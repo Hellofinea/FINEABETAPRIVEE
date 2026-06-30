@@ -1,0 +1,3 @@
+# Netlify : sert l'app (FINEA.html) à la racine et sur toute route.
+# 200 = rewrite (l'URL reste propre, pas de redirection visible).
+/*    /FINEA.html    200
