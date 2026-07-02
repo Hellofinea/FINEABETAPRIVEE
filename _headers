@@ -1,0 +1,17 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# EN-TÊTES DE SÉCURITÉ FINEA (Netlify) — FIN-003
+# ─────────────────────────────────────────────────────────────────────────
+# Bêta : CSP volontairement permissive (l'app est 100 % inline → 'unsafe-inline'
+# et 'unsafe-eval' requis, sinon l'app casse). Elle restreint malgré tout les
+# ORIGINES externes autorisées (scripts, fetch, styles) et bloque le clickjacking.
+# Durcissement nonce/hash = chantier post-bêta.
+# Après déploiement : vérifier sur la deploy-preview que (1) le login Supabase,
+# (2) l'export PDF (html2canvas/jsPDF) et (3) l'envoi waitlist fonctionnent,
+# AVANT de passer en prod.
+# ═══════════════════════════════════════════════════════════════════════════
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://script.google.com https://cdn.jsdelivr.net; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://buy.stripe.com https://script.google.com; frame-ancestors 'none'; upgrade-insecure-requests

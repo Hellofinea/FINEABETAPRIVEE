@@ -1,7 +1,8 @@
 # macOS
 .DS_Store
 
-# Éditeurs
+# Éditeurs & outillage
 .vscode/
 .idea/
+.claude/
 *.swp

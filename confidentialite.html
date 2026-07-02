@@ -53,7 +53,7 @@
     </ul>
 
     <h3>4. Base légale</h3>
-    <p>Le traitement repose sur l'exécution du contrat (CGU) et, pour la communication bêta, sur l'intérêt légitime de BEL HOLDING à itérer son produit avec ses premiers utilisateurs.</p>
+    <p>Le traitement repose sur l'exécution du contrat (CGU) et, pour la communication bêta, sur l'intérêt légitime de BEL HOLDING à itérer son produit avec ses premiers utilisateurs. Les <strong>emails marketing</strong> (séquence d'onboarding) reposent, eux, sur le <strong>consentement explicite</strong> de l'utilisateur (opt-in recueilli à l'inscription), retirable à tout moment via le lien de désinscription présent dans chaque email.</p>
 
     <h3>5. Stockage</h3>
     <p>Les données saisies par l'utilisateur sont conservées sur les serveurs Supabase (PostgreSQL, région UE — Paris, France) et, pour le confort d'utilisation hors-ligne et la sauvegarde d'un diagnostic anonyme avant inscription, en localStorage sur le navigateur de l'utilisateur.</p>
@@ -73,11 +73,13 @@
       <li><strong>Supabase Inc.</strong> — hébergement base de données et Edge Functions (données localisées dans l'UE, région Paris, France) ;</li>
       <li><strong>Stripe Payments Europe, Ltd.</strong> (Irlande) — traitement des paiements et abonnements ;</li>
       <li><strong>Brevo</strong> (Sendinblue SAS, Paris, France) — envoi des emails transactionnels et marketing ;</li>
-      <li><strong>OVH SAS</strong> (Roubaix, France) — gestion du nom de domaine.</li>
+      <li><strong>OVH SAS</strong> (Roubaix, France) — gestion du nom de domaine ;</li>
+      <li><strong>Cloudflare, Inc.</strong> (États-Unis, SCC RGPD) — mesure d'audience <strong>anonyme et sans cookie</strong>, activée uniquement si l'utilisateur accepte la mesure d'audience.</li>
     </ul>
 
     <h3>8. Cookies &amp; identifiants techniques</h3>
     <p>Aucun cookie publicitaire ou de traçage marketing n'est utilisé pendant la bêta. Un identifiant technique anonyme (UUID localStorage) est créé pour permettre la sauvegarde du diagnostic d'un visiteur non encore inscrit, et son transfert vers son compte après inscription.</p>
+    <p>Si l'utilisateur y consent (bouton « Tout accepter » du bandeau cookies), la <strong>mesure d'audience</strong> est assurée par <strong>Cloudflare Web Analytics</strong> — une solution <strong>sans cookie et sans identifiant</strong>, qui ne collecte aucune donnée personnelle et n'effectue aucun suivi entre sites. Elle reste <strong>entièrement désactivée</strong> tant que ce consentement n'est pas donné.</p>
 
     <h3>9. Droits RGPD</h3>
     <p>Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi Informatique et Libertés, l'utilisateur dispose d'un droit d'accès, de rectification, d'effacement, de portabilité, d'opposition et de limitation. Toute demande est à adresser à <strong>rgpd@hellofinea.com</strong>.</p>

@@ -17,6 +17,7 @@
     --navy-soft: #142d5e;
     --gold: #C9A961;
     --gold-soft: #e0c989;
+    --gold-ink: #806528;
     --turquoise: #2EC4B6;
     --turquoise-soft: #5fd6ca;
     --cream: #FAF7F2;
@@ -984,6 +985,7 @@
   }
   .nav-dropdown a:hover, .nav-dropdown button:hover { background: var(--cream); }
   .nav-dropdown .dd-sep { height: 1px; background: var(--line); margin: 4px 0; }
+  .nav-dropdown .dd-badge { color: var(--gold); font-size: 20px; line-height: 0; vertical-align: middle; margin-left: 2px; }
   .nav-dropdown .dd-logout { color: #c44; }
 
   /* ═══════════════════════════════════════════════
@@ -1085,6 +1087,13 @@
   .auth-form-panel {
     padding: 48px 40px; overflow-y: auto;
     display: flex; flex-direction: column;
+    /* Cellule de grid : sans min-height:0, min-height vaut auto et l'empêche
+       de se comprimer sous la hauteur de son contenu — l'overflow-y:auto ne
+       s'active alors jamais, le panneau déborde et la modale (overflow:hidden)
+       coupe le bas (bouton d'inscription + Google + CGU). min-height:0 rend le
+       scroll interne effectif quel que soit le volume du formulaire. */
+    min-height: 0;
+    max-height: 95vh;
   }
   .auth-close {
     position: absolute; top: 16px; right: 16px;
@@ -13840,6 +13849,48 @@ body.architecte-open { overflow: hidden; }
 }
 
 </style>
+<style id="finea-a11y-contrast">
+/* ═══════════════════════════════════════════════════════════════════════════
+   FIN-007 — WCAG AA : texte accent OR sur fond CLAIR passé à --gold-ink (#806528).
+   Ciblé sur les eyebrows / labels / symboles / numéros (accent sur cream/blanc).
+   N'AFFECTE PAS l'or sur navy (non listé) ni les aplats/bordures or (--gold conservé).
+   Placé après tout le CSS → gagne la cascade à spécificité égale (pas de !important).
+   Vérifié empiriquement (audit contraste navigateur : 0 échec or restant).
+═══════════════════════════════════════════════════════════════════════════ */
+.section-eyebrow, .welcome-eyebrow, .app-eyebrow, .a-eyebrow,
+.a3-cif-eyebrow, .cl-eyebrow, .d1-eyebrow, .d1-hero-eyebrow, .d2-eyebrow, .d3-eyebrow,
+.d3-hero-eyebrow, .db-eyebrow, .db-focus-eyebrow, .dbf-eyebrow, .diag-gate-eyebrow,
+.diag-profile-eyebrow, .diag-profile-offer-eyebrow, .diag-scope-eyebrow, .exit-intent-eyebrow,
+.lead-capture-eyebrow, .lesson-eyebrow, .lesson-fiche-card-eyebrow, .m1-guide-eyebrow,
+.offer-card-eyebrow, .offer-eyebrow, .per-eyebrow, .per-hero-eyebrow, .pricing-manifesto-eyebrow,
+.pricing-card-eyebrow, .rattrapage-eyebrow, .rit-annual-eyebrow,
+.rit-cover-eyebrow, .rit-priority-eyebrow, .s1-cif-eyebrow, .s1-eyebrow, .s2-eyebrow, .s3-eyebrow,
+.s4-eyebrow, .s5-eyebrow, .s6-cl-eyebrow, .s6-eyebrow, .t2-eyebrow, .t3-eyebrow, .t4-eyebrow,
+.t4-reveal-eyebrow, .t5-eyebrow, .t5-reveal-eyebrow, .t6-eyebrow, .t7-eyebrow, .t7-reveal-eyebrow,
+.un-eyebrow, .un-eyebrow--invite, .un-eyebrow--top, .studio-sidebar-eyebrow,
+.voyage-chapter-eyebrow, .dash-welcome .eyebrow, .cat-head .cat-eyebrow, .foyer-head .eyebrow,
+.foyer360-head .eyebrow, .s30-hero-info .eyebrow, .sharing-head .eyebrow,
+.d1-snap-label, .dbf-hero-label, .db-synth-card--accent .db-synth-label,
+.diag-insights--v3 .diag-insight--angle .diag-insight-label, .rit-annual-stat-label,
+.s2-kpi--acheter .s2-kpi-label, .s3-kpi--accent .s3-kpi-label, .s4-press-kpi--total .s4-press-label,
+.s360-bench-card.highlight .s360-bc-label, .t2-kpi--accent .t2-kpi-label,
+.t3-kpi--accent .t3-kpi-label, .t4-kpi--accent .t4-kpi-label, .t5-kpi--accent .t5-kpi-label,
+.t6-kpi--accent .t6-kpi-label, .t7-kpi--accent .t7-kpi-label, .pricing-scope-label,
+.problem-card .num, .s6-module-num, .journey-arc-step .arc-arrow, .journey-arc-step .arc-num,
+.journey-arc-step .arc-sym, .dash-palier-sym, .voyage-chapter-symbol, .pricing-card-symbol,
+.pricing-card-symbol--gold, .pricing-matrix-sym--gold, .pricing-card--invite .pricing-card-symbol,
+.pricing-card-promise, .pricing-faq-item div em, .pricing-mobile-section,
+.pricing-table tr.pricing-section-row td,
+/* stragglers en contexte clair (vérifiés par l'audit navigateur) */
+.journey-arc span, .voyage-chapter-prose span, .voyage-chapter-prose a,
+.voyage-chapter-cta, .voyage-chapter--invite .voyage-chapter-eyebrow, .voyage-chapter--invite .voyage-chapter-cta,
+.hero-cta-secondary-link, .dd-score, .nav-dropdown-head .dd-score, .compare-swipe-hint, [class*="nav-dot"],
+/* templates PDF export (toujours sur pages blanches) */
+.pdf-eyebrow, .pdf-5p-eyebrow, .pdf-footer-num, .pdf-5p-footer-num,
+.pdf-insight-label, .pdf-5p-insight-label, .pdf-action-meta-label {
+  color: var(--gold-ink);
+}
+</style>
 </head>
 <body>
 
@@ -14106,6 +14157,7 @@ body.architecte-open { overflow: hidden; }
           <a href="#" id="ddScore2" class="diag-trigger">⚡ Mon diagnostic</a>
           <a href="#" id="ddFoyer">🏠 Gestion du foyer</a>
           <a href="#" id="ddSharing">🔒 Mes partages</a>
+          <a href="#" id="ddNouveautes">✨ Nouveautés <span class="dd-badge" id="ddNouveautesBadge" style="display:none;">•</span></a>
           <div class="dd-sep"></div>
           <button class="dd-logout" id="ddLogout">⎋ Se déconnecter</button>
 	        </div>
@@ -14222,7 +14274,7 @@ body.architecte-open { overflow: hidden; }
           <div class="voyage-chapter-symbol" aria-hidden="true">▲</div>
           <h3 class="voyage-chapter-title">Fondation</h3>
           <blockquote class="voyage-chapter-quote">Construire ce qui résiste à vingt ans de décisions.</blockquote>
-          <p class="voyage-chapter-body">La Fondation, ce n'est pas l'optimisation — c'est ce qui rend l'optimisation possible. Un budget qui tient. Un coussin de sécurité dimensionné. Des enveloppes choisies (PEA, AV, PER, CTO) selon leur fonction, pas leur emballage marketing. C'est le palier qu'aucun conseiller commissionné ne te vendra : il préfère les produits aux fondations.</p>
+          <p class="voyage-chapter-body">La Fondation, ce n'est pas l'optimisation — c'est ce qui rend l'optimisation possible. Un budget qui tient. Un coussin de sécurité dimensionné. Des enveloppes choisies (PEA, assurance-vie, PER, compte-titres) selon leur fonction, pas leur emballage marketing. C'est le palier qu'aucun conseiller commissionné ne te vendra : il préfère les produits aux fondations.</p>
           <a href="#pricing" class="voyage-chapter-cta">Voir Fondation dans les tarifs →</a>
         </div>
         <div class="voyage-chapter-visual" aria-hidden="true">
@@ -14417,12 +14469,12 @@ body.architecte-open { overflow: hidden; }
             <td>Prix d'entrée</td>
             <td class="finea-col">9€ paiement unique</td>
             <td>Gratuit</td>
-            <td>1% AUM</td>
+            <td>1 % des encours (AUM)</td>
             <td>500€+/an</td>
           </tr>
           <tr>
             <td>Accompagnement avancé</td>
-            <td class="finea-col check">79€/mois (Architecte)</td>
+            <td class="finea-col check">49€/mois (Architecte)</td>
             <td class="cross">✗</td>
             <td>~1% des encours</td>
             <td>5 000-10 000€/an</td>
@@ -14549,8 +14601,8 @@ body.architecte-open { overflow: hidden; }
         <h3 class="pricing-card-title">Architecte</h3>
         <p class="pricing-card-tagline">Rejoins le cercle</p>
         <div class="pricing-card-price-block">
-          <span class="pricing-card-price-amount" data-pricing-price="architecte">79€</span>
-          <span class="pricing-card-price-period" data-pricing-period="architecte">par mois · engagement 6 mois</span>
+          <span class="pricing-card-price-amount" data-pricing-price="architecte">49€</span>
+          <span class="pricing-card-price-period" data-pricing-period="architecte">par mois · sur candidature</span>
         </div>
         <ul class="pricing-card-diff">
           <li><svg class="ficon ficon--sm"><use href="#ficon-orbit"/></svg>Patrimoine 360° + Cockpit Décision</li>
@@ -14635,7 +14687,7 @@ body.architecte-open { overflow: hidden; }
         </details>
         <details>
           <summary>Le Chat FINEA est-il partagé ?</summary>
-          <div><strong>Fonctionnalité à venir.</strong> Une fois lancée — Fondation : un fil pédagogique partagé ; Maîtrise et Architecte : logique par membre, avec confidentialité stricte.</div>
+          <div>La <strong>ligne directe WhatsApp</strong> est réservée au Cercle Architecte (support pédagogique, sans recommandation produit). En Duo/Foyer Architecte, chaque membre garde son fil, avec confidentialité stricte.</div>
         </details>
       </div>
     </div>
@@ -14696,9 +14748,9 @@ body.architecte-open { overflow: hidden; }
           <tr><td>Le Rituel · bilan mensuel auto</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
 
           <tr class="pricing-section-row"><td colspan="5">ACCOMPAGNEMENT &amp; ARCHITECTE</td></tr>
-          <tr><td>Chat FINEA</td><td>—</td><td>à venir</td><td>à venir</td><td>à venir</td></tr>
-          <tr><td>Visio pédagogique mensuelle</td><td>—</td><td>—</td><td>—</td><td>à venir</td></tr>
-          <tr><td>Cercle Architecte · communauté</td><td>—</td><td>—</td><td>—</td><td>à venir (places limitées)</td></tr>
+          <tr><td>Ligne directe WhatsApp · pédagogique</td><td>—</td><td>—</td><td>—</td><td>✓ · réponse 48h ouvrées</td></tr>
+          <tr><td>Cercle Architecte · communauté WhatsApp</td><td>—</td><td>—</td><td>—</td><td>✓ · places limitées</td></tr>
+          <tr><td>La Note de l'Architecte · mensuelle</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
           <tr><td>Score 360° holistique</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
           <tr><td>Patrimoine 360° · projection 5/10/20 ans · heatmap risques</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
           <tr><td>Cockpit Décision · 3 décisions générées dynamiquement</td><td>—</td><td>—</td><td>—</td><td>✓</td></tr>
@@ -14740,8 +14792,8 @@ body.architecte-open { overflow: hidden; }
         <div class="pricing-matrix-col">
           <div class="pricing-matrix-sym pricing-matrix-sym--gold">✦</div>
           <div class="pricing-matrix-name">Architecte</div>
-          <div class="pricing-matrix-price">79€<span>/mois</span></div>
-          <div class="pricing-matrix-note">Sur invitation · Duo 89€ · Foyer 129€</div>
+          <div class="pricing-matrix-price">49€<span>/mois</span></div>
+          <div class="pricing-matrix-note">Sur candidature · Solo 49€ · Duo 69€ · Foyer 89€</div>
         </div>
       </div>
       <div class="pricing-matrix-foot">Tarifs annuels : −20 %. Détail Solo / Duo / Foyer affiché dynamiquement sur les cartes en haut de section.</div>
@@ -14765,11 +14817,11 @@ body.architecte-open { overflow: hidden; }
       </details>
       <details class="pricing-faq-item">
         <summary>Comment se déroule le Rite de Passage Architecte ?</summary>
-        <div>Tu dois avoir un Score FINEA &gt; 80 + minimum 6 mois en Maîtrise. Sinon, candidature manuelle : un entretien pédagogique de 30 min avec un référent FINEA pour évaluer la pertinence pour les deux parties. Pas de filtre sur le patrimoine — uniquement sur la maturité.</div>
+        <div>Tu dois avoir un Score FINEA &gt; 80 + minimum 6 mois en Maîtrise. Sinon, candidature en ligne : tu déposes ta demande, on évalue la pertinence pour les deux parties et on te répond sous 72 h — sans rendez-vous à caler. Pas de filtre sur le patrimoine — uniquement sur la maturité.</div>
       </details>
       <details class="pricing-faq-item">
-        <summary>Pourquoi Architecte n'est pas à 149€/mois comme un CGP ?</summary>
-        <div>Parce qu'on n'est pas un CGP. À 79€/mois (758€/an), Architecte est démesurément accessible vs un Conseiller en Gestion de Patrimoine qui prélève 1% sur encours (5 000-10 000€/an pour un patrimoine 500k€-1M€). Notre stratégie : volume &gt; marge, cohérence avec la mission éducative. <em>"On vous apprend ce que d'autres vous facturent à prix d'or."</em></div>
+        <summary>Combien coûte le Cercle Architecte ?</summary>
+        <div>49 € par mois en Solo (69 € en Duo, 89 € en Foyer), sans engagement, accès <strong>sur candidature</strong>. Le repère : là où un Conseiller en Gestion de Patrimoine prélève 1 % sur encours (5 000-10 000€/an pour un patrimoine 500k€-1M€), le Cercle reste un abonnement pédagogique accessible — volume &gt; marge, cohérence avec la mission éducative. <em>"On vous apprend ce que d'autres vous facturent à prix d'or."</em></div>
       </details>
     </div>
 
@@ -14817,7 +14869,7 @@ body.architecte-open { overflow: hidden; }
       </div>
       <div class="faq-item">
         <div class="faq-q">Quand passer à Architecte ?</div>
-        <div class="faq-a">Architecte est pertinent quand tu commences à te poser des questions de <strong>stratégie pluriannuelle</strong> : lissage de plus-values, transmission anticipée, structuration juridique (SCI, holding), arbitrages complexes entre liquidité/rendement/contrôle. Si ton patrimoine net dépasse ~300 k€ ou si tu envisages une cession d'entreprise / des donations / un démembrement, c'est le niveau qui t'apporte la valeur méthodologique nécessaire.</div>
+        <div class="faq-a">Architecte est pertinent quand tu commences à te poser des questions de <strong>stratégie pluriannuelle</strong> : lissage de plus-values, transmission anticipée, structuration juridique (SCI — société civile immobilière, holding), arbitrages complexes entre liquidité/rendement/contrôle. Si ton patrimoine net dépasse ~300 k€ ou si tu envisages une cession d'entreprise / des donations / un démembrement, c'est le niveau qui t'apporte la valeur méthodologique nécessaire.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">Le Foyer ou le Duo, comment ça marche concrètement ?</div>
@@ -14879,7 +14931,7 @@ body.architecte-open { overflow: hidden; }
         <a href="#pricing">◐ Déclic · 9€</a>
         <a href="#pricing">▲ Fondation · 19€/m</a>
         <a href="#pricing">◆ Maîtrise · 29€/m</a>
-        <a href="#architecte" onclick="goToArchitecte(event)">✦ Architecte · 79€/m</a>
+        <a href="#architecte" onclick="goToArchitecte(event)">✦ Architecte · 49€/m</a>
         <a href="#architecte" onclick="goToArchitecte(event)" style="color:var(--gold);font-size:12px;margin-top:8px;display:block;">→ Cercle Architecte</a>
       </div>
       <div>
@@ -14923,7 +14975,7 @@ body.architecte-open { overflow: hidden; }
 ═══════════════════════════════════════════════ -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-modal">
-    <button class="auth-close" id="authClose">✕</button>
+    <button class="auth-close" id="authClose" aria-label="Fermer">✕</button>
 
     <!-- Panneau décoratif gauche -->
     <div class="auth-deco">
@@ -14981,6 +15033,11 @@ body.architecte-open { overflow: hidden; }
       <div class="auth-panel" id="panelRegister">
         <h2 class="auth-form-title">Rejoins FINEA ✨</h2>
         <p class="auth-form-sub">Crée ton compte gratuit en 30 secondes.</p>
+
+        <div class="founder-teaser" style="background:linear-gradient(135deg,#0A1F44,#12294f);border:1px solid rgba(201,169,97,0.35);border-radius:14px;padding:14px 16px;margin:2px 0 18px;">
+          <div style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C9A961;font-weight:700;margin-bottom:6px;">✦ Statut Membre Fondateur</div>
+          <p style="font-size:13.5px;line-height:1.55;color:#fff;margin:0;">Tu n'arrives pas en retard — tu arrives en premier. Rejoindre la bêta, c'est devenir <strong style="color:#C9A961;">Membre Fondateur</strong> : un avantage réservé, gardé à vie. La révélation, à l'ouverture officielle.</p>
+        </div>
 
         <div class="auth-field-row">
           <div class="auth-field">
@@ -15426,7 +15483,7 @@ body.architecte-open { overflow: hidden; }
       <div class="cat-eyebrow" id="catEyebrow">Catégorie</div>
       <h3 id="catTitle">—</h3>
       <p id="catSub">—</p>
-      <button class="cat-close" id="catClose">✕</button>
+      <button class="cat-close" id="catClose" aria-label="Fermer">✕</button>
     </div>
     <div class="cat-body">
       <div class="cat-tools-list" id="catToolsList"></div>
@@ -15504,9 +15561,9 @@ body.architecte-open { overflow: hidden; }
         <p>Suis tes revenus, dépenses et épargne mois par mois.</p>
       </div>
       <div class="m1-month-nav">
-        <button onclick="changeMonth(-1)">‹</button>
+        <button onclick="changeMonth(-1)" aria-label="Mois précédent">‹</button>
         <span id="monthLabel">—</span>
-        <button onclick="changeMonth(1)">›</button>
+        <button onclick="changeMonth(1)" aria-label="Mois suivant">›</button>
       </div>
     </div>
 
@@ -15602,7 +15659,7 @@ body.architecte-open { overflow: hidden; }
         </div>
         <div class="diag-progress-label" id="diagProgressLabel">0 / 15</div>
       </div>
-      <button class="diag-close" id="diagClose">✕</button>
+      <button class="diag-close" id="diagClose" aria-label="Fermer">✕</button>
     </div>
 
     <!-- BODY -->
@@ -15639,7 +15696,7 @@ body.architecte-open { overflow: hidden; }
   <div class="s360-panel">
     <div class="s360-topbar">
       <span class="lbl">✦ Score 360° — Analyse complète</span>
-      <button onclick="closeS360()">✕</button>
+      <button onclick="closeS360()" aria-label="Fermer">✕</button>
     </div>
     <div class="s360-body" id="s360Body">
       <!-- Injecté par JS -->
@@ -16222,7 +16279,7 @@ body.architecte-open { overflow: hidden; }
   <!-- Modal cadre détaillé -->
   <div class="a4-modal-overlay" id="a4ModalOverlay" onclick="if(event.target===this) a4CloseModal()">
     <div class="a4-modal" id="a4Modal">
-      <button class="a4-modal-close" onclick="a4CloseModal()">✕</button>
+      <button class="a4-modal-close" onclick="a4CloseModal()" aria-label="Fermer">✕</button>
       <div id="a4ModalContent"><!-- injecté par a4OpenFrame --></div>
     </div>
   </div>
@@ -16488,6 +16545,50 @@ body.architecte-open { overflow: hidden; }
 
 
 <script>
+/* ╔═══════════════════════════════════════════════════════════════════════════╗
+   ║  CARTE DU FICHIER — INDEX DE NAVIGATION (JS principal)                     ║
+   ║  Carte complète (CSS + HTML + JS) : voir CODE_MAP.md à la racine du repo.  ║
+   ║  Chaque section a une bannière ═══ unique → Cmd-F sur son titre pour y     ║
+   ║  sauter. Les modules sont physiquement dans le désordre (réorg physique    ║
+   ║  prévue post-lancement) ; cet index les liste dans l'ORDRE LOGIQUE.        ║
+   ╠═══════════════════════════════════════════════════════════════════════════╣
+   ║  SOCLE / SYSTÈME                                                           ║
+   ║   • FINEA_CONFIG ................ « COUCHE INTÉGRATION BACKEND »            ║
+   ║   • Accès/paywall ............... « FineaAccess » / « PAYWALL »            ║
+   ║   • Diagnostic (5 axes) ......... « DONNÉES DU DIAGNOSTIC »                 ║
+   ║   • Profils / offres ............ « FINEA PROFILES » / « OFFRES & MODULES »║
+   ║   • Config fiscale .............. « FINEA_FISCAL_CONFIG »                   ║
+   ║   • Auth / Google Sign-In ....... « AUTH SYSTEM » / « GOOGLE SIGN-IN »      ║
+   ║   • Dashboard(s) ................ « DASHBOARD RENDERING » / « MON ESPACE »  ║
+   ║                                   « DASHBOARD DE BASE » / « DBF »           ║
+   ║   • Notifications / nav ......... « Centre de Notifications » /             ║
+   ║                                   « Stack de navigation » / « Sprint 7 »    ║
+   ║   • Routage dynamique ........... QUICK_GUIDE_ROUTES, _NAV_FN_TO_ROUTE,     ║
+   ║     (window[nom]() par clé)       _FINEA_OVERLAY_RENDERERS                  ║
+   ║  MODULES FOYER / PARTAGE                                                    ║
+   ║   • Foyer / Foyer 360 / Partages  « FOYER — page » / « FOYER 360 » /        ║
+   ║                                   « MES PARTAGES »                          ║
+   ║  APPRENTISSAGE                                                              ║
+   ║   • Académie / Parcours ......... « MODULE APPRENDRE » / « ACADÉMIE »       ║
+   ║   • Budget M1 ................... « MODULE M1 — BUDGET »                     ║
+   ║   • Guides rapides .............. « GUIDES RAPIDES »                        ║
+   ║   • Transformation .............. « GESTE → PREUVE → IDENTITÉ »             ║
+   ║  SIMULATEURS  (Cmd-F « S1 — », « S2 — » … ; physiquement dispersés)         ║
+   ║   • S1 Enveloppes · S2 Achat/Loc · S3 Bilan · S4 Fiscal · S5 Stress ·      ║
+   ║     S6 Holding · PER (« SIMULATEUR PER »)                                   ║
+   ║  OUTILS  (Cmd-F « T2 — » … ; physiquement dispersés)                        ║
+   ║   • T2 Dette · T3 Coussin · T4 Trajectoire · T5 Salaire · T6 Projet ·      ║
+   ║     T7 Transition                                                          ║
+   ║  ARCHITECTE  (Cmd-F « A2 — » …)                                             ║
+   ║   • A2 Fiscalité · A3 Transmission · A4 Decision OS                         ║
+   ║  COCKPIT / PATRIMOINE                                                       ║
+   ║   • D1 Patrimoine 360 · D2 Cockpit décision · D3 Foyer étendu               ║
+   ║  PDF / RITUEL                                                               ║
+   ║   • PDF 3p (« PDF GENERATOR ») · PDF 5p (« PDF 5 PAGES ») ·                 ║
+   ║     Rituel (« LE RITUEL »)                                                  ║
+   ║  Scripts auxiliaires (fin de fichier) : bandeau cookies, NPS/partage,      ║
+   ║   analytics local, waitlist. → Cmd-F « BANDEAU COOKIES », « NPS ».         ║
+   ╚═══════════════════════════════════════════════════════════════════════════╝ */
 /* ═══════════════════════════════════════════════════════════════════════════
    FINEA — COUCHE INTÉGRATION BACKEND (Sprint 1)
    ─────────────────────────────────────────────────────────────────────────
@@ -16499,16 +16600,17 @@ body.architecte-open { overflow: hidden; }
 const FINEA_CONFIG = {
   BACKEND_ENABLED: true,                        // backend Supabase actif
   TEST_MODE: false,                             // mode test désactivé (pas de badge ni reset). Repasser true seulement pour debug local.
-  DEV_EMAILS: ['belholdingsas@gmail.com', 'team@hellofinea.com'],      // compte(s) développeur — bypass paywall + accès complet (niveau Architecte)
+  DEV_EMAILS: ['team@hellofinea.com'],      // compte(s) développeur — bypass paywall + accès complet (niveau Architecte)
   SUPABASE_URL: 'https://mkmuhsormotlovpwiqzj.supabase.co',
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rbXVoc29ybW90bG92cHdpcXpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MzUwMjIsImV4cCI6MjA5NDUxMTAyMn0.pOqE6KsDg-KGLZZY8KnO38crRrA2K8meGB7wFDNqJGA',
   FUNCTIONS_BASE: '',                           // auto-dérivé : `${SUPABASE_URL}/functions/v1`
   ENVIRONMENT: 'beta',                          // 'beta' | 'prod'
+  BETA_FREE_ACCESS: true,                       // BÊTA PUBLIQUE : accès complet gratuit à TOUT sauf Architecte (plancher niveau Maîtrise/3). Repasser false pour rétablir le paywall.
 
   // WhatsApp — « FINEA · chat 48h ». Numéro au format international SANS '+' ni espaces
   // (ex. France '33612345678'). Laisser vide → le bouton reste « bientôt disponible ».
   // Une fois rempli, le module chat 48h ouvre WhatsApp avec un message pré-rempli.
-  WHATSAPP_NUMBER: '',
+  WHATSAPP_NUMBER: '33743702518',
 
   // Liens Stripe Payment Links (test pour l'instant ; remplacer par live au lancement)
   STRIPE_LINKS: {
@@ -16526,7 +16628,7 @@ const FINEA_CONFIG = {
     maitrise_foyer_monthly: 'https://buy.stripe.com/test_3cIeVddredVTcm04ld7ss06',
     maitrise_foyer_annual:  'https://buy.stripe.com/test_7sY3cv72Q4ljfyc5ph7ss07',
     // Architecte — sur invitation : candidature d'abord, paiement APRÈS validation.
-    // Crée un Payment Link Stripe (79€/mois) tagué metadata offer=architecte,scope=solo,
+    // Crée un Payment Link Stripe (49€/mois) tagué metadata offer=architecte,scope=solo,
     // period=monthly (ou lookup_key finea_<env>_architecte_solo_monthly) et colle-le ici.
     // Une fois rempli, le webhook stripe-webhook active le niveau Architecte au paiement.
     architecte_solo_monthly: '',
@@ -16683,6 +16785,7 @@ const FineaAccess = (function () {
     opts = opts || {};
     if (!user) return false;
     if (isDev(user)) return true;
+    if (FINEA_CONFIG.BETA_FREE_ACCESS) return true;   // bêta publique : aucun paywall
     const email = _emailOf(user);
     if (!email) return false;
     if (!opts.force) {
@@ -16723,6 +16826,11 @@ const FineaAccess = (function () {
       const scope = (niveau >= 3 && ['solo','duo','foyer'].includes(data.scope)) ? data.scope : 'solo';
       _setLevel(user, niveau, data.offer, scope);
       return niveau;
+    }
+    // Bêta publique : aucun paiement requis → accès complet SAUF Architecte (Maîtrise/3, solo).
+    if (FINEA_CONFIG.BETA_FREE_ACCESS) {
+      _setLevel(user, 3, 'maitrise', 'solo');
+      return 3;
     }
     // Pas de paiement → compte gratuit (niveau 0). Purge un éventuel résidu local.
     _setLevel(user, 0, 'free', 'solo');
@@ -17079,6 +17187,26 @@ function startPurchase(offerKey, opts) {
    le persiste, puis ouvre le bon Payment Link. ── */
 async function beginCheckout(offerKey, opts) {
   opts = opts || {};
+  // ── BÊTA PUBLIQUE : aucun paiement. beginCheckout est le point de passage UNIQUE de
+  //    tous les CTA d'achat (pricing, « Activer mon plan », offre en attente appliquée
+  //    après inscription). Tant que BETA_FREE_ACCESS est true, on court-circuite Stripe
+  //    ICI : on débloque l'accès gratuitement (plancher Maîtrise/3 via syncPaidOffer, ou
+  //    niveau 4 pour un compte dev) et on ouvre l'espace — exactement comme au retour d'un
+  //    paiement réussi. Sans ce garde-fou, chaque activation renvoyait l'utilisateur sur
+  //    Stripe alors que la bêta est gratuite. Repasser BETA_FREE_ACCESS à false rétablit
+  //    le paiement pour tous ces chemins d'un coup.
+  if (FINEA_CONFIG.BETA_FREE_ACCESS) {
+    try { localStorage.removeItem('finea_pendingOffer'); } catch (_) {}
+    try { localStorage.removeItem('finea_awaitingPayment'); } catch (_) {}
+    if (typeof currentUser !== 'undefined' && currentUser && typeof FineaAccess !== 'undefined') {
+      try { FineaAccess.clearCache(); } catch (_) {}
+      try { await FineaAccess.syncPaidOffer(currentUser, {}); } catch (_) {}
+    }
+    if (typeof closePaywall === 'function') closePaywall();
+    if (typeof showNotification === 'function') showNotification('✨ Accès débloqué gratuitement pendant la bêta — bienvenue dans FINEA !', 'success', 5000);
+    if (typeof openDashboard === 'function') openDashboard();
+    return true;
+  }
   const scope  = opts.scope  || (typeof getPricingScope  === 'function' ? getPricingScope()  : 'solo');
   const period = opts.period || (typeof getPricingPeriod === 'function' ? getPricingPeriod() : 'monthly');
   try {
@@ -17623,7 +17751,7 @@ const FINEA_PROFILES = {
     tagline: 'Tu es à l\'étape de poser les fondations qui tiendront dans 20 ans.',
     offer: 'fondation',
     offerLabel: '▲ Fondation',
-    offerSub: 'Studio + Bibliothèque + Chat FINEA (à venir)',
+    offerSub: 'Studio + Bibliothèque + Dashboard',
     price: '19 €',
     priceSub: 'par mois · sans engagement',
     founderNote: null,
@@ -17655,8 +17783,8 @@ const FINEA_PROFILES = {
     offer: 'architecte',
     offerLabel: '✦ Architecte',
     offerSub: 'Patrimoine 360° · Cockpit · Cercle · sur invitation',
-    price: 'Sur candidature',
-    priceSub: 'engagement 6 mois minimum',
+    price: '49 €',
+    priceSub: 'sur candidature · sans engagement',
     features: ['Patrimoine 360° + Cockpit décision', 'Fiscalité pluriannuelle + Transmission', 'Cercle Architecte · places limitées'],
     cta: 'Candidater au Cercle Architecte',
     candidature: true,
@@ -17678,6 +17806,10 @@ function detectProfile(globalScore) {
    en LOT C pour scoper par espace utilisateur. */
 function _saveDetectedProfile(profile, globalScore) {
   if (!profile || !profile.key) return;
+  // Identité = archétype Pilote (calculé au diagnostic, réponses en direct).
+  // Persisté ici pour que salutation pricing + modales l'affichent, jamais le palier.
+  const _ps  = (typeof computeAxisScore === 'function') ? [0, 1, 2, 3, 4].map(i => computeAxisScore(i)) : null;
+  const _pil = (_ps && typeof FineaPilote !== 'undefined') ? FineaPilote.map(_ps) : null;
   const payload = {
     profileKey: profile.key,
     profileLabel: profile.label,
@@ -17685,6 +17817,8 @@ function _saveDetectedProfile(profile, globalScore) {
     // salutation, les badges et la mini-compare. Sans ça : "profil détecté : undefined".
     label: profile.label,
     emoji: profile.emoji,
+    piloteName: _pil ? _pil.name : null,
+    piloteRare: _pil ? !!_pil.rare : false,
     recommendedOffer: profile.offer,
     recommendedScope: profile.recommendedScope || 'solo',
     scopeMismatch: !!profile.scopeMismatch,
@@ -17729,33 +17863,27 @@ function getDetectedProfile() {
    Changelog Beta v3 — pop-up affiché 1× par testeur à l'arrivée
    Skip si flag finea_changelog_seen_v2 ou utilisateur déjà connecté.
 ═══════════════════════════════════════════════ */
-const CHANGELOG_VERSION_KEY = 'finea_changelog_seen_v2';
+/* Journal de bord version-gated. Bumper CHANGELOG_VERSION à chaque nouvelle entrée
+   → les revenants revoient le journal 1× ; les nouveaux comptes le sautent (marqué
+   "vu" à l'ouverture du Welcome). Voir décision cabinet 2026-07-05. */
+const CHANGELOG_VERSION  = 'beta-public-2026-07';
+const CHANGELOG_SEEN_KEY = 'finea_changelog_seen_version';
 
-function _changelogShouldShow() {
-  // AUTO-AFFICHAGE DÉSACTIVÉ (pré-lancement public) : le contenu du changelog est
-  // un artefact de bêta, daté (il ne mentionne pas le Duo). On ne l'impose donc à
-  // PERSONNE à l'arrivée — surtout pas à un primo-visiteur public. Il reste
-  // accessible à la demande via le widget feedback (« 📖 Voir les nouveautés »).
-  // À ré-activer/réécrire en fin de bêta V3 (décision fondateur).
-  return false;
-  // eslint-disable-next-line no-unreachable
-  // Skip si déjà vu
-  try { if (localStorage.getItem(CHANGELOG_VERSION_KEY) === '1') return false; } catch (_) {}
-  // Skip si un overlay bloquant est ouvert
-  const blockingOverlays = ['authOverlay', 'diagOverlay', 'dashboardOverlay', 'welcomeOverlay'];
-  for (const id of blockingOverlays) {
-    const el = document.getElementById(id);
-    if (el && el.classList.contains('active')) return false;
-  }
-  return true;
+function _changelogSeen()      { try { return localStorage.getItem(CHANGELOG_SEEN_KEY); } catch (_) { return null; } }
+function _changelogMarkSeen()  { try { localStorage.setItem(CHANGELOG_SEEN_KEY, CHANGELOG_VERSION); } catch (_) {} _changelogRefreshBadge(); }
+function _changelogHasUnseen() { return _changelogSeen() !== CHANGELOG_VERSION; }
+
+function _changelogRefreshBadge() {
+  const b = document.getElementById('ddNouveautesBadge');
+  if (b) b.style.display = _changelogHasUnseen() ? 'inline-block' : 'none';
 }
 
 function showChangelog() {
   const ov = document.getElementById('changelogOverlay');
   if (!ov) return;
   ov.classList.add('active');
-  // Bloque le scroll de fond pour focus sur le contenu
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow = 'hidden';   // focus sur le contenu
+  _changelogMarkSeen();                       // ouvrir = vu → éteint la pastille
 }
 
 function closeChangelog() {
@@ -17763,19 +17891,24 @@ function closeChangelog() {
   if (!ov) return;
   ov.classList.remove('active');
   _fineaSyncScrollLock();
-  try { localStorage.setItem(CHANGELOG_VERSION_KEY, '1'); } catch (_) {}
-  // Re-arme le timer du rattrapage maintenant que le changelog est fermé
+  // Re-arme le timer du rattrapage maintenant que le journal est fermé
   if (typeof _rattrapageResetTimer === 'function') _rattrapageResetTimer();
 }
 
+/* Auto-ouverture : UNIQUEMENT un utilisateur connecté, avec une version non vue,
+   et seulement une fois le dashboard ouvert. Jamais sur la landing / primo-visiteur. */
+function _changelogMaybeAutoOpen() {
+  if (typeof currentUser === 'undefined' || !currentUser) return;
+  if (!_changelogHasUnseen()) return;
+  const dash = document.getElementById('dashboardOverlay');
+  if (dash && dash.classList.contains('active')) showChangelog();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Petit délai pour laisser passer la restauration de session et autres init
-  setTimeout(() => {
-    if (_changelogShouldShow()) showChangelog();
-  }, 500);
-  // Clic backdrop ferme aussi
+  // Clic backdrop ferme le journal (plus d'auto-ouverture ici : elle se fait dans le dashboard)
   const ov = document.getElementById('changelogOverlay');
   if (ov) ov.addEventListener('click', e => { if (e.target === ov) closeChangelog(); });
+  _changelogRefreshBadge();
 });
 
 /* ═══════════════════════════════════════════════
@@ -18020,6 +18153,9 @@ function _maybeShowEmailGate(onContinue) {
 function _renderEmailGate(onContinue) {
   const globalScore = computeGlobalScore();
   const profile = detectProfile(globalScore);
+  // Révélation d'identité : le Pilote (archétype), pas le palier commercial
+  const _gatePiloteScores = [0, 1, 2, 3, 4].map(i => computeAxisScore(i));
+  const _gatePilote = (typeof FineaPilote !== 'undefined') ? FineaPilote.map(_gatePiloteScores) : null;
   // Persiste dès maintenant le profil (badges Recommandé pour toi)
   try { _saveDetectedProfile(profile, globalScore); } catch (_) {}
   try { _refreshRecommendedBadgesSoon(); } catch (_) {}
@@ -18029,16 +18165,17 @@ function _renderEmailGate(onContinue) {
       <div class="diag-gate-tease">
         <div class="diag-gate-eyebrow">✨ Ton diagnostic est prêt</div>
         <div class="diag-gate-profile-row">
-          <div class="diag-gate-emoji">${profile.emoji}</div>
+          <div class="diag-gate-emoji">${_gatePilote ? '✦' : profile.emoji}</div>
           <div class="diag-gate-profile-text">
-            <div class="diag-gate-profile-label">Ton profil détecté</div>
-            <div class="diag-gate-profile-name">${profile.label}</div>
+            <div class="diag-gate-profile-label">${_gatePilote && _gatePilote.rare ? 'Pilote rare' : 'Ton pilote FINEA'}</div>
+            <div class="diag-gate-profile-name">${_gatePilote ? _gatePilote.name : profile.label}</div>
+            ${_gatePilote && _gatePilote.maturity && !_gatePilote.rare ? `<div style="display:inline-block;margin-top:6px;padding:2px 10px;border:1px solid rgba(201,169,97,0.55);border-radius:999px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#C9A961;font-family:'DM Sans',sans-serif;">${_gatePilote.maturity.label}</div>` : ''}
           </div>
           <div class="diag-gate-score">
             <strong>${globalScore}</strong><small>/ 100</small>
           </div>
         </div>
-        <p class="diag-gate-tagline">${profile.tagline}</p>
+        <p class="diag-gate-tagline">${_gatePilote ? '« ' + (_gatePilote.phraseInApp || _gatePilote.phrase) + ' »' : profile.tagline}</p>
         <div class="diag-gate-blur-hint">
           <div class="diag-gate-blur-row"></div>
           <div class="diag-gate-blur-row"></div>
@@ -18131,22 +18268,35 @@ document.addEventListener('DOMContentLoaded', () => {
 ;(function(){
   const NAVY='#0A1F44', GOLD='#C9A961', CREAM='#FAF7F2', TEAL='#2EC4B6', TRACK='#1A3566';
   const AX=['Liquidité','Structure','Dette','Croissance','Protection'];
+  // phrase = maîtrise (carte partagée, aspirationnelle, INCHANGÉE).
+  // phrases = variantes par palier de maturité (in-app uniquement). Provisoires — finalisation via finea-contenu.
   const ARCHES=[
-    { axis:0, name:'Le Libre',       phrase:"L'argent ne te coince jamais.",        sym:'compass'  },
-    { axis:1, name:'Le Carré',       phrase:"Chaque euro a sa place.",              sym:'grid'     },
-    { axis:2, name:'Le Stratège',    phrase:"La dette ne te subit pas.",            sym:'rook'     },
-    { axis:3, name:'Le Visionnaire', phrase:"Tu ne laisses pas ton argent dormir.", sym:'target'   },
-    { axis:4, name:'Le Roc',         phrase:"Quoi qu'il arrive, tu tiens.",         sym:'mountain' },
+    { axis:0, name:'Le Libre',       phrase:"L'argent ne te coince jamais.",        sym:'compass',  phrases:{ naissant:"Tu prends tes premières marges.",         affirme:"L'argent te coince de moins en moins.",          maitrise:"L'argent ne te coince jamais." } },
+    { axis:1, name:'Le Carré',       phrase:"Chaque euro a sa place.",              sym:'grid',     phrases:{ naissant:"Tu poses tes premiers repères.",          affirme:"Tes euros trouvent leur place, un à un.",        maitrise:"Chaque euro a sa place." } },
+    { axis:2, name:'Le Stratège',    phrase:"La dette ne te subit pas.",            sym:'rook',     phrases:{ naissant:"Tu regardes ta dette en face.",           affirme:"La dette te pèse de moins en moins.",            maitrise:"La dette ne te subit pas." } },
+    { axis:3, name:'Le Visionnaire', phrase:"Tu ne laisses pas ton argent dormir.", sym:'target',   phrases:{ naissant:"Tu commences à réveiller ton argent.",    affirme:"Ton argent dort de moins en moins.",             maitrise:"Tu ne laisses pas ton argent dormir." } },
+    { axis:4, name:'Le Roc',         phrase:"Quoi qu'il arrive, tu tiens.",         sym:'mountain', phrases:{ naissant:"Face à l'imprévu, tu apprends à tenir.",  affirme:"Les imprévus t'ébranlent de moins en moins.",    maitrise:"Quoi qu'il arrive, tu tiens." } },
   ];
   const SOUVERAIN={ name:'Le Souverain', phrase:"Tu ne navigues pas à vue. Tu pilotes.", sym:'crown', rare:true };
+
+  // Palier de maturité sur le score de l'axe dominant (in-app uniquement).
+  function _maturity(scoreDom){
+    if(scoreDom>=75) return { tier:'maitrise', label:'Maîtrisé' };
+    if(scoreDom>=45) return { tier:'affirme',  label:'Affirmé'  };
+    return { tier:'naissant', label:'Naissant' };
+  }
 
   // ── Mapping : s = [L,S,D,C,P] 0-100 → archétype ──
   function mapPilote(s){
     const max=Math.max(...s), min=Math.min(...s);
-    if(min>=70 && (max-min)<=20) return Object.assign({}, SOUVERAIN, {frontier:s.indexOf(min)});
+    if(min>=70 && (max-min)<=20){
+      return Object.assign({}, SOUVERAIN, { frontier:s.indexOf(min), maturity:{tier:'maitrise',label:'Maîtrisé'}, phraseInApp:SOUVERAIN.phrase });
+    }
     const prio=[0,1,4,2,3]; let dom=prio[0];
     for(const i of prio){ if(s[i]>s[dom]) dom=i; }
-    return Object.assign({}, ARCHES.find(a=>a.axis===dom), {frontier:s.indexOf(min)});
+    const base=ARCHES.find(a=>a.axis===dom);
+    const mat=_maturity(s[dom]);
+    return Object.assign({}, base, { frontier:s.indexOf(min), maturity:mat, phraseInApp:(base.phrases && base.phrases[mat.tier]) || base.phrase });
   }
 
   function rr(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
@@ -18207,7 +18357,7 @@ document.addEventListener('DOMContentLoaded', () => {
     [[0.12,0.10,0.4],[0.86,0.14,0.3],[0.10,0.40,0.3],[0.90,0.46,0.35],[0.16,0.62,0.25],[0.82,0.66,0.3]].forEach(([fx,fy,op])=>{ ctx.globalAlpha=op; ctx.beginPath(); ctx.arc(W*fx,H*fy,3,0,7); ctx.fill(); });
     ctx.globalAlpha=1; ctx.textAlign='center';
     ctx.fillStyle=GOLD; ctx.font=`500 ${l.eyebrow}px 'DM Sans'`; ctx.letterSpacing=l.eyebrow*0.32+'px';
-    ctx.fillText((a.rare?'PROFIL RARE':'MON PILOTE'), W/2, l.eyebrowY); ctx.letterSpacing='0px';
+    ctx.fillText((a.rare?'PILOTE RARE':'MON PILOTE'), W/2, l.eyebrowY); ctx.letterSpacing='0px';
     ctx.strokeStyle='rgba(201,169,97,0.45)'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(W/2,l.emCy,l.emR,0,7); ctx.stroke();
     ctx.strokeStyle=GOLD; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(W/2,l.emCy,l.emR-18,0,7); ctx.stroke();
     drawSym(ctx,a.sym,W/2,l.emCy,l.emR*0.42,GOLD);
@@ -18286,6 +18436,25 @@ document.addEventListener('DOMContentLoaded', () => {
   window.FineaPilote = { map: mapPilote, open: openShare, draw: drawCard };
 })();
 
+/* Partager sa carte Pilote depuis l'espace membre. Réutilise le moteur FineaPilote
+   (qui n'était déclenchable qu'au moment du diagnostic). Guard : sans diagnostic, on
+   invite à le faire plutôt que d'ouvrir une carte vide. Convertit les axes {objet} en
+   tableau ordonné attendu par le moteur. */
+window._fineaShareMyPilote = function() {
+  try {
+    var sd = (typeof getCurrentScoreData === 'function') ? getCurrentScoreData()
+             : (typeof userScoreData !== 'undefined' ? userScoreData : null);
+    if (!sd || !sd.axes) {
+      if (typeof showNotification === 'function') showNotification('Fais d\'abord ton diagnostic pour révéler ton Pilote.', 'info', 5000);
+      return;
+    }
+    var keys = ['liquidite','structure','dette','croissance','protection'];
+    var scores = keys.map(function(k){ return (typeof sd.axes[k] === 'number') ? sd.axes[k] : 50; });
+    if (typeof FineaPilote !== 'undefined' && FineaPilote.open) FineaPilote.open(scores);
+    if (typeof _appAnalytics === 'function') _appAnalytics('pilote_share_from_space', null);
+  } catch (_) {}
+};
+
 function renderResults() {
   currentScreen = 'results';
   updateProgress();
@@ -18319,10 +18488,10 @@ function renderResults() {
   const pilote = (typeof FineaPilote !== 'undefined') ? FineaPilote.map(piloteScores) : null;
   const piloteBlockHTML = pilote ? `
     <div class="diag-pilote-reveal" style="margin:24px 0;padding:24px 20px;background:#0A1F44;border:1px solid rgba(201,169,97,0.35);border-radius:14px;text-align:center;">
-      <div style="font-size:11px;letter-spacing:3px;color:#C9A961;text-transform:uppercase;font-family:'DM Sans',sans-serif;">${pilote.rare ? 'Profil rare' : 'Ton pilote FINEA'}</div>
+      <div style="font-size:11px;letter-spacing:3px;color:#C9A961;text-transform:uppercase;font-family:'DM Sans',sans-serif;">${pilote.rare ? 'Pilote rare' : 'Ton pilote FINEA' + (pilote.maturity ? ' · ' + pilote.maturity.label : '')}</div>
       <div style="font-family:'Cormorant Garamond',serif;font-size:40px;color:#C9A961;line-height:1.05;margin-top:8px;">${pilote.name}</div>
       <div style="width:42px;height:1px;background:#C9A961;opacity:0.5;margin:14px auto;"></div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#FAF7F2;opacity:0.92;line-height:1.35;">« ${pilote.phrase} »</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#FAF7F2;opacity:0.92;line-height:1.35;">« ${pilote.phraseInApp || pilote.phrase} »</div>
       <button id="diagPiloteShare" style="margin-top:20px;background:#C9A961;color:#0A1F44;border:0;border-radius:9px;padding:14px 28px;font-size:14px;font-weight:600;font-family:'DM Sans',sans-serif;cursor:pointer;letter-spacing:0.3px;">Partager ma carte ↗</button>
     </div>` : '';
 
@@ -18434,16 +18603,16 @@ function renderResults() {
   const profileCardHTML = `
     <div class="diag-profile-card">
       ${diagOriginRibbon}
-      <div class="diag-profile-eyebrow">✨ Ton profil détecté</div>
+      <div class="diag-profile-eyebrow">✨ Ton point de départ</div>
       <div class="diag-profile-head">
         <div class="diag-profile-emoji">${profile.emoji}</div>
         <div class="diag-profile-head-text">
-          <h2 class="diag-profile-label">${profile.label}</h2>
           <p class="diag-profile-tagline">${profile.tagline}</p>
         </div>
       </div>
+      ${pilote ? `<div class="diag-profile-bridge" style="margin:14px 0 0 0;padding:12px 14px;background:#FAF7F2;border-left:3px solid #C9A961;border-radius:0 8px 8px 0;font-size:13px;line-height:1.55;color:#0A1F44;">En tant que <strong>${pilote.name}</strong>, ta prochaine frontière est <strong>${pointFaible.label}</strong>. <span style="color:#4a4a4a;">${profile.offerLabel} t'outille pour la faire reculer.</span></div>` : ''}
       <div class="diag-profile-offer-block">
-        <span class="diag-profile-offer-eyebrow">🎯 Offre recommandée pour toi</span>
+        <span class="diag-profile-offer-eyebrow">🎯 L'offre alignée avec ton diagnostic</span>
         <div class="diag-profile-offer-row" style="align-items:baseline;">
           <span class="diag-profile-offer-name">${profile.offerLabel}</span>
           <span style="font-size:22px;font-weight:700;color:#0A1F44;margin-left:auto;">${profile.price}</span>
@@ -18468,7 +18637,6 @@ function renderResults() {
 
   document.getElementById('diagBody').innerHTML = `
     <div class="diag-results">
-      ${isAnon ? profileCardHTML : ''}
       <div class="diag-result-header">
         <h2>Ton Score FINEA détaillé</h2>
         <p>Basé sur tes ${TOTAL_Q} réponses — analyse instantanée</p>
@@ -18494,6 +18662,7 @@ function renderResults() {
       <div class="diag-axes-grid">${axesHTML}</div>
       ${insightsHTML}
       ${piloteBlockHTML}
+      ${isAnon ? profileCardHTML : ''}
       ${benchmarkHTML}
       ${prioritiesHTML}
       <div class="diag-result-cta">${ctaHTML}</div>
@@ -18611,13 +18780,18 @@ function renderResults() {
 function _openLeadCaptureModal(profile, score) {
   const existing = document.getElementById('leadCaptureOverlay');
   if (existing) existing.remove();
+  const _lcPilote = (typeof FineaPilote !== 'undefined' && typeof computeAxisScore === 'function')
+    ? FineaPilote.map([0, 1, 2, 3, 4].map(i => computeAxisScore(i))) : null;
+  const _lcIntro = _lcPilote
+    ? `En tant que <strong>${_lcPilote.name}</strong>, ton plan d'action est prêt. Indique ton email pour le recevoir au format PDF.`
+    : `Ton diagnostic et ton plan d'action sont prêts. Indique ton email pour les recevoir au format PDF.`;
   const html = `
     <div class="lead-capture-overlay" id="leadCaptureOverlay">
       <div class="lead-capture-modal">
         <button class="lead-capture-close" aria-label="Fermer">✕</button>
         <div class="lead-capture-eyebrow">📩 Rapport personnalisé</div>
         <h2>Recevoir ton plan par email</h2>
-        <p class="lead-capture-intro">Ton profil <strong>${profile.label}</strong> et ton plan d'action sont prêts. Indique ton email pour les recevoir au format PDF.</p>
+        <p class="lead-capture-intro">${_lcIntro}</p>
         <div class="lead-capture-fields">
           <input type="text" id="lcPrenom" placeholder="Prénom" autocomplete="given-name">
           <input type="email" id="lcEmail" placeholder="ton@email.com" autocomplete="email">
@@ -18661,13 +18835,18 @@ function _openLeadCaptureModal(profile, score) {
 function openArchitecteCandidature(profile) {
   const existing = document.getElementById('archCandOverlay');
   if (existing) existing.remove();
+  const _acPilote = (typeof FineaPilote !== 'undefined' && typeof computeAxisScore === 'function')
+    ? FineaPilote.map([0, 1, 2, 3, 4].map(i => computeAxisScore(i))) : null;
+  const _acIntro = _acPilote
+    ? `En tant que <strong>${_acPilote.name}</strong>, ton diagnostic révèle une dimension stratégique.`
+    : `Ton diagnostic révèle une dimension stratégique.`;
   const html = `
     <div class="lead-capture-overlay" id="archCandOverlay">
       <div class="lead-capture-modal">
         <button class="lead-capture-close" aria-label="Fermer">✕</button>
         <div class="lead-capture-eyebrow">🏛️ Cercle Architecte · sur invitation</div>
         <h2>Candidater au Cercle Architecte</h2>
-        <p class="lead-capture-intro">Ton profil <strong>${profile.label}</strong> suggère une dimension stratégique. Le Cercle Architecte accueille un nombre limité de membres après échange. Laisse-nous tes coordonnées et 2 lignes sur ta situation.</p>
+        <p class="lead-capture-intro">${_acIntro} Le Cercle Architecte accueille un nombre limité de membres après échange. Laisse-nous tes coordonnées et 2 lignes sur ta situation.</p>
         <div class="lead-capture-fields">
           <input type="text" id="acPrenom" placeholder="Prénom" autocomplete="given-name">
           <input type="email" id="acEmail" placeholder="ton@email.com" autocomplete="email">
@@ -18805,7 +18984,7 @@ const OFFERS = [
   { id: 1, key: 'declic',     label: 'Déclic',     badge: '◐ Déclic',      color: '#2EC4B6', price: '9€ paiement unique', priceShort: '9€',     verb: 'Clarifier',  status: 'active' },
   { id: 2, key: 'fondation',  label: 'Fondation',  badge: '▲ Fondation',   color: '#1a8a80', price: '19€/mois',           priceShort: '19€/m',  verb: 'Structurer', status: 'active' },
   { id: 3, key: 'maitrise',   label: 'Maîtrise',   badge: '◆ Maîtrise',    color: '#C9A961', price: '29€/mois',           priceShort: '29€/m',  verb: 'Optimiser',  status: 'soon' },
-  { id: 4, key: 'architecte', label: 'Architecte', badge: '✦ Architecte',  color: '#876f2c', price: '79€/mois',           priceShort: '79€/m',  verb: 'Bâtir',      status: 'invite' },
+  { id: 4, key: 'architecte', label: 'Architecte', badge: '✦ Architecte',  color: '#876f2c', price: '49€/mois',           priceShort: '49€/m',  verb: 'Bâtir',      status: 'invite' },
 ];
 
 /* Chaque module : { icon, title, sub, minLevel } */
@@ -18828,9 +19007,8 @@ const MODULES = [
   { icon: 'calendar-fiscal', title: 'Le Rituel · bilan mensuel', sub: '3 priorités personnalisées chaque mois', minLevel: 3 },
   { icon: 'home-foyer', title: 'Foyer Étendu', sub: 'Grand Objectif commun · contributions · timeline', minLevel: 3 },
   // ── Accompagnement (firewall non-CIF strict)
-  { section: 'Accompagnement & communauté', icon: 'chat', title: 'Chat FINEA', sub: 'Pédagogie pure · sans recommandation produit', minLevel: 2, dev: true },
-  { icon: 'video', title: 'Visio pédagogique mensuelle', sub: 'Mensuelle · Architecte · pédagogie', minLevel: 4, dev: true },
-  { icon: 'people-duo', title: 'Cercle Architecte', sub: 'Communauté à places limitées · visio mensuelle', minLevel: 4, dev: true },
+  { section: 'Accompagnement & communauté', icon: 'chat', title: 'Chat FINEA', sub: 'Ligne directe WhatsApp · pédagogie pure, sans recommandation produit', minLevel: 4, dev: true },
+  { icon: 'people-duo', title: 'Cercle Architecte', sub: 'Communauté privée WhatsApp · places limitées', minLevel: 4, dev: true },
   // ── Simulateurs (Comparateur d'Enveloppes en tête)
   { section: 'Simulateurs & Optimisation', icon: 'envelopes', title: 'Comparateur d\'Enveloppes', sub: 'Livret A · PEA · AV · PER · CTO — caractéristiques objectives', minLevel: 2 },
   { icon: 'calculator', title: 'Simulateur PER & plafonds fiscaux', sub: 'Économies fiscales chiffrées', minLevel: 3 },
@@ -20055,13 +20233,17 @@ function getEffectiveNiveauId(user) {
   const base = user.niveauId ?? 0;
   const scope = user.scopeId ? _fineaGetScope(user.scopeId) : null;
   const scopeLevel = scope ? _fineaScopeOfferToLevel(scope.offer) : 0;
-  return Math.max(base, scopeLevel);
+  const eff = Math.max(base, scopeLevel);
+  // Bêta publique : plancher au niveau Maîtrise (3) → tout est débloqué SAUF Architecte (4).
+  if (FINEA_CONFIG.BETA_FREE_ACCESS) return Math.max(eff, 3);
+  return eff;
 }
 
 /* ── Helpers nav ── */
 function setNavLoggedIn(user) {
   const initials = (user.prenom[0] + (user.nom[0] || '')).toUpperCase();
   document.getElementById('btnConnexion').style.display = 'none';
+  if (typeof _changelogRefreshBadge === 'function') _changelogRefreshBadge();  // pastille « Nouveautés »
   const navUser = document.getElementById('navUser');
   navUser.classList.add('visible');
   document.getElementById('navAvatar').textContent   = initials;
@@ -20260,6 +20442,27 @@ async function _fineaEmailSignIn(email, password) {
     return { ok: true, uid: data && data.user && data.user.id, session: !!(data && data.session) };
   } catch (e) { return { ok: false, error: String(e) }; }
 }
+/* Sécurité — vérifie si un mot de passe apparaît dans une fuite de données connue
+   (HaveIBeenPwned, API publique gratuite, k-anonymat : seuls les 5 premiers caractères du
+   hash SHA-1 quittent le navigateur). Fail-open : toute erreur/indisponibilité réseau ⇒ false
+   (on ne bloque jamais une inscription à cause d'une panne d'un service tiers). */
+async function _fineaPwnedPassword(pw) {
+  try {
+    const buf = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(pw));
+    const hash = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('').toUpperCase();
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch('https://api.pwnedpasswords.com/range/' + hash.slice(0, 5),
+      { headers: { 'Add-Padding': 'true' }, signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) return false;
+    const suffix = hash.slice(5);
+    return (await res.text()).split('\n').some(line => {
+      const [suf, count] = line.trim().split(':');
+      return suf === suffix && parseInt(count || '0', 10) > 0;
+    });
+  } catch (_) { return false; }
+}
 /* Établit l'identité serveur pour une inscription/connexion email.
    Retourne l'uid Supabase si OK, sinon null (→ mode local dégradé, foyer indispo). */
 async function _fineaEstablishEmailIdentity(mode, email, password, prenom, opts) {
@@ -20269,6 +20472,7 @@ async function _fineaEstablishEmailIdentity(mode, email, password, prenom, opts)
       const su = await _fineaEmailSignup(email, password, prenom, opts);
       if (su.ok) { const si = await _fineaEmailSignIn(email, password); return si.ok ? si.uid : null; }
       if (su.error === 'email_exists') { const si = await _fineaEmailSignIn(email, password); return si.ok ? si.uid : 'email_exists'; }
+      if (su.error === 'pwned_password') return 'pwned_password';
       return null;
     }
     // mode login : tente la session ; si échec, migre un éventuel compte local hérité.
@@ -20493,15 +20697,29 @@ document.getElementById('registerSubmit').addEventListener('click', async () => 
   const consentMarketing = !!(_consentEl && _consentEl.checked);
   let valid = true;
   if (sessionUsers.find(u => u.email.toLowerCase() === email)) { showError('regEmail','regEmailErr'); valid = false; }
-  if (pass.length < 8)  { showError('regPassword','regPassErr'); valid = false; }
+  if (pass.length < 8)  { const _pm=document.getElementById('regPassErr'); if(_pm) _pm.textContent='Minimum 8 caractères.'; showError('regPassword','regPassErr'); valid = false; }
   if (pass !== confirm) { showError('regPasswordConfirm','regConfirmErr'); valid = false; }
   if (!valid) return;
   // Identité serveur (Supabase Auth) — indispensable pour Duo/Foyer/Cap/Partages.
   const _regBtn = document.getElementById('registerSubmit');
-  const _regLbl = _regBtn.textContent; _regBtn.disabled = true; _regBtn.textContent = 'Création…';
+  const _regLbl = _regBtn.textContent; _regBtn.disabled = true; _regBtn.textContent = 'Vérification…';
+  // Sécurité HIBP : refuse un mot de passe présent dans une fuite connue (k-anonymat, fail-open).
+  if (await _fineaPwnedPassword(pass)) {
+    const _pm = document.getElementById('regPassErr');
+    if (_pm) _pm.textContent = 'Ce mot de passe figure dans une fuite de données connue. Choisis-en un plus sûr.';
+    showError('regPassword','regPassErr');
+    _regBtn.disabled = false; _regBtn.textContent = _regLbl;
+    return;
+  }
+  _regBtn.textContent = 'Création…';
   let authUid = null;
   const _idres = await _fineaEstablishEmailIdentity('register', email, pass, prenom, { nom, consentMarketing });
   _regBtn.disabled = false; _regBtn.textContent = _regLbl;
+  if (_idres === 'pwned_password') { // filet serveur : mot de passe compromis détecté côté backend
+    const _pm = document.getElementById('regPassErr');
+    if (_pm) _pm.textContent = 'Ce mot de passe figure dans une fuite de données connue. Choisis-en un plus sûr.';
+    showError('regPassword','regPassErr'); return;
+  }
   if (_idres === 'email_exists') { showError('regEmail','regEmailErr'); return; } // déjà inscrit (mot de passe différent) → utiliser Connexion
   if (_idres) authUid = _idres;
   const newUser = { id: authUid || null, email, password: pass, prenom: prenom||'Utilisateur', nom: nom||'', niveauId: 0 };
@@ -20547,7 +20765,7 @@ const WELCOME_LEVELS = [
   { id: 'declic',     emoji: '⚡',  name: 'Déclic',
     tagline: 'Premier rapport complet + plan 90 jours actionnable.', cta: 'Choisir Déclic' },
   { id: 'fondation',  emoji: '📚',  name: 'Fondation',
-    tagline: 'Studio 6 outils, Comparateur d\'Enveloppes, Bibliothèque, Chat FINEA (à venir).', cta: 'Choisir Fondation',
+    tagline: 'Studio 6 outils, Comparateur d\'Enveloppes, Bibliothèque, Dashboard + Plan 90 jours.', cta: 'Choisir Fondation',
     badge: '' },
   { id: 'maitrise',   emoji: '🧱',  name: 'Maîtrise',
     tagline: 'Bilan Patrimonial, Stress Test, Achat vs Location, Dashboard complet, Foyer Étendu.', cta: 'M\'avertir' },
@@ -20561,6 +20779,9 @@ function openWelcome() {
   if (spaceStorage.rawGet(getCurrentSpaceId(), 'welcome_seen')) {
     return openDashboard();
   }
+  // Nouveau compte : il voit le Welcome (accueil) → on marque le Journal de bord
+  // "vu" pour ne pas lui imposer AUSSI le journal. Les revenants, eux, le verront 1×.
+  if (typeof _changelogMarkSeen === 'function') _changelogMarkSeen();
   if (typeof PRICING_SCOPE_DEF !== 'undefined') {
     const savedScope = localStorage.getItem('finea_pricing_scope');
     welcomeSelectedScope = PRICING_SCOPE_DEF[savedScope] ? savedScope : 'solo';
@@ -20696,6 +20917,13 @@ document.getElementById('ddDashboard').addEventListener('click', e => {
   document.getElementById('navDropdown').classList.remove('open');
   openDashboard();
 });
+{ const _ddNew = document.getElementById('ddNouveautes');
+  if (_ddNew) _ddNew.addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('navDropdown').classList.remove('open');
+    showChangelog();
+  });
+}
 
 // Déconnexion
 function _fineaDoLogout(e) {
@@ -20964,7 +21192,7 @@ function _renderStripTop(offer) {
         <div class="un-top-icon">🏛️</div>
         <div class="un-top-text">
           <div class="un-top-title">Tu bénéficies de l'intégralité de FINEA</div>
-          <div class="un-top-sub">Cercle Architecte · Visio mensuelle · Bilan annuel · Cahier personnalisé</div>
+          <div class="un-top-sub">Cercle Architecte · Ligne directe WhatsApp · La Note de l'Architecte · Bilan annuel</div>
         </div>
       </div>
     </div>`;
@@ -21043,6 +21271,8 @@ async function openDashboard() {
   document.getElementById('dashboardOverlay').classList.add('active');
   // Pastilles de notifications : refresh sur ouverture du dashboard
   setTimeout(() => { if (typeof refreshNotificationBadges === 'function') refreshNotificationBadges(); }, 50);
+  // Journal de bord : auto-ouverture 1× pour un revenant avec une version non vue (jamais nouveau/landing)
+  setTimeout(_changelogMaybeAutoOpen, 700);
   document.body.style.overflow = 'hidden';
 }
 
@@ -22675,7 +22905,7 @@ function rdvRender() {
     <div class="rdv-questions">${qs}</div>
     <div class="m1-guide-tip">💡 ${_escapeHtml(c.astuce)}</div>
     <div class="rdv-nav">
-      ${_rdvStep > 0 ? `<button class="rdv-back" onclick="rdvPrev()">←</button>` : ''}
+      ${_rdvStep > 0 ? `<button class="rdv-back" onclick="rdvPrev()" aria-label="Retour">←</button>` : ''}
       <button class="rdv-next" onclick="rdvNext()">${_rdvStep === n - 1 ? 'Conclure →' : 'Suivant →'}</button>
     </div>`;
 }
@@ -22724,9 +22954,9 @@ function foyer360Deactivate() {
 /* ── Sélecteur d'offre (beta) ── */
 const OFFER_SWITCHER_DEF = [
   { id: 'declic',     niveauId: 1, label: '◐ Déclic',     sub: 'Premier rapport + plan 90j' },
-  { id: 'fondation',  niveauId: 2, label: '▲ Fondation',  sub: 'Studio + Bibliothèque + Chat FINEA (à venir)' },
+  { id: 'fondation',  niveauId: 2, label: '▲ Fondation',  sub: 'Studio + Bibliothèque + Dashboard' },
   { id: 'maitrise',   niveauId: 3, label: '◆ Maîtrise',   sub: 'Dashboard complet + Rituel' },
-  { id: 'architecte', niveauId: 4, label: '✦ Architecte', sub: 'Cercle + visio + bilan annuel' },
+  { id: 'architecte', niveauId: 4, label: '✦ Architecte', sub: 'Cercle WhatsApp + La Note + bilan annuel' },
 ];
 function renderOfferSwitcher() {
   // Ancienne UI "Mon plan · Beta accès complet" remplacée par la carte
@@ -23277,13 +23507,17 @@ function renderDashJourney() {
     // Palier branché à un parcours Académie ?
     let pct = 0, done = 0, total = 0, hasParcours = false, certifie = false;
     if (p.parcoursSlug && typeof APP_PARCOURS !== 'undefined') {
-      const parc = APP_PARCOURS.find(x => x.slug === p.parcoursSlug);
-      if (parc) {
+      // Agrège TOUS les parcours du pilier (ex. Clarifier = « Premiers pas » 5 + « Clarifier ses flux » 6 = 11 leçons)
+      const parcs = APP_PARCOURS.filter(x => x.pilier === p.key);
+      if (parcs.length) {
         hasParcours = true;
-        total = parc.lessons.length;
-        const prog = (typeof getParcoursProgress === 'function') ? getParcoursProgress(parc.id) : { lessons_completed: [], certificat_obtenu: false };
-        done = prog.lessons_completed.length;
-        certifie = !!prog.certificat_obtenu;
+        certifie = true;
+        parcs.forEach(parc => {
+          total += parc.lessons.length;
+          const prog = (typeof getParcoursProgress === 'function') ? getParcoursProgress(parc.id) : { lessons_completed: [], certificat_obtenu: false };
+          done += prog.lessons_completed.length;
+          if (!prog.certificat_obtenu) certifie = false;
+        });
         pct = total ? Math.round(done / total * 100) : 0;
       }
     }
@@ -23295,7 +23529,7 @@ function renderDashJourney() {
           <div class="dash-palier-sym">${p.sym}</div>
           <div class="dash-palier-name">${p.name}</div>
           <div class="dash-palier-bar"><div class="dash-palier-bar-fill" style="width:0%"></div></div>
-          <div class="dash-palier-meta">6 leçons en préparation<br><strong>${structurerWaitlistCount()} intéressés</strong></div>
+          <div class="dash-palier-meta">Parcours en préparation<br><strong>${structurerWaitlistCount()} intéressés</strong></div>
           <div class="dash-palier-waitbtn ${on ? 'on' : ''}">${on ? '✓ Inscrit' : '🔔 Me prévenir'}</div>
         </div>`;
     }
@@ -23737,7 +23971,7 @@ const BUDGET_DEF = {
   ],
   epargne: [
     { key:'livret_a',    label:'Livret A',       custom:false },
-    { key:'pel',         label:'PEL / CEL',      custom:false },
+    { key:'pel',         label:'PEL / CEL (épargne logement)',      custom:false },
     { key:'assurance_v', label:'Assurance-vie',  custom:false },
     { key:'pea',         label:'PEA / Bourse',   custom:false },
     { key:'per',         label:'PER / Retraite', custom:false },
@@ -26485,7 +26719,7 @@ function t3ComputeMonths(p) {
 // Critères pédagogiques (non-prescriptif — FINEA n'est pas CIF)
 const T3_CRITERIA = [
   { icon: '⚡', title: 'Liquidité immédiate',    note: 'Tu dois pouvoir récupérer ton argent en 24 à 72 h, sans pénalité.' },
-  { icon: '🛡️', title: 'Capital garanti',       note: 'Le solde ne doit pas pouvoir baisser. On exclut actions, OPCVM, crypto, immobilier.' },
+  { icon: '🛡️', title: 'Capital garanti',       note: 'Le solde ne doit pas pouvoir baisser. On exclut actions, OPCVM (fonds de placement collectif), crypto, immobilier.' },
   { icon: '🚫', title: 'Sans frais de retrait', note: 'Pas de pénalité, pas de blocage de durée, pas de fenêtre de sortie restreinte.' },
   { icon: '🌱', title: 'Fiscalité allégée',     note: 'Privilégie un cadre où les intérêts ne sont pas érodés par l\'impôt et les prélèvements sociaux.' },
 ];
@@ -27706,7 +27940,7 @@ function a2ComputeCession(state) {
   }
   else if (type === 'titres') {
     // PV mobilière CTO : PFU 30 %
-    result.cadres.push({ name: 'PFU mobilier (Flat Tax)', desc: 'PFU 12,8 % IR + 17,2 % PS = 30 % (ou option barème IR + 17,2 % PS)', impact: formatCurrency(M * cfg.pfu.total) + ' indicatif' });
+    result.cadres.push({ name: 'PFU mobilier — Prélèvement Forfaitaire Unique (Flat Tax)', desc: 'PFU 12,8 % IR + 17,2 % PS = 30 % (ou option barème IR + 17,2 % PS)', impact: formatCurrency(M * cfg.pfu.total) + ' indicatif' });
     result.pvNet = M;
     result.impotEstime = M * cfg.pfu.total;
   }
@@ -28697,7 +28931,7 @@ const A4_FRAMES = [
       </ul>
       <p>Tu ne peux <strong>maximiser que 2 sur 3</strong> :</p>
       <ul>
-        <li>Liquidité + Rendement → tu sacrifies le contrôle (fonds actions, ETF).</li>
+        <li>Liquidité + Rendement → tu sacrifies le contrôle (fonds actions, ETF — fonds indiciels cotés).</li>
         <li>Liquidité + Contrôle → tu sacrifies le rendement (livrets, comptes courants).</li>
         <li>Rendement + Contrôle → tu sacrifies la liquidité (immobilier, PER, entreprise).</li>
       </ul>
@@ -29661,7 +29895,7 @@ function renderD3Timeline(state) {
           <div style="display: flex; gap: 6px;">
             <button class="d3-add-btn" style="background: var(--gold); color: var(--navy); border-style: solid;"
                     onclick="d3SubmitTimeline()">Ajouter</button>
-            <button class="d3-contrib-del" onclick="patchD3State({_showAddTimeline: false})">✕</button>
+            <button class="d3-contrib-del" onclick="patchD3State({_showAddTimeline: false})" aria-label="Annuler">✕</button>
           </div>
         </div>
       ` : `
@@ -30829,7 +31063,8 @@ function renderDashSupportCard() {
     html += '<p style="font-size:12.5px;color:var(--ink-soft);margin:0 0 14px;line-height:1.45;">💬 Chat FINEA (WhatsApp) — bientôt disponible.</p>';
   }
   // Noter / Partager
-  html += '<button class="dash-offer-btn dash-offer-btn--ghost" style="width:100%;margin-bottom:8px;" onclick="_fineaOpenNps()">★ Noter FINEA</button>'
+  html += '<button class="dash-offer-btn" style="width:100%;margin-bottom:8px;background:#C9A961;color:#0A1F44;font-weight:600;" onclick="_fineaShareMyPilote()">📲 Partager mon Pilote</button>'
+       +  '<button class="dash-offer-btn dash-offer-btn--ghost" style="width:100%;margin-bottom:8px;" onclick="_fineaOpenNps()">★ Noter FINEA</button>'
        +  '<button class="dash-offer-btn dash-offer-btn--ghost" style="width:100%;" onclick="_fineaOpenShare()">📲 Partager FINEA</button>';
   // Admin : configurer le numéro support sans toucher au code
   if (isAdmin) {
@@ -32464,7 +32699,7 @@ const S6_MODULES = [
         <li><strong>Étape 4</strong> : si le réinvestissement est respecté, le report est maintenu (et purgé en cas de décès du dirigeant). Sinon, la plus-value initiale devient imposable rétroactivement.</li>
       </ul>
       <div class="s6-quote">
-        <strong>Ce que les vendeurs de holding ne disent pas toujours</strong> : le réinvestissement éligible exclut explicitement le placement financier passif (actions cotées, fonds €, SCPI fiscales de loueurs en meublé). Les actifs éligibles sont plus limités qu&apos;on ne le pense — et les sanctions en cas de non-respect sont lourdes.
+        <strong>Ce que les vendeurs de holding ne disent pas toujours</strong> : le réinvestissement éligible exclut explicitement le placement financier passif (actions cotées, fonds €, SCPI (sociétés civiles de placement immobilier) fiscales de loueurs en meublé). Les actifs éligibles sont plus limités qu&apos;on ne le pense — et les sanctions en cas de non-respect sont lourdes.
       </div>
       <p>L&apos;apport-cession est <strong>pertinent uniquement</strong> si tu as un projet de réinvestissement professionnel clair (rachat d&apos;une autre entreprise, immobilier d&apos;exploitation, fonds éligibles). Sans projet, c&apos;est un piège à 60 % du capital de cession.</p>
     `,
@@ -32863,7 +33098,7 @@ function renderS4Header() {
     <div class="s4-header">
       <span class="s4-eyebrow">Simulateurs · Fiscal Complet</span>
       <h1 class="s4-title">Simulateur Fiscal — comprendre ta pression, voir les cadres</h1>
-      <p class="s4-intro">Estime ta pression fiscale globale (IR + PS + taxe foncière + CEHR + CDHR éventuelles) et découvre <strong>4 fenêtres pédagogiques</strong> classiquement évoquées en optimisation fiscale. <strong>Aucune optimisation personnalisée n&apos;est calculée</strong> : ces cadres se discutent obligatoirement avec un expert-comptable ou un avocat fiscaliste.</p>
+      <p class="s4-intro">Estime ta pression fiscale globale (Impôt sur le Revenu — IR, Prélèvements Sociaux — PS, taxe foncière, et contributions sur les hauts revenus — CEHR/CDHR — le cas échéant) et découvre <strong>4 fenêtres pédagogiques</strong> classiquement évoquées en optimisation fiscale. <strong>Aucune optimisation personnalisée n&apos;est calculée</strong> : ces cadres se discutent obligatoirement avec un expert-comptable ou un avocat fiscaliste.</p>
       <div class="finea-year-chip" title="${cfg.yearSource} · ${cfg.yearNote}">
         📅 Barème indicatif ${cfg.yearRef} · ${cfg.yearSource}
       </div>
@@ -32875,7 +33110,7 @@ function renderS4Pedago() {
     <div class="s4-pedago">
       <span class="s4-pedago-tag">Le principe</span>
       <div class="s4-pedago-name">L&apos;impôt n&apos;est pas un mur, c&apos;est un cadre</div>
-      <p class="s4-pedago-mantra">Comprendre où se situent les vraies marges de manœuvre — quelle TMI, quels prélèvements sociaux, quelles enveloppes ouvrent des fenêtres — change la qualité du dialogue avec ton expert-comptable. FINEA t&apos;aide à formuler les bonnes questions ; les décisions et déclarations restent du ressort des professionnels agréés.</p>
+      <p class="s4-pedago-mantra">Comprendre où se situent les vraies marges de manœuvre — quelle TMI (Tranche Marginale d&apos;Imposition), quels prélèvements sociaux, quelles enveloppes ouvrent des fenêtres — change la qualité du dialogue avec ton expert-comptable. FINEA t&apos;aide à formuler les bonnes questions ; les décisions et déclarations restent du ressort des professionnels agréés.</p>
     </div>`;
 }
 
@@ -34479,7 +34714,7 @@ function renderS1Header() {
     <div class="s1-header">
       <span class="s1-eyebrow">Simulateurs · Comparateur d&apos;Enveloppes</span>
       <h1 class="s1-title">Comparateur d&apos;Enveloppes — connaître ses cadres</h1>
-      <p class="s1-intro">5 enveloppes principales en France : Livret A/LDDS, PEA, Assurance-Vie, PER, Compte-Titres. FINEA t&apos;aide à <strong>comprendre leurs caractéristiques objectives</strong> selon ton profil — pas à choisir pour toi. Le choix final relève d&apos;un Conseiller en Investissements Financiers (CIF) agréé AMF.</p>
+      <p class="s1-intro">Les enveloppes principales en France : <strong>Livret A</strong>, <strong>LDDS</strong> (Livret de Développement Durable et Solidaire), <strong>PEA</strong> (Plan d&apos;Épargne en Actions), <strong>Assurance-Vie</strong> (AV), <strong>PER</strong> (Plan d&apos;Épargne Retraite) et <strong>CTO</strong> (Compte-Titres Ordinaire). FINEA t&apos;aide à <strong>comprendre leurs caractéristiques objectives</strong> selon ton profil — pas à choisir pour toi. Le choix final relève d&apos;un Conseiller en Investissements Financiers (CIF) agréé AMF (Autorité des Marchés Financiers).</p>
       <div class="finea-year-chip" title="${cfg.yearSource} · taux Livret A révisé en ${cfg.livretA.lastRevisionDate}. ${cfg.yearNote}">
         📅 Plafonds & taux indicatifs ${cfg.yearRef} · ${cfg.yearSource}
       </div>
@@ -37928,12 +38163,56 @@ function appSubmitQuiz(parcoursId, lessonId) {
 /* ─── Instrumentation légère (localStorage) ─── */
 function _appAnalytics(event, data) {
   try {
+    const ev = { event, data: data || null, ts: new Date().toISOString() };
     const arr = JSON.parse(localStorage.getItem('finea_analytics') || '[]');
-    arr.push({ event, data: data || null, ts: new Date().toISOString() });
+    arr.push(ev);
     if (arr.length > 500) arr.splice(0, arr.length - 500);
     localStorage.setItem('finea_analytics', JSON.stringify(arr));
+    // Outbox serveur : on empile pour un flush best-effort (batch) vers la Google Sheet.
+    const out = JSON.parse(localStorage.getItem('finea_analytics_outbox') || '[]');
+    out.push(ev);
+    if (out.length > 200) out.splice(0, out.length - 200);
+    localStorage.setItem('finea_analytics_outbox', JSON.stringify(out));
+    if (out.length >= 25) _appAnalyticsFlush(false);   // flush anticipé si ça s'accumule
   } catch (_) {}
 }
+/* ─── Flush serveur de l'instrumentation (batch, best-effort, non bloquant) ───
+   Envoie les événements accumulés vers le même endpoint que le feedback (Google
+   Sheet), avec type:'analytics'. no-cors → on ne peut pas confirmer la réception,
+   c'est acceptable pour de l'analytique bêta. Déclenché périodiquement et à la
+   fermeture de l'onglet (sendBeacon survit à l'unload). */
+function _appAnalyticsFlush(useBeacon) {
+  let outbox;
+  try { outbox = JSON.parse(localStorage.getItem('finea_analytics_outbox') || '[]'); } catch (_) { outbox = []; }
+  if (!outbox.length) return;
+  // Endpoint absent ou mode dev : on purge quand même pour éviter l'accumulation infinie.
+  if (typeof FB_ENDPOINT === 'undefined' || (typeof FB_DEV_MODE !== 'undefined' && FB_DEV_MODE)) {
+    try { localStorage.removeItem('finea_analytics_outbox'); } catch (_) {}
+    return;
+  }
+  const payload = {
+    type: 'analytics',
+    events: outbox,
+    testerEmail: (typeof currentUser !== 'undefined' && currentUser && currentUser.email) || 'anonymous',
+    demoLevel: (typeof currentUser !== 'undefined' && currentUser && currentUser.niveauId != null) ? currentUser.niveauId : '',
+    url: location.href,
+    ua: navigator.userAgent,
+    timestamp: new Date().toISOString(),
+  };
+  try {
+    const fd = new FormData();
+    fd.append('payload', JSON.stringify(payload));
+    if (useBeacon && navigator.sendBeacon) {
+      navigator.sendBeacon(FB_ENDPOINT, fd);
+    } else {
+      fetch(FB_ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors', keepalive: true });
+    }
+    localStorage.removeItem('finea_analytics_outbox');   // envoyé (best-effort)
+  } catch (_) { /* on garde l'outbox pour la prochaine tentative */ }
+}
+// Flush à la mise en arrière-plan / fermeture de l'onglet.
+window.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') _appAnalyticsFlush(true); });
+window.addEventListener('pagehide', () => _appAnalyticsFlush(true));
 function _appMarkLessonCompleted(lessonId) {
   try {
     const arr = JSON.parse(localStorage.getItem('finea_lesson_completed') || '[]');
@@ -38242,30 +38521,30 @@ const PRICING_SCOPE_DEF = {
   solo:  {
     icon: '👤', label: 'Solo', spaces: '1 espace inclus', feature: '1 espace personnel',
     copy: 'Ton parcours, ton rythme, ton espace.',
-    prices:        { declic: '9€',  fondation: '19€',  maitrise: '29€',  architecte: '79€'  },
-    periods:       { declic: 'paiement unique', fondation: '/mois sans engagement', maitrise: '/mois sans engagement', architecte: '/mois · engagement 6 mois' },
-    pricesAnnual:  { declic: '9€',  fondation: '182€', maitrise: '278€', architecte: '758€' },
-    periodsAnnual: { declic: 'paiement unique', fondation: '/an · économie 46€', maitrise: '/an · économie 70€', architecte: '/an · économie 190€' },
+    prices:        { declic: '9€',  fondation: '19€',  maitrise: '29€',  architecte: '49€'  },
+    periods:       { declic: 'paiement unique', fondation: '/mois sans engagement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
+    pricesAnnual:  { declic: '9€',  fondation: '182€', maitrise: '278€', architecte: '470€' },
+    periodsAnnual: { declic: 'paiement unique', fondation: '/an · économie 46€', maitrise: '/an · économie 70€', architecte: '/an · économie 118€' },
     founder: '',
     founderBanner: '',
   },
   duo:   {
     icon: '👥', label: 'Duo', spaces: '2 espaces (Maîtrise+)', feature: '2 espaces personnels liés',
     copy: 'Deux espaces liés. Réservé aux plans Maîtrise et Architecte.',
-    prices:        { declic: '—',   fondation: '—',   maitrise: '49€',  architecte: '89€'  },
-    periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · 2 sièges Architecte' },
-    pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '470€', architecte: '854€' },
-    periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 118€', architecte: '/an · économie 214€' },
+    prices:        { declic: '—',   fondation: '—',   maitrise: '49€',  architecte: '69€'  },
+    periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
+    pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '470€', architecte: '662€' },
+    periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 118€', architecte: '/an · économie 166€' },
     founder: '',
     founderBanner: '',
   },
   foyer: {
     icon: '🏠', label: 'Foyer', spaces: "jusqu'à 5 espaces (Maîtrise+)", feature: "jusqu'à 5 espaces personnels liés",
     copy: "Jusqu'à 5 espaces. Réservé aux plans Maîtrise et Architecte.",
-    prices:        { declic: '—',   fondation: '—',   maitrise: '69€',  architecte: '129€'  },
-    periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · jusqu’à 5 sièges' },
-    pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '662€', architecte: '1238€' },
-    periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 166€', architecte: '/an · économie 310€' },
+    prices:        { declic: '—',   fondation: '—',   maitrise: '69€',  architecte: '89€'  },
+    periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
+    pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '662€', architecte: '854€' },
+    periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 166€', architecte: '/an · économie 214€' },
     founder: '',
     founderBanner: '',
   }
@@ -38374,6 +38653,7 @@ const LEGAL_CONTENT = {
         <li>EUID : FR7501.994382786</li>
         <li>N° TVA intracommunautaire : FR88 994 382 786</li>
       </ul>
+      <p><strong>Directeur de la publication :</strong> Djordan Belson, en sa qualité de président de BEL HOLDING SAS.</p>
 
       <h3>Contact</h3>
       <p>Email général : <strong>contact@hellofinea.com</strong><br>
@@ -38401,7 +38681,7 @@ const LEGAL_CONTENT = {
     `,
   },
   cgu: {
-    title: 'Conditions Générales d\'Utilisation — Bêta privée',
+    title: 'Conditions Générales d\'Utilisation — Bêta publique',
     body: `
       <h3>1. Objet</h3>
       <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et
@@ -38491,7 +38771,9 @@ const LEGAL_CONTENT = {
       <h3>4. Base légale</h3>
       <p>Le traitement repose sur l'exécution du contrat (CGU) et, pour la communication
       bêta, sur l'intérêt légitime de BEL HOLDING à itérer son produit avec ses premiers
-      utilisateurs.</p>
+      utilisateurs. Les <strong>emails marketing</strong> (séquence d'onboarding) reposent, eux,
+      sur le <strong>consentement explicite</strong> de l'utilisateur (opt-in recueilli à
+      l'inscription), retirable à tout moment via le lien de désinscription présent dans chaque email.</p>
 
       <h3>5. Stockage</h3>
       <p>Les données saisies par l'utilisateur sont conservées sur les serveurs Supabase
@@ -38515,7 +38797,8 @@ const LEGAL_CONTENT = {
         <li><strong>Supabase Inc.</strong> — hébergement base de données et Edge Functions (données localisées dans l'UE, région Paris, France) ;</li>
         <li><strong>Stripe Payments Europe, Ltd.</strong> (Irlande) — traitement des paiements et abonnements ;</li>
         <li><strong>Brevo</strong> (Sendinblue SAS, Paris, France) — envoi des emails transactionnels et marketing ;</li>
-        <li><strong>OVH SAS</strong> (Roubaix, France) — gestion du nom de domaine.</li>
+        <li><strong>OVH SAS</strong> (Roubaix, France) — gestion du nom de domaine ;</li>
+        <li><strong>Cloudflare, Inc.</strong> (États-Unis, SCC RGPD) — mesure d'audience anonyme et sans cookie, activée uniquement si l'utilisateur accepte la mesure d'audience.</li>
       </ul>
 
       <h3>8. Cookies &amp; identifiants techniques</h3>
@@ -38523,6 +38806,10 @@ const LEGAL_CONTENT = {
       Un identifiant technique anonyme (UUID localStorage) est créé pour permettre la
       sauvegarde du diagnostic d'un visiteur non encore inscrit, et son transfert vers son
       compte après inscription.</p>
+      <p>Si l'utilisateur y consent (« Tout accepter » du bandeau cookies), la mesure d'audience
+      est assurée par <strong>Cloudflare Web Analytics</strong> — solution <strong>sans cookie
+      et sans identifiant</strong>, sans donnée personnelle ni suivi entre sites. Elle reste
+      entièrement désactivée sans ce consentement.</p>
 
       <h3>9. Droits RGPD</h3>
       <p>Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi Informatique et Libertés,
@@ -41626,13 +41913,47 @@ if (mobileNavToggle && mobileNavDrawer) {
     <button class="cl-close" onclick="closeChangelog()" aria-label="Fermer">✕</button>
     <header class="cl-header">
       <div style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:var(--navy);letter-spacing:-0.5px;line-height:1;margin-bottom:12px;">FINEA<span style="color:var(--gold);">.</span></div>
-      <div class="cl-eyebrow">🧭 Journal de bord · juin 2026</div>
-      <h2 id="clTitle">Un nouveau cap franchi.</h2>
-      <p class="cl-sub">Voici ce qui a changé à bord depuis ta dernière escale.</p>
+      <div class="cl-eyebrow">🧭 Journal de bord · juillet 2026</div>
+      <h2 id="clTitle">Bienvenue à bord. FINEA est à toi.</h2>
+      <p class="cl-sub">Tu n'ouvres pas une appli de plus. Tu prends la barre de ton argent — sans banquier au-dessus de l'épaule, sans produit à te vendre.</p>
     </header>
 
     <div class="cl-body">
       <div class="cl-journey" style="padding:6px 0 2px;">
+
+        <div style="display:flex;gap:16px;">
+          <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #f3e9cf;"></div>
+            <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
+          </div>
+          <div style="padding-bottom:22px;">
+            <div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-ink);margin-bottom:2px;">Juillet 2026</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Ton Pilote, révélé</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Ton diagnostic ne te rend plus seulement un score : il te révèle ton <strong>Pilote</strong> — l'archétype qui dit <em>comment</em> tu navigues avec ton argent, et jusqu'où tu maîtrises ton cap. Une identité à voir grandir à chaque geste. Et à partager.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;">
+          <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #f3e9cf;"></div>
+            <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
+          </div>
+          <div style="padding-bottom:22px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Ce que tu peux faire, dès maintenant</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Lance ton <strong>diagnostic</strong> et lis ton <strong>Score FINEA</strong> sur 5 axes — liquidité, structure, dette, croissance, protection. Puis mets les mains dans le cambouis : <strong>compare un PEA et un CTO</strong>, simule <strong>acheter ou louer</strong>, teste ta <strong>trajectoire</strong> sur 10 ans, décrypte le jargon à l'<strong>Académie</strong>. Tout est débloqué — seul le <strong>Cercle Architecte</strong> reste sur invitation.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;">
+          <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #f3e9cf;"></div>
+            <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
+          </div>
+          <div style="padding-bottom:22px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Ce qu'on attend de toi</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Tu fais partie des premiers. Pose <strong>un vrai geste</strong> cette semaine, explore le simulateur qui te concerne, et surtout : <strong>dis-nous ce qui coince</strong> (le bouton Feedback est toujours là). Ton retour ne tombe pas dans le vide — il change ce qu'on livre la semaine suivante. C'est une bêta : on construit <strong>avec</strong> toi.</div>
+          </div>
+        </div>
 
         <div style="display:flex;gap:16px;">
           <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
@@ -41683,7 +42004,7 @@ if (mobileNavToggle && mobileNavDrawer) {
     </div>
 
     <footer class="cl-footer">
-      <button class="cl-cta" onclick="closeChangelog()">Reprendre la barre →</button>
+      <button class="cl-cta" onclick="closeChangelog(); if (typeof openDiag === 'function') openDiag();">Lancer mon diagnostic →</button>
     </footer>
   </div>
 </div>
@@ -41728,7 +42049,7 @@ if (mobileNavToggle && mobileNavDrawer) {
 
 <div class="fb-overlay" id="fbOverlay">
   <div class="fb-modal">
-    <button class="fb-modal-close" onclick="closeFeedback()">✕</button>
+    <button class="fb-modal-close" onclick="closeFeedback()" aria-label="Fermer">✕</button>
     <div class="fb-modal-content" id="fbContent"><!-- injecté par fbRenderModal() --></div>
   </div>
 </div>
@@ -42429,12 +42750,14 @@ function renderPricingGreeting() {
     const lead = JSON.parse(localStorage.getItem('finea_lead') || '{}');
     if (lead.prenom) prenom = lead.prenom;
   } catch (_) {}
-  document.getElementById('pricingGreetingEmoji').textContent = profile.emoji || '✨';
+  const _identity = profile.piloteName || profile.label;
+  document.getElementById('pricingGreetingEmoji').textContent = profile.piloteName ? '✦' : (profile.emoji || '✨');
+  const _identityLabel = profile.piloteName ? 'Ton pilote' : 'Ton point de départ';
   const line1 = prenom
-    ? `${prenom} · Ton profil détecté : <strong>${profile.label}</strong>`
-    : `Ton profil détecté : <strong>${profile.label}</strong>`;
+    ? `${prenom} · ${_identityLabel} : <strong>${_identity}</strong>`
+    : `${_identityLabel} : <strong>${_identity}</strong>`;
   document.getElementById('pricingGreetingLine1').innerHTML = line1;
-  document.getElementById('pricingGreetingLine2').textContent = "Voici l'offre alignée avec ton profil ↓";
+  document.getElementById('pricingGreetingLine2').textContent = "Voici l'offre alignée avec ton diagnostic ↓";
   const mismatchEl = document.getElementById('pricingGreetingMismatch');
   if (profile.scopeMismatch && profile.scopeMessage) {
     mismatchEl.innerHTML = `💡 ${profile.scopeMessage}`;
@@ -42832,7 +43155,7 @@ else _v3LandingInit();
       <h2 class="arch-h2">Tu as construit.<br>Tu ne cherches plus à apprendre les bases.</h2>
       <div class="arch-prose">
         <p>Tu as déjà passé la phase d'éducation financière. Tu sais ce qu'est une assurance-vie multi-supports, tu as choisi tes enveloppes, tu suis ton patrimoine. Ce que tu cherches maintenant, ce n'est pas une nouvelle leçon — c'est un cadre pour les décisions que tes outils mensuels ne couvrent pas.</p>
-        <p>Tu envisages une cession d'entreprise, une donation à tes enfants, une structuration en SCI ou en holding. Tu te demandes comment lisser des plus-values sur cinq ans, à quel moment activer un démembrement, comment articuler PER et IFI. Ce sont les questions des paliers que le marché traite mal : entre l'autonomie totale et le family office à 60 000 € par an, il n'y a presque rien.</p>
+        <p>Tu envisages une cession d'entreprise, une donation à tes enfants, une structuration en SCI ou en holding. Tu te demandes comment lisser des plus-values sur cinq ans, à quel moment activer un démembrement, comment articuler PER et IFI (Impôt sur la Fortune Immobilière). Ce sont les questions des paliers que le marché traite mal : entre l'autonomie totale et le family office à 60 000 € par an, il n'y a presque rien.</p>
         <p>Le Cercle Architecte est ce qui manque. Une méthode, des cadres mentaux, une communauté restreinte qui se posent les mêmes questions — et un référent senior qui partage la même posture : pédagogique, sans commission, sans produit à vendre.</p>
       </div>
     </div>
@@ -42866,13 +43189,13 @@ else _v3LandingInit();
         </div>
         <div class="arch-pillar">
           <div class="arch-symbol" aria-hidden="true">✦</div>
-          <h3>Visio mensuelle avec un référent senior</h3>
-          <p>Une heure par mois, en groupe restreint. Pas de masterclass — des cas réels, des arbitrages, du contre-feu.</p>
+          <h3>La Note de l'Architecte · mensuelle</h3>
+          <p>Chaque mois, un cadre de fond écrit — un angle d'arbitrage, une grille de lecture. Pas de l'actualité : de la structure. À lire, à garder.</p>
         </div>
         <div class="arch-pillar">
           <div class="arch-symbol" aria-hidden="true">✦</div>
-          <h3>Mastermind entre pairs</h3>
-          <p>Cinquante membres maximum. Espaces de discussion privés, partage d'expérience, entraide structurée.</p>
+          <h3>Le Cercle · communauté privée WhatsApp</h3>
+          <p>Cinquante membres maximum. Une ligne directe pour tes questions pédagogiques et l'entraide entre pairs, sur WhatsApp — réponse sous 48 h ouvrées.</p>
         </div>
       </div>
     </div>
@@ -42919,8 +43242,8 @@ else _v3LandingInit();
         <div class="arch-condition">
           <div class="arch-num">③</div>
           <div class="arch-condition-text">
-            <h3>Entretien pédagogique 30 min</h3>
-            <p>Un référent senior valide la pertinence pour les deux parties. On vérifie que tes questions correspondent au registre Architecte, et que le Cercle correspond à ce que tu cherches.</p>
+            <h3>Candidature en ligne · réponse 72 h</h3>
+            <p>Tu déposes ta candidature en ligne. On valide la pertinence pour les deux parties — que tes questions correspondent au registre Architecte, et que le Cercle correspond à ce que tu cherches. Réponse sous 72 h, sans rendez-vous à caler.</p>
           </div>
         </div>
       </div>
@@ -42931,7 +43254,7 @@ else _v3LandingInit();
   <section class="arch-section">
     <div class="arch-inner">
       <div class="arch-eyebrow">Investissement</div>
-      <h2 class="arch-h2 arch-h2--xl">708 € par an.</h2>
+      <h2 class="arch-h2 arch-h2--xl">470 € par an.</h2>
       <div class="arch-anchors">
         <div class="arch-anchor-row">
           <span class="arch-anchor-label">Family office classique</span>
@@ -42947,14 +43270,14 @@ else _v3LandingInit();
         </div>
         <div class="arch-anchor-row arch-anchor-row--us">
           <span class="arch-anchor-label">Cercle Architecte FINEA</span>
-          <span class="arch-anchor-value">708 € / an</span>
+          <span class="arch-anchor-value">470 € / an</span>
         </div>
       </div>
       <div class="arch-prose">
-        <p>Notre modèle : volume avant marge, cohérence avec la mission éducative. À 59 € par mois, le Cercle reste accessible à toute personne qui a atteint le palier. C'est la condition pour que la communauté reflète une maturité, pas un patrimoine.</p>
+        <p>Notre modèle : volume avant marge, cohérence avec la mission éducative. À 49 € par mois, le Cercle reste accessible à toute personne qui a atteint le palier. C'est la condition pour que la communauté reflète une maturité, pas un patrimoine.</p>
       </div>
       <div class="arch-details">
-        <span>59 € / mois</span>
+        <span>49 € / mois</span>
         <span class="arch-details-sep">·</span>
         <span>Sans engagement</span>
         <span class="arch-details-sep">·</span>
@@ -43062,6 +43385,20 @@ else _v3LandingInit();
   };
   window._fineaOpenCookiePrefs = function(){ render(true); };
 
+  // Cloudflare Web Analytics (cookieless, anonyme) — chargé UNIQUEMENT si la mesure
+  // d'audience a été explicitement acceptée. Idempotent (ne s'injecte qu'une fois).
+  var _cfLoaded = false;
+  function loadCloudflare(){
+    if (_cfLoaded || !window._fineaCookieConsent || !window._fineaCookieConsent('audience')) return;
+    _cfLoaded = true;
+    var s = document.createElement('script');
+    s.defer = true;
+    s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    s.setAttribute('data-cf-beacon', '{"token": "574873d2f3df4f6b999c3739e204d39f"}');
+    (document.head || document.documentElement).appendChild(s);
+  }
+  window._fineaLoadAudience = loadCloudflare;
+
   function close(){ var b = document.getElementById('fineaCookieBanner'); if (b) b.parentNode.removeChild(b); }
 
   function render(force){
@@ -43086,7 +43423,7 @@ else _v3LandingInit();
       +   '<button id="fineaCookieAccept" type="button" style="flex:1;min-width:150px;background:#0A1F44;color:#fff;border:1px solid #0A1F44;border-radius:100px;padding:11px 16px;font-size:13px;font-weight:600;cursor:pointer;">Tout accepter</button>'
       + '</div>';
     document.body.appendChild(wrap);
-    document.getElementById('fineaCookieAccept').addEventListener('click', function(){ save('all'); close(); });
+    document.getElementById('fineaCookieAccept').addEventListener('click', function(){ save('all'); loadCloudflare(); close(); });
     document.getElementById('fineaCookieRefuse').addEventListener('click', function(){ save('essential'); close(); });
     var pol = document.getElementById('fineaCookiePolicy');
     if (pol) pol.addEventListener('click', function(e){
@@ -43097,8 +43434,8 @@ else _v3LandingInit();
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ render(false); });
-  else render(false);
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ render(false); loadCloudflare(); });
+  else { render(false); loadCloudflare(); }
 })();
 </script>
 
@@ -43186,8 +43523,33 @@ else _v3LandingInit();
     ov.querySelectorAll('[data-nps]').forEach(function(b){ b.addEventListener('click', function(){ pick(parseInt(b.getAttribute('data-nps'),10)); }); });
   }
 
+  // Envoie la note NPS vers la même Google Sheet que les feedbacks (via FB_ENDPOINT, type 'nps').
+  function sendNpsToSheet(score, feedbackText){
+    try {
+      var payload = {
+        type: 'nps',
+        npsScore: score,
+        npsFeedback: feedbackText || '',
+        message: 'NPS ' + score + '/10' + (feedbackText ? ' · ' + feedbackText : ''),
+        severity: '',
+        section: 'nps',
+        demoUser: (typeof currentUser !== 'undefined' && currentUser && currentUser.email) || 'anonymous',
+        score: (typeof userScoreData !== 'undefined' && userScoreData && userScoreData.global) || '',
+        url: location.href,
+        ua: navigator.userAgent,
+        timestamp: new Date().toISOString(),
+      };
+      if (typeof FB_DEV_MODE !== 'undefined' && FB_DEV_MODE) { console.log('[FINEA NPS · DEV]', payload); return; }
+      if (typeof FB_ENDPOINT === 'undefined' || !FB_ENDPOINT) return;
+      var fd = new FormData();
+      fd.append('payload', JSON.stringify(payload));
+      fetch(FB_ENDPOINT, { method: 'POST', body: fd, mode: 'no-cors' });
+    } catch(_){}
+  }
+
   function pick(score){
     try { localStorage.setItem('finea_nps', JSON.stringify({ score: score, at: new Date().toISOString() })); } catch(_){}
+    sendNpsToSheet(score, '');
     if (typeof _appAnalytics === 'function') { try { _appAnalytics('nps_submitted', { score: score }); } catch(_){} }
     close();
     var inner;
@@ -43207,6 +43569,7 @@ else _v3LandingInit();
       if (send) send.addEventListener('click', function(){
         var v = (document.getElementById('fineaNpsFb')||{}).value || '';
         try { localStorage.setItem('finea_nps_feedback', JSON.stringify({ score: score, text: v, at: new Date().toISOString() })); } catch(_){}
+        if (v) sendNpsToSheet(score, v);
         if (typeof _appAnalytics === 'function') { try { _appAnalytics('nps_feedback', { score: score, len: v.length }); } catch(_){} }
         close();
         if (typeof showNotification==='function') showNotification('Reçu — merci, on en tient compte.', 'success');
@@ -43264,7 +43627,7 @@ else _v3LandingInit();
     ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(10,31,68,0.45);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Arial,Helvetica,sans-serif;';
     ov.innerHTML = '<div style="background:#fff;border-radius:22px;max-width:460px;width:100%;padding:26px 24px;box-shadow:0 24px 64px rgba(10,31,68,0.3);position:relative;">'
       + '<button type="button" id="fineaWlClose" aria-label="Fermer" style="position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:#9aa;cursor:pointer;">✕</button>'
-      + '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:#876f2c;margin-bottom:8px;">Bêta privée</div>'
+      + '<div style="font-size:11px;letter-spacing:0.18em;text-transform:uppercase;font-weight:700;color:#876f2c;margin-bottom:8px;">Bêta publique</div>'
       + '<div style="font-size:19px;font-weight:700;color:#0A1F44;margin-bottom:6px;">Rejoins la liste d\'attente</div>'
       + '<p style="font-size:13px;color:#4a4a4a;line-height:1.5;margin:0 0 16px;">FINEA ouvre ses portes par vagues. Laisse ton email : on te prévient dès qu\'une place se libère. Aucun spam, désinscription en un clic.</p>'
       + '<input id="fineaWlPrenom" type="text" placeholder="Prénom (facultatif)" style="width:100%;border:1px solid rgba(10,31,68,0.2);border-radius:12px;padding:11px 12px;font-size:14px;margin-bottom:10px;box-sizing:border-box;">'
