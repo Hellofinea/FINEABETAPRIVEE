@@ -38482,16 +38482,21 @@ const _FINEA_EMAIL_ROUTES = {
   },
   feedback:   () => { if (typeof openFeedback === 'function') openFeedback(); },
 };
+// Extrait la route du hash en ignorant tout paramètre parasite accolé au fragment.
+// Instagram/Facebook ajoutent parfois leur `fbclid` DANS le fragment sur mobile
+// (`#diagnostic&fbclid=…` ou `#diagnostic?fbclid=…`) : sans ce split, la route
+// n'était plus reconnue et le deep-link retombait sur la landing.
+function _fineaHashRoute() {
+  return (location.hash || '').replace(/^#/, '').split(/[?&]/)[0].toLowerCase();
+}
 function _fineaHandleEmailDeeplink() {
-  const h = (location.hash || '').replace(/^#/, '').toLowerCase();
-  const fn = _FINEA_EMAIL_ROUTES[h];
+  const fn = _FINEA_EMAIL_ROUTES[_fineaHashRoute()];
   if (fn) { try { fn(); } catch (_) {} }
 }
 window.addEventListener('hashchange', _fineaHandleEmailDeeplink);
 document.addEventListener('DOMContentLoaded', () => {
-  const h = (location.hash || '').replace(/^#/, '').toLowerCase();
   // Laisse l'app s'initialiser (session/espace) avant d'ouvrir l'overlay.
-  if (_FINEA_EMAIL_ROUTES[h]) setTimeout(_fineaHandleEmailDeeplink, 700);
+  if (_FINEA_EMAIL_ROUTES[_fineaHashRoute()]) setTimeout(_fineaHandleEmailDeeplink, 700);
 });
 
 /* ─── Compteur Fondateur Beta + Waitlist (frontend uniquement, prêt pour backend Sept) ─── */
