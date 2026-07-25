@@ -18139,13 +18139,29 @@ function _hasCapturedLead() {
   } catch (_) { return false; }
 }
 
+/* Enregistre TOUTE complétion de diagnostic côté serveur (table `diagnostics`),
+   y compris quand l'email n'est pas fourni (skip, membre connecté, lead déjà
+   capturé). Sans email → simple comptage : aucun email-rapport n'est déclenché
+   (l'Edge Function submit-diagnostic ne maile que si `email` est présent).
+   But : ne plus être aveugle sur le nombre réel de diagnostics réalisés. */
+function _recordDiagnosticCompletion(email) {
+  try {
+    const globalScore = computeGlobalScore();
+    const profile = detectProfile(globalScore);
+    const axesScores = (typeof AXES !== 'undefined')
+      ? AXES.map((a, i) => ({ key: a.id, label: a.label, score: (typeof computeAxisScore === 'function' ? computeAxisScore(i) : null) }))
+      : [];
+    FineaSubmit.diagnostic({ email: email || null, score: globalScore, profileKey: profile.key, axes: axesScores });
+  } catch (_) {}
+}
+
 function _maybeShowEmailGate(onContinue) {
-  // Skip si déjà inscrit (currentUser)
-  if (typeof currentUser !== 'undefined' && currentUser) { onContinue(); return; }
-  // Skip si lead déjà capturé
-  if (_hasCapturedLead()) { onContinue(); return; }
-  // Skip si le user a déjà cliqué "Plus tard" dans la même session
-  try { if (sessionStorage.getItem('finea_gate_skipped') === '1') { onContinue(); return; } } catch (_) {}
+  // Skip si déjà inscrit (currentUser) — on compte la complétion (sans re-mailer le membre)
+  if (typeof currentUser !== 'undefined' && currentUser) { _recordDiagnosticCompletion(null); onContinue(); return; }
+  // Skip si lead déjà capturé — on compte la complétion (email déjà connu, pas de re-mail)
+  if (_hasCapturedLead()) { _recordDiagnosticCompletion(null); onContinue(); return; }
+  // Skip si le user a déjà cliqué "Plus tard" dans la même session — on compte quand même
+  try { if (sessionStorage.getItem('finea_gate_skipped') === '1') { _recordDiagnosticCompletion(null); onContinue(); return; } } catch (_) {}
   // Sinon : on affiche l'écran teaser
   _renderEmailGate(onContinue);
 }
@@ -18231,10 +18247,11 @@ function _renderEmailGate(onContinue) {
   });
 
   document.getElementById('gateSkip').addEventListener('click', () => {
-    // Skip sans capture — on flag tout de même pour éviter de réafficher le gate au sein
-    // de la même session (sessionStorage uniquement, pas localStorage : on redemandera
+    // Skip sans capture d'email — on flag tout de même pour éviter de réafficher le gate au
+    // sein de la même session (sessionStorage uniquement, pas localStorage : on redemandera
     // la prochaine fois pour maximiser la capture lead).
     try { sessionStorage.setItem('finea_gate_skipped', '1'); } catch (_) {}
+    _recordDiagnosticCompletion(null);   // on compte la complétion même sans email
     onContinue();
   });
 }
