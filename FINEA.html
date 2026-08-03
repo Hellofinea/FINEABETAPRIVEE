@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>FINEA — Le cockpit financier qui t'éduque, te pilote, te fait décider</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1636,6 +1636,70 @@
     .level-visual { display: none; }
     .footer-top { grid-template-columns: 1fr 1fr; }
     .diag-modal-body { padding: 32px 20px 104px; } /* marge basse pour dégager les boutons flottants (feedback/guide) en mobile */
+  }
+  @media (max-width: 360px) {
+    /* Logo + Diagnostic + Connexion + burger ne tiennent pas sur 320-360px sans ce resserrement (cause : nav-inner scrollWidth > clientWidth, burger poussé hors écran) */
+    .logo { font-size: 18px; }
+    .nav-links { gap: 4px; }
+    .btn-nav-score { padding: 6px 9px; font-size: 11px; }
+    .btn-connexion { padding: 5px 9px; font-size: 11px; }
+    .nav-inner { gap: 4px; }
+  }
+
+  /* ═══ ERGONOMIE TACTILE MOBILE — cibles ≥ 44px (Apple HIG) ═══
+     Mobile uniquement : aucune de ces règles ne s'applique au-dessus de 768px,
+     donc le rendu desktop est strictement inchangé. On agrandit la ZONE
+     tactile (hit-area), pas la typo : le glyphe visuel reste identique. */
+  @media (max-width: 768px) {
+    /* Boutons de navigation : hauteur tactile confortable (étaient à 35px) */
+    .btn-nav-score, .btn-connexion { min-height: 44px; }
+    .mobile-nav-toggle { min-width: 44px; min-height: 44px; }
+
+    /* Les 17 croix de fermeture (*-close) : zone 44×44 centrée, croix inchangée.
+       Corrige notamment m1-guide-close (14×21) et score-sticky-close (24×24). */
+    [class*="-close"], button[aria-label="Fermer"] {
+      min-width: 44px; min-height: 44px;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+
+    /* Liens-CTA secondaires : zone tactile pleine hauteur sans casser le flux */
+    .hero-cta-secondary-link, .voyage-chapter-cta {
+      display: inline-flex; align-items: center; min-height: 44px;
+    }
+
+    /* CTA collant tarifs (était 37px) */
+    .pricing-sticky-cta { min-height: 44px; }
+
+    /* Barres de nav de TOUTE l'app (dashboard, foyer, simulateurs a2/a3/d1/s30…) :
+       bouton retour ~36px, menu ☰ 28px, onglets, skip → tous ≥44px tactile.
+       Sélecteurs par motif : couvre s1-back…s6-nav-back, d1/d2/a2…-nav-back, etc. */
+    [class*="-nav-back"], .s30-back,
+    .modnav-trigger, .legal-tab, .rattrapage-skip { min-height: 44px; }
+    .modnav-trigger, .legal-tab { display: inline-flex; align-items: center; }
+
+    /* ⚠️ ANTI-ZOOM iOS : Safari zoome automatiquement au focus d'un champ dont
+       la police est < 16px, ce qui « décale » toute la page. 22/25 champs FINEA
+       étaient à 13-14px. 16px = plus aucun zoom. + hauteur tactile ≥44px.
+       Mobile uniquement → desktop inchangé. */
+    input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+    textarea, select { font-size: 16px; min-height: 44px; }
+    .dash-save-btn, .dash-back { min-height: 44px; }
+
+    /* — Finition cibles tactiles (round 2) — */
+    /* Boutons retour nommés « …-back » (complète « …-nav-back ») :
+       s60-back, m1-back, foyer-back, sharing-back, s30-back… */
+    [class$="-back"] { min-height: 44px; }
+    /* Logos de nav (marque) : zone tactile 44px, glyphe centré vertical */
+    .logo, [class*="-nav-logo"] { min-height: 44px; display: inline-flex; align-items: center; }
+    /* Toggles tarifs, mini-CTA comparatif, nav mois du calendrier */
+    .pricing-period-btn, .pricing-mini-compare-cta { min-height: 44px; }
+    button[aria-label="Mois précédent"], button[aria-label="Mois suivant"] {
+      min-height: 44px; min-width: 44px;
+    }
+    /* Liens du footer : hauteur tactile confortable (étaient ~15px) */
+    .footer-inner a { min-height: 44px; display: inline-flex; align-items: center; }
+    /* Menu burger mobile = navigation principale : liens bien tappables */
+    .mobile-nav-drawer a { min-height: 44px; display: flex; align-items: center; }
   }
 
   /* ─── MODULE GRID ─── */
@@ -11921,29 +11985,61 @@ html, body { overflow-x: hidden; }
   .pricing-cards { grid-template-columns: 1fr !important; gap: 16px; padding: 0 5%; }
   .pricing-card { padding: 22px 20px; }
 
-  /* ────────── COMPARATIF — scrollable horizontal ────────── */
+  /* ────────── COMPARATIF — cartes empilées (mobile) ──────────
+     Desktop = tableau (règles de base intactes, cf. ~l.907).
+     Mobile = 1 carte par ligne : titre = la caractéristique comparée,
+     puis chaque colonne en « libellé → valeur ». Les 4 colonnes sont
+     fixes et ordonnées (2=FINEA, 3=Finary, 4=Yomoni/Ramify, 5=CGP),
+     donc les libellés sont injectés par position → ZÉRO modif HTML.
+     Supprime le scroll horizontal : plus de swipe à deviner. */
   .compare-table {
-    overflow-x: auto; -webkit-overflow-scrolling: touch;
-    max-width: 100%; padding-bottom: 8px;
-    scroll-snap-type: x proximity;
+    overflow-x: visible; max-width: 100%;
+    background: transparent; box-shadow: none; border-radius: 0;
   }
-  .compare-table table { min-width: 720px; }
-  .compare-table::-webkit-scrollbar { height: 6px; }
-  .compare-table::-webkit-scrollbar-thumb { background: rgba(10,31,68,0.18); border-radius: 8px; }
-  /* Colonne « libellé » figée pour garder le contexte en swipant les concurrents */
-  .compare-table th:first-child,
+  .compare-table table,
+  .compare-table tbody,
+  .compare-table tr,
+  .compare-table td { display: block; width: auto; min-width: 0; }
+  .compare-table table { min-width: 0; }
+  .compare-table thead { display: none; }
+  .compare .compare-swipe-hint { display: none; }
+
+  .compare-table tr {
+    background: white; border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(10,31,68,0.05);
+    padding: 4px 16px 8px; margin-bottom: 14px;
+  }
+
+  /* Cellules valeur : libellé de colonne à gauche, valeur à droite */
+  .compare-table td {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+    padding: 11px 0; text-align: right; font-size: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .compare-table tr td:last-child { border-bottom: none; }
+  .compare-table td::before {
+    content: ""; flex: 0 0 44%;
+    font-weight: 600; color: var(--ink-soft); text-align: left;
+  }
+  .compare-table td:nth-child(2)::before { content: "FINEA"; color: var(--gold); }
+  .compare-table td:nth-child(3)::before { content: "Finary"; }
+  .compare-table td:nth-child(4)::before { content: "Yomoni / Ramify"; }
+  .compare-table td:nth-child(5)::before { content: "CGP traditionnel"; }
+
+  /* Cellule 1 = titre de la carte (la caractéristique) */
   .compare-table td:first-child {
-    position: sticky; left: 0; z-index: 2;
-    background: white;
-    box-shadow: 4px 0 8px rgba(10,31,68,0.05);
+    display: block; text-align: left;
+    font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600;
+    color: var(--navy); line-height: 1.2;
+    padding: 6px 0 12px; margin-bottom: 4px;
+    border-bottom: 2px solid var(--gold);
   }
-  .compare-table thead th:first-child { background: var(--navy); }
-  /* Indice de swipe (mobile uniquement) */
-  .compare .compare-swipe-hint {
-    display: block; text-align: right;
-    margin: -8px 0 10px; padding-right: 4px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: 12px; font-weight: 600; color: var(--gold);
+  .compare-table td:first-child::before { content: none; }
+
+  /* Ligne FINEA mise en avant dans chaque carte */
+  .compare-table td.finea-col {
+    background: rgba(201,169,97,0.08); border-radius: 8px;
+    padding-left: 10px; padding-right: 10px; margin: 4px 0;
   }
 
   /* ────────── DASHBOARD — colonnes empilées ────────── */
@@ -12067,6 +12163,320 @@ html, body { overflow-x: hidden; }
 
   /* Toast notifications : pas par-dessus la cloche */
   .toast, .notification { right: 12px !important; left: 12px !important; max-width: calc(100vw - 24px) !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOT 7 — FONDATION MOBILE (refonte 2026-08 · Phase 1)
+   Objectif : remplacer le mobile "patch-par-patch" (13 breakpoints dispersés)
+   par UNE couche de tokens réutilisée par toutes les phases suivantes :
+   zones sûres (encoche / Dynamic Island / barre d'accueil), échelle
+   d'espacement, rayons, hauteur de header. Mobile-only (≤768px) ; le desktop
+   n'est jamais touché ; aucun changement de comportement (polish + fondation).
+   Dernier dans la cascade → gagne à spécificité égale.
+═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  :root {
+    /* Zones sûres — env()=0 en navigateur (aucun impact Safari),
+       actives seulement en app installée (PWA plein écran). */
+    --m-safe-top: env(safe-area-inset-top, 0px);
+    --m-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --m-safe-left: env(safe-area-inset-left, 0px);
+    --m-safe-right: env(safe-area-inset-right, 0px);
+    /* Rythme d'espacement mobile — échelle unique (remplace les 5% dispersés). */
+    --m-pad-x: 20px;         /* marge latérale d'écran */
+    --m-gap: 14px;           /* gouttière entre cartes */
+    --m-section-gap: 22px;   /* respiration entre sections */
+    /* Rayons cohérents. */
+    --m-radius-card: 18px;
+    --m-radius-btn: 12px;
+    /* Header app. */
+    --m-header-h: 56px;
+  }
+
+  /* ────────── HEADER APP — plus fin, centré, safe-area-aware ──────────
+     Le header .dash-nav (Menu / logo / Déconnexion) passe de ~67px à ~56px,
+     s'aligne sur la marge latérale unique et dégage l'encoche en mode PWA.
+     En navigateur (env=0) : simple allègement, aucun décalage. */
+  .dash-nav {
+    padding: 8px var(--m-pad-x);
+    padding-top: calc(8px + var(--m-safe-top));
+    min-height: var(--m-header-h);
+    gap: 10px;
+  }
+  .dash-nav .logo { font-size: 21px; }
+
+  /* Contenu du dashboard : marge latérale = token, +dégagement encoche paysage. */
+  .dash-body {
+    padding-left: max(var(--m-pad-x), var(--m-safe-left));
+    padding-right: max(var(--m-pad-x), var(--m-safe-right));
+  }
+
+  /* Boutons flottants remontés au-dessus de la barre d'accueil (home indicator)
+     en mode PWA — préserve les règles conditionnelles :has() existantes
+     (score-sticky/pricing) qui restent plus spécifiques. */
+  .fb-fab { bottom: calc(16px + var(--m-safe-bottom)); }
+  .guide-quick-btn { bottom: calc(78px + var(--m-safe-bottom)); }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOT 7 — BARRE D'ONGLETS MOBILE (refonte 2026-08 · Phase 2)
+   Remplace le menu « ☰ Menu ▾ » (2 taps, aucun repère de position) par une
+   barre persistante en zone du pouce : 4 destinations directes + « Tout »
+   qui ouvre le panneau COMPLET existant (les 28 entrées de MODNAV_DEF).
+   Aucune destination n'est perdue : le bouton Tout réutilise modnavToggle().
+   Mobile-only ; la barre n'existe pas ≥769px (desktop strictement intact).
+═══════════════════════════════════════════════════════════════════════════ */
+.mtab { display: none; }
+
+@media (max-width: 768px) {
+  /* ── Ordre d'empilement mobile ──────────────────────────────────────────
+     Les overlays d'écran sont en z-index 400. La couche de navigation doit
+     donc passer AU-DESSUS d'eux, sinon la barre est peinte derrière l'écran
+     courant (mesurable mais invisible et intappable) et le panneau « Tout »
+     s'ouvrirait dans le vide. Les overlays d'écran ne partagent PAS un z-index
+     unique : ils s'échelonnent de 700 à 2000 selon le module (seul le dashboard
+     est à 400). Une barre calée juste au-dessus du dashboard disparaissait donc
+     dès qu'on ouvrait Studio (1000), un simulateur (1000) ou le Score 360 (2000).
+     Ordre retenu : écrans 700→2000 < backdrop 2090 < barre 2100 < dialogues 9100+
+     (guides, paywall, feedback), qui doivent continuer de tout recouvrir.
+     La barre passe AU-DESSUS du backdrop parce qu'elle crée un contexte
+     d'empilement : le panneau qu'elle contient est résolu à l'intérieur de ce
+     contexte, donc un z-index 450 sur le panneau ne le ferait PAS sortir de la
+     barre — c'est le z-index de .mtab qui arbitre face au backdrop.
+     Mobile-only : l'empilement desktop (240/245/250) n'est pas modifié. */
+  .modnav-backdrop { z-index: 2090; }
+  .modnav-panel { z-index: 450; }
+
+  .mtab {
+    position: fixed; left: 0; right: 0; bottom: 0;
+    z-index: 2100;
+    display: flex; align-items: stretch;
+    border-top: 1px solid var(--line);
+    box-shadow: 0 -2px 20px rgba(10,31,68,0.06);
+    /* barre d'accueil iOS (home indicator) en mode PWA */
+    padding-bottom: var(--m-safe-bottom);
+    padding-left: var(--m-safe-left);
+    padding-right: var(--m-safe-right);
+  }
+  .mtab[hidden] { display: none !important; }
+  /* Effet verre porté par un pseudo-élément, PAS par .mtab :
+     `backdrop-filter` sur un élément en fait un bloc conteneur pour ses
+     descendants en position:fixed — le panneau « Tout » se retrouvait alors
+     enfermé dans les 53px de la barre au lieu de s'ouvrir sur l'écran.
+     Le pseudo-élément n'a pas de descendant : le flou est conservé sans le piège. */
+  .mtab::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: rgba(250,247,242,0.94);
+    backdrop-filter: blur(20px) saturate(1.6);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  }
+
+  .mtab-item {
+    position: relative;
+    flex: 1 1 0; min-width: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 3px;
+    /* cible tactile confortable (≥44px) */
+    min-height: 52px; padding: 7px 2px 6px;
+    background: none; border: 0; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--ink-soft);
+    -webkit-tap-highlight-color: transparent;
+    transition: color .18s ease, transform .12s ease;
+  }
+  .mtab-item:active { transform: scale(0.94); }
+  .mtab-ico { display: flex; align-items: center; justify-content: center; height: 22px; }
+  .mtab-ico .ficon { width: 21px; height: 21px; }
+  .mtab-lbl {
+    font-size: 10px; font-weight: 600; line-height: 1;
+    max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  /* Section active : couleur pleine + trait or en haut de l'onglet. */
+  .mtab-item.active { color: var(--navy); }
+  .mtab-item.active::before {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 26px; height: 2.5px; border-radius: 0 0 3px 3px; background: var(--gold);
+  }
+  /* Le « Tout » porte le panneau modnav : on neutralise le layout inline du wrapper. */
+  .mtab .modnav { flex: 1 1 0; min-width: 0; display: flex; }
+  .mtab .modnav .mtab-item { width: 100%; }
+
+  /* ☰ Menu retiré sur mobile — mais seulement quand la barre est réellement
+     affichée (body.mtab-on) : si la barre venait à ne pas s'afficher, le menu
+     reste disponible et l'utilisateur n'est jamais bloqué sans navigation. */
+  body.mtab-on .modnav-trigger { display: none !important; }
+
+  /* Dégage le contenu derrière la barre (mêmes wrappers que le garde-fou l.11961). */
+  body.mtab-on .dash-body,
+  body.mtab-on .a-wrap, body.mtab-on .a3-wrap, body.mtab-on .a4-wrap,
+  body.mtab-on .d1-wrap, body.mtab-on .d2-wrap, body.mtab-on .d3-wrap,
+  body.mtab-on .s1-wrap, body.mtab-on .s2-wrap, body.mtab-on .s3-wrap,
+  body.mtab-on .s4-wrap, body.mtab-on .s5-wrap, body.mtab-on .s6-wrap,
+  body.mtab-on .t2-wrap, body.mtab-on .t3-wrap, body.mtab-on .t4-wrap,
+  body.mtab-on .t5-wrap, body.mtab-on .t6-wrap, body.mtab-on .t7-wrap,
+  body.mtab-on .a2-content, body.mtab-on .a3-content, body.mtab-on .a4-content,
+  body.mtab-on .d1-content, body.mtab-on .d2-content, body.mtab-on .d3-content,
+  body.mtab-on .studio-content, body.mtab-on .m1-wrap {
+    padding-bottom: calc(86px + var(--m-safe-bottom));
+  }
+
+  /* Boutons flottants : au-dessus de la barre, plus jamais par-dessus un CTA. */
+  body.mtab-on .fb-fab { bottom: calc(70px + var(--m-safe-bottom)); }
+  body.mtab-on .guide-quick-btn { bottom: calc(126px + var(--m-safe-bottom)); }
+  /* Panneau « Tout » ouvert : on estompe les ONGLETS seulement — surtout pas
+     la barre entière, qui porte désormais le panneau (l'effacer effaçait aussi
+     le panneau). Le bouton « Tout » reste net pour permettre de refermer. */
+  body.modnav-locked .mtab-item:not(#mtabMore) { opacity: .35; transition: opacity .2s ease; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOT 7 — MOTION & CONFORT TACTILE (refonte 2026-08 · Phase 3)
+   Constat : un seul overlay sur 30+ avait une animation d'entrée (dashIn) ;
+   tous les autres apparaissaient d'un bloc — c'est ce qui donne la sensation
+   « page web » au lieu d'« application ». On ajoute donc UNE grammaire de
+   mouvement cohérente, plus le respect de prefers-reduced-motion (absent du
+   fichier jusqu'ici), et on discipline le bouton flottant Feedback.
+   Mobile-only : le desktop conserve son comportement d'origine.
+═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Deux gestes seulement, pour rester lisible :
+     — ÉCRANS (modules plein écran) : poussée depuis la droite, comme une pile
+       de navigation native. Reprend l'idiome de dashIn déjà présent.
+     — MODALES : montée courte + fondu, elles ne « viennent » pas d'ailleurs.
+     Courbe : sortie rapide puis amortie (ressenti iOS), pas de rebond. */
+  @keyframes mScreenIn { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes mSheetIn  { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .dashboard-overlay.active, .diag-overlay.active,
+  .s30-overlay.active, .s60-overlay.active, .s360-overlay.active,
+  .m1-overlay.active, .studio-overlay.active, .app-overlay.active,
+  .per-overlay.active, .rit-overlay.active, .cert-overlay.active,
+  .db-overlay.active, .dbf-overlay.active,
+  .foyer-overlay.active, .foyer360-overlay.active, .sharing-overlay.active,
+  .s1-overlay.active, .s2-overlay.active, .s3-overlay.active,
+  .s4-overlay.active, .s5-overlay.active, .s6-overlay.active,
+  .a2-overlay.active, .a3-overlay.active, .a4-overlay.active,
+  .d1-overlay.active, .d2-overlay.active, .d3-overlay.active {
+    animation: mScreenIn .26s cubic-bezier(.32,.72,0,1);
+  }
+  .cat-overlay.active, .legal-overlay.active, .welcome-overlay.active,
+  .invite-prompt-overlay.active, .m1-guide-overlay.active,
+  .a4-modal-overlay.active, .offer-overlay.active {
+    animation: mSheetIn .22s cubic-bezier(.32,.72,0,1);
+  }
+
+  /* ────────── Bouton flottant Feedback — compact ──────────
+     En pastille large il recouvrait des CTA réels (« Enregistrer les
+     informations », cartes du dashboard). Sur mobile il devient une pastille
+     ronde de 46px : même fonction, ~4× moins de surface masquée.
+     La pulsation infinie est coupée (bruit visuel permanent + batterie). */
+  .fb-fab {
+    padding: 0; width: 46px; height: 46px;
+    justify-content: center; gap: 0;
+    border-radius: 50%;
+    animation: none;
+    box-shadow: 0 4px 16px rgba(201,169,97,0.38);
+  }
+  /* Seul l'emoji reste : le libellé « Feedback » et l'infobulle sortent.
+     aria-label sur le bouton assure l'accessibilité (déjà présent au markup). */
+  .fb-fab > span:not(.fb-fab-emoji) { display: none; }
+  .fb-fab-emoji { font-size: 20px; }
+
+  /* ────────── Confort tactile ────────── */
+  /* Pas de surlignage bleu au tap sur les éléments interactifs. */
+  button, a, [role="button"], .modnav-item, .dash-action-cat { -webkit-tap-highlight-color: transparent; }
+  /* Inertie de défilement iOS sur les panneaux de navigation. */
+  .modnav-panel { -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+
+  /* ────────── Accessibilité : mouvement réduit ──────────
+     Respecte le réglage système « Réduire les animations ». Neutralise les
+     mouvements introduits ici ET la pulsation du bouton Feedback. */
+  @media (prefers-reduced-motion: reduce) {
+    .dashboard-overlay.active, .diag-overlay.active,
+    .s30-overlay.active, .s60-overlay.active, .s360-overlay.active,
+    .m1-overlay.active, .studio-overlay.active, .app-overlay.active,
+    .per-overlay.active, .rit-overlay.active, .cert-overlay.active,
+    .db-overlay.active, .dbf-overlay.active,
+    .foyer-overlay.active, .foyer360-overlay.active, .sharing-overlay.active,
+    .s1-overlay.active, .s2-overlay.active, .s3-overlay.active,
+    .s4-overlay.active, .s5-overlay.active, .s6-overlay.active,
+    .a2-overlay.active, .a3-overlay.active, .a4-overlay.active,
+    .d1-overlay.active, .d2-overlay.active, .d3-overlay.active,
+    .cat-overlay.active, .legal-overlay.active, .welcome-overlay.active,
+    .invite-prompt-overlay.active, .m1-guide-overlay.active,
+    .a4-modal-overlay.active, .offer-overlay.active,
+    .fb-fab, .mtab-item {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LOT 7 — DENSITÉ & MARGES (refonte 2026-08 · Phase 4)
+   Audit mesuré des écrans lourds : la marge latérale variait d'un module à
+   l'autre (Studio 0px, Budget 15px, Académie/S1 18.75px = 5% du viewport).
+   Un pourcentage change avec l'appareil (18.75px sur iPhone SE, 20.1px sur
+   iPhone 17) : le rythme vertical ne peut pas être stable. On fixe la marge
+   sur le token de la Phase 1, et on met les dernières cibles tactiles à 44px.
+   Mobile-only ; le desktop garde ses marges d'origine.
+═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* Marge latérale unique sur tous les conteneurs de contenu.
+     On ne touche QUE l'horizontal : les paddings verticaux propres à chaque
+     module (et le dégagement bas de la barre d'onglets) restent intacts. */
+  .dash-body, .app-content, .studio-content, .m1-wrap,
+  .a2-content, .a3-content, .a4-content,
+  .d1-content, .d2-content, .d3-content,
+  .a-wrap, .a3-wrap, .a4-wrap, .d1-wrap, .d2-wrap, .d3-wrap,
+  .t2-wrap, .t3-wrap, .t4-wrap, .t5-wrap, .t6-wrap, .t7-wrap,
+  /* Les simulateurs sont ciblés par `.sN-overlay .sN-wrap` plus haut dans la
+     cascade (spécificité 0,2,0) : on reprend la même forme, sinon la règle
+     simple est ignorée et ils gardent leur marge en pourcentage. */
+  .s1-overlay .s1-wrap, .s2-overlay .s2-wrap, .s3-overlay .s3-wrap,
+  .s4-overlay .s4-wrap, .s5-overlay .s5-wrap, .s6-overlay .s6-wrap {
+    padding-left: max(var(--m-pad-x), var(--m-safe-left));
+    padding-right: max(var(--m-pad-x), var(--m-safe-right));
+  }
+
+  /* ────────── STUDIO — les 6 outils ne s'affichaient pas ──────────
+     `.studio-layout` est un conteneur FLEX (display:flex, cf. l.5119), mais la
+     règle mobile existante empile via `grid-template-columns: 1fr !important` —
+     une propriété INERTE sur un flex. L'empilement n'avait donc jamais lieu :
+     la sidebar (width:100%) occupait les 375px et `.studio-content { flex:1 }`
+     se retrouvait à 40px, avec le contenu de l'outil écrasé sur ~2700px de haut.
+     On empile sur le bon axe. `min-width:0` lève la taille minimale automatique
+     des éléments flex, qui empêche un enfant large de se comprimer. */
+  .studio-layout { flex-direction: column; }
+  .studio-content { min-width: 0; width: 100%; }
+  .studio-sidebar { flex: 0 0 auto; padding-top: 10px; padding-bottom: 10px; }
+
+  /* En-tête du Studio compacté : il occupait 333px, soit ~40% de l'écran avant
+     le premier contenu utile. Le surtitre « BOÎTE À OUTILS » et le titre
+     « STUDIO » font doublon avec le header de l'app, qui affiche déjà
+     « FINEA · Studio » → on les retire ici (aucune information perdue) et on
+     resserre la progression, la barre d'outils et le bandeau budget. */
+  .studio-sidebar-header { padding: 4px 4px 10px; }
+  .studio-sidebar-eyebrow, .studio-sidebar-title { display: none; }
+  .studio-tools-nav { padding: 8px 4px 4px; }
+  .studio-m1-badge { padding: 9px 10px; margin-bottom: 8px; }
+  .studio-m1-badge-text { font-size: 11.5px; line-height: 1.35; }
+
+  /* Pile de navigation flottante (« ← Précédent ») : en top:12px elle se
+     superposait au titre du header. On la cale SOUS le header plutôt que de
+     toucher à sa logique — l'historique de navigation reste inchangé. */
+  .finea-nav-stack {
+    top: calc(var(--m-header-h) + var(--m-safe-top) + 8px);
+    left: max(var(--m-pad-x), var(--m-safe-left));
+  }
+
+  /* Cibles tactiles restantes sous le seuil de 44px (mesurées dans l'Académie :
+     onglets à 41px, boutons « Commencer » à 34px). Le centrage flex évite que
+     l'agrandissement décale le libellé. */
+  .app-tab, .parcours-cta, .fiche-cta, .lesson-cta {
+    min-height: 44px;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -17866,7 +18276,7 @@ function getDetectedProfile() {
 /* Journal de bord version-gated. Bumper CHANGELOG_VERSION à chaque nouvelle entrée
    → les revenants revoient le journal 1× ; les nouveaux comptes le sautent (marqué
    "vu" à l'ouverture du Welcome). Voir décision cabinet 2026-07-05. */
-const CHANGELOG_VERSION  = 'beta-public-2026-07';
+const CHANGELOG_VERSION  = 'beta-public-2026-08';
 const CHANGELOG_SEEN_KEY = 'finea_changelog_seen_version';
 
 function _changelogSeen()      { try { return localStorage.getItem(CHANGELOG_SEEN_KEY); } catch (_) { return null; } }
@@ -20346,6 +20756,9 @@ async function signInWithGoogle() {
       if (typeof showNotification === 'function') showNotification('La connexion Google nécessite le site en ligne (https). Indisponible en ouverture locale du fichier.', 'info', 6000);
       return;
     }
+    // L'utilisateur choisit délibérément Google : une demande de récupération encore
+    // en attente ne doit pas faire passer ce retour `?code=` pour une récupération.
+    _fineaClearPendingRecovery();
     const redirectTo = location.href.split('#')[0].split('?')[0];
     const { error } = await sb.auth.signInWithOAuth({
       provider: 'google',
@@ -20362,6 +20775,11 @@ async function signInWithGoogle() {
 async function _handleGoogleAuthReturn() {
   const hasOAuth = location.search.includes('code=') || location.hash.includes('access_token');
   if (!hasOAuth) return false;
+  // Un lien de récupération de mot de passe revient AUSSI avec `?code=` (flow PKCE).
+  // Sans ce garde-fou il était traité comme une connexion Google : l'utilisateur se
+  // retrouvait connecté silencieusement et l'écran « nouveau mot de passe » n'était
+  // jamais affiché — donc le mot de passe n'était jamais changé.
+  if (_fineaIsRecoveryReturn()) return false;
   try {
     const sb = await _getSupabaseAuth();
     // detectSessionInUrl échange le code automatiquement ; on attend la session.
@@ -20533,6 +20951,37 @@ function _fineaOpenForgot() {
   const fe = document.getElementById('forgotEmail'), le = document.getElementById('loginEmail');
   if (fe && le && le.value) fe.value = le.value;
 }
+/* Le client est en flowType 'pkce' : le lien de récupération ne revient PAS avec
+   `#type=recovery` (ça, c'est le flow implicite) mais avec `?code=…`, exactement
+   comme un retour Google OAuth. Impossible de les distinguer par l'URL seule.
+   On pose donc un marqueur au moment de la demande : PKCE impose de toute façon
+   de rouvrir le lien dans le MÊME navigateur (le code_verifier y est stocké),
+   donc ce marqueur est disponible dans tous les cas où l'échange peut réussir. */
+const _FINEA_RECOVERY_FLAG = 'finea_pending_recovery';
+const _FINEA_RECOVERY_TTL  = 3600000;   // 1 h — durée de validité du lien Supabase
+
+function _fineaMarkPendingRecovery() {
+  try { localStorage.setItem(_FINEA_RECOVERY_FLAG, String(Date.now())); } catch (_) {}
+}
+function _fineaHasPendingRecovery() {
+  try {
+    const t = parseInt(localStorage.getItem(_FINEA_RECOVERY_FLAG) || '0', 10);
+    return t > 0 && (Date.now() - t) < _FINEA_RECOVERY_TTL;
+  } catch (_) { return false; }
+}
+function _fineaClearPendingRecovery() {
+  try { localStorage.removeItem(_FINEA_RECOVERY_FLAG); } catch (_) {}
+}
+/* Vrai si l'URL courante est un retour de récupération de mot de passe.
+   Couvre les deux flows : implicite (`type=recovery`) et PKCE (`?code=` + marqueur). */
+function _fineaIsRecoveryReturn() {
+  let h = '';
+  try { h = location.hash || ''; } catch (_) {}
+  const s = location.search || '';
+  if (/type=recovery/.test(h) || /[?&]type=recovery/.test(s)) return true;
+  return /[?&]code=/.test(s) && _fineaHasPendingRecovery();
+}
+
 async function _fineaSendResetEmail() {
   clearAuthErrors();
   const emailEl = document.getElementById('forgotEmail');
@@ -20540,6 +20989,7 @@ async function _fineaSendResetEmail() {
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { showError('forgotEmail','forgotEmailErr'); return; }
   const btn = document.getElementById('forgotSubmit');
   if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+  _fineaMarkPendingRecovery();   // avant l'envoi : le retour doit être reconnaissable
   try {
     const sb = await _getSupabaseAuth();
     const redirectTo = location.href.split('#')[0].split('?')[0];
@@ -20562,12 +21012,24 @@ async function _fineaSubmitNewPassword() {
   if (btn) { btn.disabled = true; btn.textContent = 'Enregistrement…'; }
   try {
     const sb = await _getSupabaseAuth();
+    // Sans session de récupération, updateUser échoue avec un message technique.
+    // Cas typique : lien ouvert dans un autre navigateur que celui de la demande —
+    // le flow PKCE ne peut alors pas aboutir (code_verifier absent).
+    const { data: _sess } = await sb.auth.getSession();
+    if (!_sess || !_sess.session) {
+      if (typeof showNotification === 'function') {
+        showNotification("Ce lien doit être ouvert dans le navigateur d'où tu as fait la demande. Redemande un lien depuis ce navigateur.", 'error', 7000);
+      }
+      if (btn) { btn.disabled = false; btn.textContent = 'Définir mon mot de passe →'; }
+      return;
+    }
     const { error } = await sb.auth.updateUser({ password: p1 });
     if (error) {
       if (typeof showNotification === 'function') showNotification('Échec : ' + error.message, 'error', 5000);
       if (btn) { btn.disabled = false; btn.textContent = 'Définir mon mot de passe →'; }
       return;
     }
+    _fineaClearPendingRecovery();
     if (typeof showNotification === 'function') showNotification('✓ Mot de passe mis à jour. Tu peux te connecter.', 'success', 5000);
     // Nettoie le hash de récupération puis renvoie vers la connexion.
     try { history.replaceState(null, '', location.pathname); } catch (_) {}
@@ -20624,10 +21086,7 @@ document.getElementById('switchToLogin').addEventListener('click',    e => { e.p
 // (ou émet l'événement PASSWORD_RECOVERY) → on ouvre directement le panneau « nouveau
 // mot de passe ».
 (function _detectPasswordRecovery() {
-  let h = '';
-  try { h = location.hash || ''; } catch (_) {}
-  const looksLikeRecovery = /type=recovery/.test(h) || /[?&]type=recovery/.test(location.search || '');
-  if (!looksLikeRecovery) return;
+  if (!_fineaIsRecoveryReturn()) return;
   const go = () => { try { openAuth('login'); _fineaShowAuthPanel('panelReset'); } catch (_) {} };
   // Laisse Supabase établir la session de récupération depuis le hash, puis affiche le panneau.
   if (typeof _getSupabaseAuth === 'function') {
@@ -41949,6 +42408,30 @@ if (mobileNavToggle && mobileNavDrawer) {
             <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
           </div>
           <div style="padding-bottom:22px;">
+            <div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-ink);margin-bottom:2px;">Août 2026</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Une nouvelle façon de naviguer sur téléphone</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Tes sections principales sont désormais à portée de pouce, en bas de l'écran — Espace, Diagnostic, Studio, Académie — et « Tout » ouvre l'ensemble de tes outils d'un geste. Fini le menu à déplier pour changer de cap.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;">
+          <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #f3e9cf;"></div>
+            <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
+          </div>
+          <div style="padding-bottom:22px;">
+            <div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-ink);margin-bottom:2px;">Août 2026</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Le Studio enfin utilisable sur mobile</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Les 6 outils de la boîte à outils s'affichent maintenant en pleine largeur sur téléphone. Un en-tête allégé, et tu entres directement dans l'outil.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:16px;">
+          <div style="flex:0 0 28px;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:14px;height:14px;border-radius:50%;background:var(--gold);border:3px solid #f3e9cf;"></div>
+            <div style="flex:1;width:2px;background:#e6ddc9;margin-top:2px;"></div>
+          </div>
+          <div style="padding-bottom:22px;">
             <div style="font-size:11px;letter-spacing:.5px;text-transform:uppercase;color:var(--gold-ink);margin-bottom:2px;">Juillet 2026</div>
             <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Ton Pilote, révélé</div>
             <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Ton diagnostic ne te rend plus seulement un score : il te révèle ton <strong>Pilote</strong> — l'archétype qui dit <em>comment</em> tu navigues avec ton argent, et jusqu'où tu maîtrises ton cap. Une identité à voir grandir à chaque geste. Et à partager.</div>
@@ -43687,6 +44170,112 @@ else _v3LandingInit();
       } else { finish(); }
     } catch(_) { finish(); }
   }
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════
+     LOT 7 — BARRE D'ONGLETS MOBILE (Phase 2)
+     4 destinations directes + « Tout » (panneau complet MODNAV_DEF).
+     Foyer n'est PAS un onglet fixe : son showIf() le réserve aux comptes
+     duo/foyer — il resterait mort pour un compte solo. Il vit dans « Tout ».
+     Invisible ≥769px (CSS) et hors mode app (JS).
+═══════════════════════════════════════════════ -->
+<!-- <div> et non <nav> : la règle `body > nav` (header marketing) s'applique à
+     TOUT nav enfant direct de body et imposerait top:0 → barre pleine hauteur.
+     role="navigation" conserve la sémantique pour les lecteurs d'écran. -->
+<div class="mtab" id="mtabBar" hidden role="navigation" aria-label="Navigation FINEA">
+  <button type="button" class="mtab-item" data-mtab="home" onclick="modnavGo('home')">
+    <span class="mtab-ico"><svg class="ficon"><use href="#ficon-grid-dashboard"/></svg></span>
+    <span class="mtab-lbl">Espace</span>
+  </button>
+  <button type="button" class="mtab-item" data-mtab="diag" onclick="modnavGo('diag')">
+    <span class="mtab-ico"><svg class="ficon"><use href="#ficon-target"/></svg></span>
+    <span class="mtab-lbl">Diagnostic</span>
+  </button>
+  <button type="button" class="mtab-item" data-mtab="studio" onclick="modnavGo('studio')">
+    <span class="mtab-ico"><svg class="ficon"><use href="#ficon-toolbox"/></svg></span>
+    <span class="mtab-lbl">Studio</span>
+  </button>
+  <button type="button" class="mtab-item" data-mtab="apprendre" onclick="modnavGo('apprendre')">
+    <span class="mtab-ico"><svg class="ficon"><use href="#ficon-book"/></svg></span>
+    <span class="mtab-lbl">Académie</span>
+  </button>
+  <div class="modnav">
+    <button type="button" class="mtab-item" id="mtabMore" onclick="modnavToggle(event, _navCurrentRoute)" aria-label="Toutes les sections">
+      <span class="mtab-ico" aria-hidden="true" style="font-size:19px;letter-spacing:1px;line-height:1;">•••</span>
+      <span class="mtab-lbl">Tout</span>
+    </button>
+    <div class="modnav-panel"></div>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   LOT 7 — BARRE D'ONGLETS MOBILE · pilotage (Phase 2)
+   Ne duplique AUCUNE logique de navigation : les onglets passent par
+   modnavGo(), qui gère déjà paywall / verrouillage / historique de nav.
+   Ici on ne fait que (1) afficher la barre en mode app, (2) refléter la
+   section courante.
+═══════════════════════════════════════════════ */
+(function _mtabInit() {
+  const BAR = document.getElementById('mtabBar');
+  if (!BAR) return;
+
+  /* Onglet → overlay qui le matérialise. On lit l'état réel du DOM plutôt que
+     _navCurrentRoute : l'onglet reste juste même quand un écran est ouvert
+     par un chemin qui ne passe pas par le routeur (carte du dashboard, etc.). */
+  const TAB_OVERLAY = {
+    home: 'dashboardOverlay',
+    diag: 'diagOverlay',
+    studio: 'studioOverlay',
+    apprendre: 'appOverlay'
+  };
+
+  /* Boîtes de dialogue : tant que l'une est ouverte, la barre s'efface — elle
+     n'a pas à concurrencer une décision ponctuelle (connexion, paiement,
+     guide, mentions légales). Les ÉCRANS pleine page, eux, la conservent. */
+  const MODAL_IDS = ['authOverlay', 'legalOverlay', 'm1GuideOverlay', 'moduleGuideOverlay',
+    'offerOverlay', 'invitePromptOverlay', 'catOverlay', 'rattrapageOverlay',
+    'exitIntentOverlay', 'a4ModalOverlay', 'welcomeOverlay', 'fbOverlay'];
+
+  function mtabSync() {
+    const modalOpen = MODAL_IDS.some(id => {
+      const el = document.getElementById(id);
+      return el && el.classList.contains('active');
+    });
+    const appOpen = !!document.querySelector('[id$="Overlay"].active, .dashboard-overlay.active, .cert-overlay.active');
+    /* `currentUser` est déclaré `let` au niveau global : il vit dans
+       l'environnement lexical global et n'existe PAS sur `window`.
+       On le lit donc par son identifiant (partagé entre scripts classiques),
+       avec garde `typeof` au cas où ce script s'exécute avant sa déclaration. */
+    const user = (typeof currentUser !== 'undefined') ? currentUser : null;
+    const on = !!user && appOpen && !modalOpen;
+
+    BAR.hidden = !on;
+    document.body.classList.toggle('mtab-on', on);
+    if (!on) return;
+
+    let active = null;
+    for (const route in TAB_OVERLAY) {
+      const el = document.getElementById(TAB_OVERLAY[route]);
+      if (el && el.classList.contains('active')) { active = route; break; }
+    }
+    BAR.querySelectorAll('[data-mtab]').forEach(b => {
+      b.classList.toggle('active', b.dataset.mtab === active);
+    });
+  }
+  window.mtabSync = mtabSync;
+
+  /* Un observateur sur la classe des overlays capte TOUTES les navigations,
+     quel que soit le point d'entrée — pas besoin de patcher chaque fonction
+     d'ouverture (elles sont nombreuses et appelées dynamiquement). */
+  const obs = new MutationObserver(mtabSync);
+  document.querySelectorAll('[id$="Overlay"], .dashboard-overlay, .cert-overlay').forEach(el => {
+    obs.observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+
+  document.addEventListener('DOMContentLoaded', mtabSync);
+  mtabSync();
 })();
 </script>
 
