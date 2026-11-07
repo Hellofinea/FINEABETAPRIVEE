@@ -10,6 +10,16 @@
 <!-- PDF Generation Libs -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<!-- PWA : installable + consultation hors-ligne -->
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0A1F44">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="FINEA">
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/finea-icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/finea-icon-512.png">
 <style>
   :root {
     --navy: #0A1F44;
@@ -271,36 +281,6 @@
   .level--soon .level-content { opacity: 0.85; }
   .level--invite .level-content { background: linear-gradient(180deg, white, #fffdf5); border-color: var(--line-gold); }
 
-  /* Founder banner */
-  .founder-banner {
-    margin-top: 20px; padding: 16px 18px;
-    background: linear-gradient(135deg, rgba(201,169,97,0.12), rgba(46,196,182,0.08));
-    border: 1px solid var(--line-gold); border-radius: 14px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .founder-banner-head {
-    display: flex; justify-content: space-between; align-items: center; gap: 10px;
-    flex-wrap: wrap;
-  }
-  .founder-banner-tag {
-    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
-    font-weight: 700; color: var(--gold);
-  }
-  .founder-banner-counter {
-    font-size: 11px; color: var(--ink-soft); font-weight: 600;
-  }
-  .founder-banner-counter strong { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 700; }
-  .founder-banner-text {
-    font-size: 13px; color: var(--navy); line-height: 1.5; margin: 0;
-  }
-  .founder-banner-text strong { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
-  .founder-banner-bar {
-    height: 4px; background: rgba(10,31,68,0.06); border-radius: 100px; overflow: hidden;
-  }
-  .founder-banner-bar-fill {
-    height: 100%; background: linear-gradient(90deg, var(--turquoise), var(--gold));
-    border-radius: 100px; transition: width .6s ease;
-  }
 
   /* Waitlist */
   .level-waitlist {
@@ -533,62 +513,6 @@
   /* .pricing-scope-select supprimé (audit simplify) — le sliding indicator
      gère 3 boutons même sur mobile, le select fallback n'est plus utilisé. */
 
-  /* Founder banner */
-  .pricing-founder-banner {
-    max-width: 980px; margin: 0 auto 56px;
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-soft) 100%);
-    border-radius: 22px; padding: 28px 36px;
-    display: grid; grid-template-columns: 1fr auto; gap: 28px;
-    align-items: center; color: var(--cream);
-    position: relative; overflow: hidden;
-    box-shadow: 0 16px 48px rgba(10,31,68,0.18);
-  }
-  .pricing-founder-banner::before {
-    content: ""; position: absolute; top: -60px; right: -60px;
-    width: 280px; height: 280px;
-    background: radial-gradient(circle, rgba(201,169,97,0.22), transparent 70%);
-    pointer-events: none;
-  }
-  .pricing-founder-left { position: relative; }
-  .pricing-founder-tag {
-    font-size: 11px; letter-spacing: 0.22em; font-weight: 700;
-    color: var(--gold); display: block; margin-bottom: 10px;
-  }
-  .pricing-founder-headline {
-    font-family: 'Cormorant Garamond', serif; font-size: 32px;
-    color: var(--cream); font-weight: 500; line-height: 1.15; margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .pricing-founder-headline strong { color: var(--gold); font-weight: 700; }
-  .pricing-founder-sub { font-size: 13px; color: rgba(250,247,242,0.7); margin: 0; line-height: 1.5; }
-  .pricing-founder-right {
-    display: flex; flex-direction: column; gap: 10px;
-    min-width: 200px; position: relative;
-  }
-  .pricing-founder-counter {
-    text-align: right;
-    font-family: 'Cormorant Garamond', serif;
-  }
-  .pricing-founder-counter strong { color: var(--gold); font-size: 36px; font-weight: 700; }
-  .pricing-founder-counter span { color: rgba(250,247,242,0.6); font-size: 14px; margin-left: 6px; font-family: 'DM Sans', sans-serif; }
-  .pricing-founder-bar {
-    height: 4px; background: rgba(255,255,255,0.10); border-radius: 100px; overflow: hidden;
-  }
-  .pricing-founder-bar-fill {
-    height: 100%; background: linear-gradient(90deg, var(--turquoise), var(--gold));
-    border-radius: 100px; transition: width .6s ease;
-  }
-  .pricing-founder-cta {
-    background: var(--gold); color: var(--navy);
-    padding: 11px 22px; border-radius: 100px;
-    font-size: 13px; font-weight: 700; text-decoration: none;
-    text-align: center; transition: all .2s;
-    font-family: 'DM Sans', sans-serif;
-  }
-  .pricing-founder-cta:hover {
-    transform: translateY(-1px); box-shadow: 0 6px 20px rgba(201,169,97,0.4);
-    background: var(--gold-soft);
-  }
 
   /* Cards 4 offres */
   .pricing-cards {
@@ -752,9 +676,6 @@
     font-size: 12px; color: var(--navy); background: white;
     outline: none; font-family: 'DM Sans', sans-serif;
   }
-  .pricing-founder-scope-note {
-    margin-top: 8px; font-size: 11px; color: rgba(250,247,242,0.64); line-height: 1.45;
-  }
 
   /* Section heading inside pricing */
   .pricing-section-head {
@@ -889,14 +810,11 @@
   @media (max-width: 1024px) {
     .pricing-cards { grid-template-columns: repeat(2, 1fr); }
     .pricing-card--featured { transform: none; }
-    .pricing-founder-banner { grid-template-columns: 1fr; gap: 18px; }
-    .pricing-founder-counter { text-align: left; }
     .pricing-share-grid { gap: 12px; }
     .pricing-share { padding: 26px; }
   }
   @media (max-width: 768px) {
     .pricing-cards { grid-template-columns: 1fr; }
-    .pricing-founder-headline { font-size: 24px; }
     .pricing-scope { margin-top: -22px; }
     /* Niveau B : on garde le sliding indicator même sur mobile (3 boutons compacts), le select reste un fallback caché */
     .pricing-share-grid, .pricing-share-faq { grid-template-columns: 1fr; }
@@ -1787,13 +1705,6 @@
   .un-eyebrow--invite { color: var(--gold); }
   .un-eyebrow--top { color: var(--gold); }
 
-  .un-founder {
-    align-self: flex-start; max-width: 100%;
-    font-size: 11px; color: var(--gold); font-weight: 700;
-    background: rgba(201,169,97,0.15); padding: 4px 12px; border-radius: 100px;
-    letter-spacing: 0.02em;
-    white-space: normal; line-height: 1.45;
-  }
   .un-rite {
     margin-top: 4px; padding: 8px 12px;
     background: rgba(201,169,97,0.10); border: 1px solid rgba(201,169,97,0.25);
@@ -2395,9 +2306,9 @@
   transition: background .16s ease;
 }
 .welcome-card-cta:hover { background: var(--navy-soft); }
-.welcome-card.founder { border-color: rgba(201,169,97,0.5); }
-.welcome-card.founder .welcome-card-cta { background: var(--gold); color: var(--navy); }
-.welcome-card.founder .welcome-card-cta:hover { background: var(--gold-soft); }
+.welcome-card--featured { border-color: rgba(201,169,97,0.5); }
+.welcome-card--featured .welcome-card-cta { background: var(--gold); color: var(--navy); }
+.welcome-card--featured .welcome-card-cta:hover { background: var(--gold-soft); }
 .welcome-skip-wrap { text-align: center; margin-top: 22px; }
 .welcome-skip {
   background: none; border: none; color: var(--ink-soft);
@@ -14003,15 +13914,6 @@ body.architecte-open { overflow: hidden; }
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
-.pricing-card--minimal .pricing-card-price-founder {
-  display: block;
-  margin-top: 12px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 11.5px;
-  color: var(--gold);
-  font-weight: 600;
-  letter-spacing: 0.04em;
-}
 .pricing-card--minimal .pricing-card-diff {
   list-style: none;
   padding: 0;
@@ -14643,7 +14545,7 @@ body.architecte-open { overflow: hidden; }
     <div class="section-eyebrow">Le voyage FINEA</div>
     <h2 class="section-title">Quatre paliers.<br>De la clarté au patrimoine bâti.</h2>
     <div class="journey-intro">
-      <p>FINEA est une <strong>école de souveraineté financière</strong>, pas un conseiller. Tu démarres où tu es, tu progresses à ton rythme, et tu apprends à piloter en autonomie. Le même Score, les mêmes outils, les mêmes données t&apos;accompagnent à chaque palier.</p>
+      <p>FINEA est une <strong>application de souveraineté financière</strong>, pas un conseiller. Tu démarres où tu es, tu progresses à ton rythme, et tu apprends à piloter en autonomie. Le même Score, les mêmes outils, les mêmes données t&apos;accompagnent à chaque palier.</p>
       <div class="journey-arc">
         <div class="journey-arc-step"><span class="arc-sym">◐</span> Clarifier</div>
         <span class="arc-arrow">→</span>
@@ -14800,7 +14702,7 @@ body.architecte-open { overflow: hidden; }
 <section class="diff" id="difference">
   <div class="section-inner">
     <div class="section-eyebrow">Pourquoi FINEA</div>
-    <h2 class="section-title">Une école de souveraineté.<br>Pas un conseiller.</h2>
+    <h2 class="section-title">Une application de souveraineté.<br>Pas un conseiller.</h2>
     <div class="diff-grid">
       <div class="diff-card">
         <div class="diff-icon"><svg class="ficon ficon--lg ficon--gold"><use href="#ficon-instrument"/></svg></div>
@@ -14948,7 +14850,7 @@ body.architecte-open { overflow: hidden; }
       <div class="pricing-scope-copy" id="pricingScopeCopy">Ton parcours, ton rythme, ton espace.</div>
     </div>
 
-    <!-- PASS 1 — Band manifesto (remplace l'ancien founder banner désencombré) -->
+    <!-- PASS 1 — Band manifesto (logique économique) -->
     <div class="pricing-manifesto">
       <div class="pricing-manifesto-eyebrow">— Notre logique économique —</div>
       <p class="pricing-manifesto-quote">On ne facture pas <strong>1 % de ton patrimoine</strong>.<br>On facture <strong>une méthode</strong>.</p>
@@ -15325,7 +15227,7 @@ body.architecte-open { overflow: hidden; }
     <div class="footer-top">
       <div>
         <div class="logo" style="color:var(--cream); margin-bottom: 16px;">FINEA<span>.</span></div>
-        <p style="max-width: 340px;">L'école de souveraineté financière. On ne vend pas du conseil — on transmet de la lucidité. Sans CGP, sans produit à vendre, sans commission.</p>
+        <p style="max-width: 340px;">L'application de souveraineté financière. On ne vend pas du conseil — on transmet de la lucidité. Sans CGP, sans produit à vendre, sans commission.</p>
       </div>
       <div>
         <h5>Produit</h5>
@@ -15334,7 +15236,7 @@ body.architecte-open { overflow: hidden; }
         <a href="#difference">Pourquoi FINEA</a>
         <a href="#compare">Comparatif</a>
         <a href="#faq">FAQ</a>
-        <a href="#" onclick="event.preventDefault(); if(typeof _fineaOpenWaitlist==='function')_fineaOpenWaitlist();" style="color:var(--gold);margin-top:8px;">✦ Rejoindre la bêta</a>
+        <a href="#" onclick="event.preventDefault(); if(typeof openAuth==='function')openAuth('register');" style="color:var(--gold);margin-top:8px;">✦ Rejoindre FINEA</a>
       </div>
       <div>
         <h5>Offres</h5>
@@ -15346,10 +15248,13 @@ body.architecte-open { overflow: hidden; }
       </div>
       <div>
         <h5>Légal</h5>
-        <a href="#" onclick="event.preventDefault(); openLegal('mentions')">Mentions légales</a>
+        <a href="/mentions-legales" onclick="event.preventDefault(); openLegal('mentions')">Mentions légales</a>
         <a href="/cgu" onclick="event.preventDefault(); openLegal('cgu')">CGU</a>
+        <a href="/cgv" onclick="event.preventDefault(); openLegal('cgv')">CGV</a>
         <a href="/confidentialite" onclick="event.preventDefault(); openLegal('privacy')">Confidentialité</a>
         <a href="#" onclick="event.preventDefault(); openLegal('cif')" id="footerNonCif">Posture non-CIF</a>
+        <a href="#" onclick="event.preventDefault(); if(typeof openResiliation==='function')openResiliation()">Résilier mon abonnement</a>
+        <a href="#" onclick="event.preventDefault(); if(typeof _fineaOpenCookiePrefs==='function')_fineaOpenCookiePrefs()">Gérer mes cookies</a>
       </div>
     </div>
     <div class="compliance">
@@ -15444,10 +15349,6 @@ body.architecte-open { overflow: hidden; }
         <h2 class="auth-form-title">Rejoins FINEA ✨</h2>
         <p class="auth-form-sub">Crée ton compte gratuit en 30 secondes.</p>
 
-        <div class="founder-teaser" style="background:linear-gradient(135deg,#0A1F44,#12294f);border:1px solid rgba(201,169,97,0.35);border-radius:14px;padding:14px 16px;margin:2px 0 18px;">
-          <div style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C9A961;font-weight:700;margin-bottom:6px;">✦ Statut Membre Fondateur</div>
-          <p style="font-size:13.5px;line-height:1.55;color:#fff;margin:0;">Tu n'arrives pas en retard — tu arrives en premier. Rejoindre la bêta, c'est devenir <strong style="color:#C9A961;">Membre Fondateur</strong> : un avantage réservé, gardé à vie. La révélation, à l'ouverture officielle.</p>
-        </div>
 
         <div class="auth-field-row">
           <div class="auth-field">
@@ -15489,7 +15390,7 @@ body.architecte-open { overflow: hidden; }
         </button>
 
         <div class="auth-terms">
-          En t'inscrivant, tu acceptes nos <a href="#">CGV</a> et notre <a href="#">politique de confidentialité</a>.
+          En t'inscrivant, tu acceptes nos <a href="/cgv" target="_blank" rel="noopener">CGV</a>, nos <a href="/cgu" target="_blank" rel="noopener">CGU</a> et notre <a href="/confidentialite" target="_blank" rel="noopener">politique de confidentialité</a>.
         </div>
         <div class="auth-switch">Déjà un compte ? <a id="switchToLogin">Se connecter</a></div>
       </div>
@@ -15574,6 +15475,12 @@ body.architecte-open { overflow: hidden; }
     <div id="dashFirstVisitWrap"><!-- injecté par renderDashFirstVisit() --></div>
     <div id="dashScopeBannerWrap"><!-- injecté par renderDashScopeBanner() --></div>
     <div id="dashChecklistWrap"><!-- injecté par renderDashChecklist() --></div>
+    <div id="dashReferralWrap" style="display:none;">
+      <div class="dash-card" style="margin-bottom:18px;">
+        <div class="eyebrow">Mon parrainage</div>
+        <div id="dashReferralBody"><!-- injecté par renderDashReferral() --></div>
+      </div>
+    </div>
     <div class="dash-grid">
       <!-- Colonne gauche : Score + Niveau actuel -->
       <div>
@@ -16568,7 +16475,7 @@ body.architecte-open { overflow: hidden; }
         <div class="app-header">
           <span class="app-eyebrow">Académie · Apprendre à ton rythme</span>
           <h1 class="app-title">L'Académie FINEA</h1>
-          <p class="app-intro">Ton école de souveraineté financière. Des <strong>Parcours</strong> guidés pour apprendre pas à pas — séquences courtes, quiz, mise en pratique et <strong>certificat FINEA</strong> — et une <strong>Bibliothèque</strong> de fiches pour comprendre à la demande.</p>
+          <p class="app-intro">Ton application de souveraineté financière. Des <strong>Parcours</strong> guidés pour apprendre pas à pas — séquences courtes, quiz, mise en pratique et <strong>certificat FINEA</strong> — et une <strong>Bibliothèque</strong> de fiches pour comprendre à la demande.</p>
         </div>
         <div class="parcours-grid" id="parcoursGrid"><!-- injecté par renderParcoursList() --></div>
       </div>
@@ -17015,7 +16922,7 @@ const FINEA_CONFIG = {
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1rbXVoc29ybW90bG92cHdpcXpqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg5MzUwMjIsImV4cCI6MjA5NDUxMTAyMn0.pOqE6KsDg-KGLZZY8KnO38crRrA2K8meGB7wFDNqJGA',
   FUNCTIONS_BASE: '',                           // auto-dérivé : `${SUPABASE_URL}/functions/v1`
   ENVIRONMENT: 'beta',                          // 'beta' | 'prod'
-  BETA_FREE_ACCESS: true,                       // BÊTA PUBLIQUE : accès complet gratuit à TOUT sauf Architecte (plancher niveau Maîtrise/3). Repasser false pour rétablir le paywall.
+  BETA_FREE_ACCESS: true,                       // ACCÈS GRATUIT ACTUEL : accès complet à TOUT sauf Architecte (plancher niveau Maîtrise/3). Repasser false pour rétablir le paywall.
 
   // WhatsApp — « FINEA · chat 48h ». Numéro au format international SANS '+' ni espaces
   // (ex. France '33612345678'). Laisser vide → le bouton reste « bientôt disponible ».
@@ -17029,7 +16936,6 @@ const FINEA_CONFIG = {
     // Fondation — solo uniquement
     fondation_solo_monthly: 'https://buy.stripe.com/test_14A6oHdre053eu8dVN7ss00',
     fondation_solo_annual:  'https://buy.stripe.com/test_8x26oH3QEbNL99O6tl7ss01',
-    fondation_solo_founder: '',                 // appliqué via le code promo FONDATEUR sur le lien monthly
     // Maîtrise — solo / duo / foyer
     maitrise_solo_monthly:  'https://buy.stripe.com/test_5kQ8wP5YM2db2Lq7xp7ss02',
     maitrise_solo_annual:   'https://buy.stripe.com/test_14A3cvdre8Bzcm004X7ss03',
@@ -17195,7 +17101,7 @@ const FineaAccess = (function () {
     opts = opts || {};
     if (!user) return false;
     if (isDev(user)) return true;
-    if (FINEA_CONFIG.BETA_FREE_ACCESS) return true;   // bêta publique : aucun paywall
+    if (FINEA_CONFIG.BETA_FREE_ACCESS) return true;   // accès gratuit actuel : aucun paywall
     const email = _emailOf(user);
     if (!email) return false;
     if (!opts.force) {
@@ -17237,7 +17143,7 @@ const FineaAccess = (function () {
       _setLevel(user, niveau, data.offer, scope);
       return niveau;
     }
-    // Bêta publique : aucun paiement requis → accès complet SAUF Architecte (Maîtrise/3, solo).
+    // Accès gratuit actuel : aucun paiement requis → accès complet SAUF Architecte (Maîtrise/3, solo).
     if (FINEA_CONFIG.BETA_FREE_ACCESS) {
       _setLevel(user, 3, 'maitrise', 'solo');
       return 3;
@@ -17402,6 +17308,72 @@ function closePaywall() {
 /* Ouvre le Customer Portal Stripe (résiliation, mise à jour CB, factures).
    Appelle l'Edge Function create-portal-session qui retrouve le customer Stripe
    via l'email et renvoie l'URL de la session portal. */
+/* ─── Résiliation en ligne « Résilier mon abonnement » (art. L215-1-1 C. conso) ───
+   Parcours dédié : accès direct → récapitulatif modifiable avec date d'effet →
+   bouton « Notification de la résiliation » → confirmation sur support durable.
+   L'annulation Stripe effective + l'email de confirmation serveur se branchent avec
+   le flux de paiement (janvier) ; ici on recueille et confirme la demande. */
+function openResiliation() {
+  if (typeof currentUser === 'undefined' || !currentUser || !currentUser.email) {
+    if (typeof showNotification === 'function') showNotification('Connecte-toi pour résilier ton abonnement.', 'info');
+    if (typeof openAuth === 'function') openAuth('login');
+    return;
+  }
+  const prev = document.getElementById('resiliationOverlay');
+  if (prev) prev.remove();
+  const email = currentUser.email;
+  const esc = (typeof _escapeHtml === 'function') ? _escapeHtml : (s) => String(s);
+  const dateStr = new Date(Date.now() + 10 * 86400000).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+  const ov = document.createElement('div');
+  ov.id = 'resiliationOverlay';
+  ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:100001;background:rgba(10,31,68,0.5);display:flex;align-items:center;justify-content:center;padding:18px;';
+  ov.innerHTML =
+    '<div style="background:#fff;border-radius:20px;max-width:480px;width:100%;padding:26px 24px 20px;box-shadow:0 24px 64px rgba(10,31,68,0.32);font-family:Arial,Helvetica,sans-serif;max-height:92vh;overflow:auto;">'
+    + '<div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#C9A961;margin-bottom:10px;">Résilier mon abonnement</div>'
+    + '<div id="resiStep1">'
+    +   '<p style="font-size:14px;color:#33404F;line-height:1.55;margin:0 0 14px;">Compte : <strong>' + esc(email) + '</strong></p>'
+    +   '<p style="font-size:13px;color:#4a4a4a;line-height:1.55;margin:0 0 10px;">Choisis la date d\'effet de ta résiliation :</p>'
+    +   '<label style="display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid #e6ddc9;border-radius:12px;margin-bottom:8px;cursor:pointer;">'
+    +     '<input type="radio" name="resiDate" value="10j" checked style="margin-top:2px;flex:0 0 auto;">'
+    +     '<span style="font-size:13px;color:#33404F;line-height:1.5;">Dans 10 jours (le <strong>' + dateStr + '</strong>). Toute somme déjà réglée pour la période postérieure te sera remboursée au prorata.</span>'
+    +   '</label>'
+    +   '<label style="display:flex;gap:10px;align-items:flex-start;padding:11px 12px;border:1px solid #e6ddc9;border-radius:12px;margin-bottom:14px;cursor:pointer;">'
+    +     '<input type="radio" name="resiDate" value="fin" style="margin-top:2px;flex:0 0 auto;">'
+    +     '<span style="font-size:13px;color:#33404F;line-height:1.5;">À la fin de ma période facturée en cours (l\'accès est maintenu jusque-là).</span>'
+    +   '</label>'
+    +   '<button id="resiNotify" type="button" style="width:100%;background:#C9A961;color:#0A1F44;border:none;border-radius:100px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;">Notification de la résiliation</button>'
+    +   '<button id="resiCancel" type="button" style="width:100%;margin-top:8px;background:none;border:none;color:#7A8494;font-size:13px;cursor:pointer;">Annuler</button>'
+    + '</div>'
+    + '<div id="resiStep2" style="display:none;text-align:center;padding:8px 0 4px;">'
+    +   '<div style="font-size:38px;line-height:1;margin-bottom:8px;color:#1a8a80;">✓</div>'
+    +   '<div style="font-size:17px;font-weight:700;color:#0A1F44;margin-bottom:8px;">Résiliation enregistrée</div>'
+    +   '<p id="resiConfirmTxt" style="font-size:13.5px;color:#4a4a4a;line-height:1.6;margin:0 0 16px;"></p>'
+    +   '<button id="resiClose" type="button" style="background:#0A1F44;color:#fff;border:none;border-radius:100px;padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer;">Fermer</button>'
+    + '</div>'
+    + '</div>';
+  document.body.appendChild(ov);
+  const close = () => { try { ov.remove(); } catch (_) {} };
+  ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+  const cEl = document.getElementById('resiCancel'); if (cEl) cEl.onclick = close;
+  const clEl = document.getElementById('resiClose'); if (clEl) clEl.onclick = close;
+  const nEl = document.getElementById('resiNotify'); if (nEl) nEl.onclick = () => _submitResiliation(email, dateStr);
+}
+
+function _submitResiliation(email, dateStr) {
+  const esc = (typeof _escapeHtml === 'function') ? _escapeHtml : (s) => String(s);
+  const choice = (document.querySelector('input[name="resiDate"]:checked') || {}).value || '10j';
+  const effet = choice === 'fin' ? 'à la fin de ta période facturée en cours' : ('le ' + dateStr);
+  const ts = Date.now();
+  try { localStorage.setItem('finea_resiliation', JSON.stringify({ email, choice, dateStr, ts })); } catch (_) {}
+  // Best-effort serveur (persistance + annulation Stripe + email support durable = janvier).
+  try { if (typeof _postAuthed === 'function') _postAuthed('submit-resiliation', { choice, date_effet: dateStr }).catch(() => {}); } catch (_) {}
+  const s1 = document.getElementById('resiStep1'), s2 = document.getElementById('resiStep2'), t = document.getElementById('resiConfirmTxt');
+  if (t) t.innerHTML = 'Ta demande de résiliation est prise en compte, avec effet <strong>' + effet + '</strong>. Une confirmation t\'est adressée par e-mail à <strong>' + esc(email) + '</strong>. Ton accès reste ouvert jusqu\'à la date d\'effet.';
+  if (s1) s1.style.display = 'none';
+  if (s2) s2.style.display = 'block';
+}
+
 async function openBillingPortal(btn) {
   if (!currentUser || !currentUser.email) {
     if (typeof showNotification === 'function') showNotification('Connecte-toi pour gérer ton abonnement.', 'info');
@@ -17613,10 +17585,72 @@ async function beginCheckout(offerKey, opts) {
       try { await FineaAccess.syncPaidOffer(currentUser, {}); } catch (_) {}
     }
     if (typeof closePaywall === 'function') closePaywall();
-    if (typeof showNotification === 'function') showNotification('✨ Accès débloqué gratuitement pendant la bêta — bienvenue dans FINEA !', 'success', 5000);
+    if (typeof showNotification === 'function') showNotification('✨ Accès débloqué — bienvenue dans FINEA !', 'success', 5000);
     if (typeof openDashboard === 'function') openDashboard();
     return true;
   }
+  // PAYANT : étape de confirmation de commande + renonciation à la rétractation (service
+  // numérique, art. L221-25 C. conso) OBLIGATOIRE avant toute redirection vers Stripe.
+  return _openCheckoutConsent(offerKey, opts);
+}
+
+/* Étape de confirmation de commande : récapitulatif + case de renonciation à la
+   rétractation (non pré-cochée, distincte des CGV), puis bouton « Souscrire avec
+   obligation de paiement ». Le consentement est horodaté et transmis au serveur. */
+function _openCheckoutConsent(offerKey, opts) {
+  opts = opts || {};
+  const scope  = opts.scope  || (typeof getPricingScope  === 'function' ? getPricingScope()  : 'solo');
+  const period = opts.period || (typeof getPricingPeriod === 'function' ? getPricingPeriod() : 'monthly');
+  const prev = document.getElementById('checkoutConsentOverlay');
+  if (prev) prev.remove();
+  const OFFER_LABELS = { declic: 'Déclic', fondation: 'Fondation', maitrise: 'Maîtrise', architecte: 'Architecte' };
+  const offerLabel = OFFER_LABELS[offerKey] || offerKey;
+  const periodLabel = (offerKey === 'declic') ? 'paiement unique' : (period === 'annual' ? 'facturé par an' : 'facturé par mois');
+  const scopeLabel = (scope && scope !== 'solo') ? (scope.charAt(0).toUpperCase() + scope.slice(1) + ' · ') : '';
+  const ov = document.createElement('div');
+  ov.id = 'checkoutConsentOverlay';
+  ov.setAttribute('role', 'dialog'); ov.setAttribute('aria-modal', 'true');
+  ov.style.cssText = 'position:fixed;inset:0;z-index:100001;background:rgba(10,31,68,0.5);display:flex;align-items:center;justify-content:center;padding:18px;';
+  ov.innerHTML =
+    '<div style="background:#fff;border-radius:20px;max-width:480px;width:100%;padding:26px 24px 20px;box-shadow:0 24px 64px rgba(10,31,68,0.32);font-family:Arial,Helvetica,sans-serif;max-height:92vh;overflow:auto;">'
+    + '<div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:#C9A961;margin-bottom:8px;">Confirmer ta souscription</div>'
+    + '<div style="font-size:20px;font-weight:700;color:#0A1F44;margin-bottom:3px;">' + offerLabel + '</div>'
+    + '<div style="font-size:13.5px;color:#4a4a4a;margin-bottom:18px;">' + scopeLabel + periodLabel + ' · le prix TTC exact s\'affiche à l\'étape de paiement sécurisé.</div>'
+    + '<label for="checkoutRetractationConsent" style="display:flex;gap:11px;align-items:flex-start;background:#FAF8F3;border:1px solid #e6ddc9;border-radius:12px;padding:13px 14px;cursor:pointer;">'
+    +   '<input type="checkbox" id="checkoutRetractationConsent" style="margin-top:2px;flex:0 0 auto;width:18px;height:18px;cursor:pointer;">'
+    +   '<span style="font-size:12.5px;line-height:1.5;color:#33404F;">Je demande expressément que la fourniture du service commence dès la conclusion du contrat, avant l\'expiration du délai de rétractation de quatorze jours. Je conserve mon droit de rétractation pendant ce délai ; si je l\'exerce, je serai redevable du montant proportionnel au service déjà fourni.</span>'
+    + '</label>'
+    + '<div id="checkoutConsentErr" style="display:none;color:#b91c1c;font-size:12px;margin-top:8px;">Coche la case pour continuer vers le paiement.</div>'
+    + '<button id="checkoutConsentPay" type="button" style="width:100%;margin-top:16px;background:#C9A961;color:#0A1F44;border:none;border-radius:100px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;">Souscrire avec obligation de paiement</button>'
+    + '<button id="checkoutConsentCancel" type="button" style="width:100%;margin-top:8px;background:none;border:none;color:#7A8494;font-size:13px;cursor:pointer;">Annuler</button>'
+    + '<p style="font-size:11px;color:#9aa1ad;line-height:1.5;margin:12px 0 0;">En confirmant, tu acceptes les <a href="/cgv" target="_blank" rel="noopener" style="color:#C9A961;">Conditions Générales de Vente</a>. Paiement sécurisé par Stripe.</p>'
+    + '</div>';
+  document.body.appendChild(ov);
+  const close = () => { try { ov.remove(); } catch (_) {} };
+  ov.addEventListener('click', (e) => { if (e.target === ov) close(); });
+  const cancelBtn = document.getElementById('checkoutConsentCancel');
+  if (cancelBtn) cancelBtn.onclick = close;
+  const payBtn = document.getElementById('checkoutConsentPay');
+  if (payBtn) payBtn.onclick = function () {
+    const cb = document.getElementById('checkoutRetractationConsent');
+    if (!cb || !cb.checked) {
+      const er = document.getElementById('checkoutConsentErr');
+      if (er) er.style.display = 'block';
+      return;
+    }
+    const ts = Date.now();
+    try { localStorage.setItem('finea_retractationConsent', JSON.stringify({ offer: offerKey, scope, period, ts })); } catch (_) {}
+    close();
+    _proceedToStripeCheckout(offerKey, { scope, period, retractationConsentTs: ts });
+  };
+  return true;
+}
+
+/* Reprise du flux de paiement Stripe APRÈS recueil du consentement de renonciation
+   (ex-corps payant de beginCheckout). */
+async function _proceedToStripeCheckout(offerKey, opts) {
+  opts = opts || {};
+  const retractationConsentTs = opts.retractationConsentTs || null;
   const scope  = opts.scope  || (typeof getPricingScope  === 'function' ? getPricingScope()  : 'solo');
   const period = opts.period || (typeof getPricingPeriod === 'function' ? getPricingPeriod() : 'monthly');
   try {
@@ -17653,7 +17687,7 @@ async function beginCheckout(offerKey, opts) {
         'Authorization': `Bearer ${FINEA_CONFIG.SUPABASE_ANON_KEY}`,
         'apikey': FINEA_CONFIG.SUPABASE_ANON_KEY,
       },
-      body: JSON.stringify({ offer: offerKey, scope, period, email: payEmail, return_url: returnUrl, client_reference_id: refId }),
+      body: JSON.stringify({ offer: offerKey, scope, period, email: payEmail, return_url: returnUrl, client_reference_id: refId, retractation_consent: retractationConsentTs ? { accepted: true, ts: retractationConsentTs } : undefined }),
     });
     const data = await res.json().catch(() => null);
     if (res.ok && data && data.url) {
@@ -18164,7 +18198,6 @@ const FINEA_PROFILES = {
     offerSub: 'Studio + Bibliothèque + Dashboard',
     price: '19 €',
     priceSub: 'par mois · sans engagement',
-    founderNote: null,
     features: ['Studio FINEA · 6 outils pédagogiques', 'Comparateur d\'enveloppes (PEA · AV · PER · CTO)', 'Dashboard + rapport 5 pages + plan 90j'],
     cta: 'Activer Fondation',
     candidature: false,
@@ -18276,7 +18309,7 @@ function getDetectedProfile() {
 /* Journal de bord version-gated. Bumper CHANGELOG_VERSION à chaque nouvelle entrée
    → les revenants revoient le journal 1× ; les nouveaux comptes le sautent (marqué
    "vu" à l'ouverture du Welcome). Voir décision cabinet 2026-07-05. */
-const CHANGELOG_VERSION  = 'beta-public-2026-08';
+const CHANGELOG_VERSION  = 'v1-2026-11';
 const CHANGELOG_SEEN_KEY = 'finea_changelog_seen_version';
 
 function _changelogSeen()      { try { return localStorage.getItem(CHANGELOG_SEEN_KEY); } catch (_) { return null; } }
@@ -19021,9 +19054,6 @@ function renderResults() {
        <span style="position:absolute;left:0;top:5px;color:#C9A961;font-size:14px;">✓</span>${f}
      </li>`
   ).join('');
-  const founderNoteHTML = profile.founderNote
-    ? `<div style="background:#fff8e7;border:1px solid #C9A961;border-radius:8px;padding:8px 12px;margin:10px 0 0 0;font-size:12px;color:#8a6a1f;line-height:1.5;">${profile.founderNote}</div>`
-    : '';
   const primaryCtaLabel = profile.candidature
     ? `📝 ${profile.cta} →`
     : `▶ ${profile.cta} — ${profile.price} <span style="opacity:0.75;font-weight:400;font-size:12px;">${profile.priceSub}</span> →`;
@@ -19046,7 +19076,6 @@ function renderResults() {
         </div>
         <div style="font-size:12px;color:#999;margin-top:2px;">${profile.priceSub}</div>
         <ul style="margin:14px 0 0 0;padding:0;">${featuresHTML}</ul>
-        ${founderNoteHTML}
       </div>
       <div class="diag-profile-ctas">
         <button class="diag-profile-cta diag-profile-cta--primary" id="diagProfileCtaPrimary">${primaryCtaLabel}</button>
@@ -19918,7 +19947,6 @@ function migrateUserToScopeV2(user) {
     offer: user.niveauId >= 4 ? 'architecte' : user.niveauId >= 3 ? 'maitrise' : user.niveauId >= 2 ? 'fondation' : user.niveauId >= 1 ? 'declic' : 'free',
     max_members: 1,
     billing_status: 'local_demo',
-    founder_flag: false,
     created_at: now,
   };
   const space = {
@@ -19958,7 +19986,7 @@ function _fineaGetOrCreateAnonSpaceId() {
     const now = new Date().toISOString();
     _fineaJsonSet(_fineaScopeKey(scopeId), {
       id: scopeId, type: 'solo', owner_user_id: null, offer: 'free',
-      max_members: 1, billing_status: 'anonymous', founder_flag: false,
+      max_members: 1, billing_status: 'anonymous',
       created_at: now,
     });
     _fineaJsonSet(_fineaSpaceKey(spaceId), {
@@ -20511,7 +20539,7 @@ function detachMySpace(opts) {
     // doit réellement accorder le niveau Fondation (sinon getEffectiveNiveauId reste
     // bas et l'utilisateur perçoit « repassé en gratuit »). Pas d'expiry auto en bêta.
     offer: 'fondation', max_members: 1,
-    billing_status: 'detached_trial', founder_flag: false,
+    billing_status: 'detached_trial',
     fondation_trial_end_at: trialEnd.toISOString(),
     detached_from_scope: fromScope.id, detached_panic: panic,
     created_at: now.toISOString(),
@@ -20837,6 +20865,7 @@ function _createOrLoadAccountFromOAuth(email, prenom, nom, authUid) {
       .catch(() => {});
   }
   // Invitation foyer en attente (lien ?invite=) → acceptation serveur prioritaire.
+  if (typeof _finea_handlePendingReferralAfterAuth === 'function') _finea_handlePendingReferralAfterAuth(currentUser);
   if (typeof _finea_handlePendingInvitesAfterAuth === 'function'
       && _finea_handlePendingInvitesAfterAuth(currentUser, { newUser: isNew })) return;
   // Hydrate l'appartenance foyer depuis le serveur (si déjà membre d'un scope).
@@ -21154,6 +21183,7 @@ document.getElementById('loginSubmit').addEventListener('click', async () => {
   closeAuth();
   setNavLoggedIn(currentUser);
   // Sprint 2 — si une invitation est en attente pour cet email, propose de l'accepter
+  if (typeof _finea_handlePendingReferralAfterAuth === 'function') _finea_handlePendingReferralAfterAuth(currentUser);
   if (!_finea_handlePendingInvitesAfterAuth(currentUser, { newUser: false })) {
     if (typeof _fineaHydrateScopeFromServer === 'function') _fineaHydrateScopeFromServer();
     if (typeof _fineaPullState === 'function') _fineaPullState();
@@ -21223,6 +21253,7 @@ document.getElementById('successGoBtn').addEventListener('click', () => {
   closeAuth();
   setNavLoggedIn(currentUser);
   // Sprint 2 — invitation en attente
+  if (typeof _finea_handlePendingReferralAfterAuth === 'function') _finea_handlePendingReferralAfterAuth(currentUser);
   if (_finea_handlePendingInvitesAfterAuth(currentUser, { newUser: true })) return;
   // LOT E — Si l'utilisateur arrive avec une offre en attente (depuis un CTA pricing
   // ou le diagnostic), on l'applique directement et on saute le welcome screen.
@@ -21348,11 +21379,9 @@ function renderWelcome() {
   const cardsHTML = WELCOME_LEVELS.map(o => {
     const price = scopeCfg?.prices?.[o.id] || '';
     const sub = scopeCfg?.periods?.[o.id] || '';
-    const badge = o.id === 'fondation'
-      ? (scope === 'solo' ? o.badge : scopeCfg?.founder || '')
-      : '';
+    const badge = o.id === 'fondation' && scope === 'solo' ? o.badge : '';
     return `
-    <div class="welcome-card ${o.id === 'fondation' ? 'founder' : ''}" data-offer-key="${o.id}">
+    <div class="welcome-card ${o.id === 'fondation' ? 'welcome-card--featured' : ''}" data-offer-key="${o.id}">
       <div class="welcome-card-emoji">${o.emoji}</div>
       <div class="welcome-card-name">${o.name}</div>
       <div class="welcome-card-price">
@@ -21593,7 +21622,7 @@ function renderModuleGrid(niveauId) {
 
 function _renderStripActive(next, blockedCount, currentLevel) {
   // Cas Gratuit → Déclic, Déclic → Fondation
-  // Si next = Fondation, montrer aussi l'offre fondateur 9€/m pendant 24 mois
+  // next = Fondation : on met en avant l'étape suivante (prix réel de l'offre)
   const isFondation = next.key === 'fondation';
   return `
     <div class="upgrade-next">
@@ -21742,6 +21771,7 @@ async function openDashboard() {
   if (typeof renderOfferSwitcher === 'function') renderOfferSwitcher();
   if (typeof renderDashOfferCard === 'function') renderDashOfferCard();
   if (typeof renderDashSupportCard === 'function') renderDashSupportCard();
+  if (typeof renderDashReferral === 'function') renderDashReferral();
   if (typeof renderDashFirstVisit === 'function') renderDashFirstVisit();
   setNavLoggedIn(currentUser);
   document.getElementById('dashboardOverlay').classList.add('active');
@@ -23600,7 +23630,95 @@ document.addEventListener('DOMContentLoaded', () => {
   // Hash router : #invite=TOKEN → pré-remplit l'auth modal pour l'invité
   _finea_handleInviteHash();
   window.addEventListener('hashchange', _finea_handleInviteHash);
+  // Parrainage : capture ?ref=CODE au chargement (mémorisé jusqu'à l'inscription du filleul).
+  _finea_handleRefParam();
+  window.addEventListener('hashchange', _finea_handleRefParam);
 });
+
+/* ── Parrainage (Phase 1a) : capture du code, hook post-auth, carte dashboard ──
+   Attribution côté serveur (record-referral) ; la récompense (1 mois offert de
+   chaque côté) sera créditée en Phase 1b au 1er paiement du filleul. */
+const FINEA_PENDING_REF_KEY = 'finea_pending_ref';
+
+function _finea_handleRefParam() {
+  try {
+    const qs = new URLSearchParams(location.search || '');
+    const hashM = (location.hash || '').match(/[#&]ref=([A-Za-z0-9-]+)/);
+    const code = qs.get('ref') || (hashM ? hashM[1] : null);
+    if (!code) return;
+    localStorage.setItem(FINEA_PENDING_REF_KEY, String(code).trim().toUpperCase());
+    // Retire SEULEMENT ?ref= / #ref= (préserve ?code= OAuth et autres params).
+    qs.delete('ref');
+    const q = qs.toString();
+    let h = (location.hash || '').replace(/([#&])ref=[A-Za-z0-9-]+/, '$1').replace(/[#&]$/, '');
+    if (h === '#') h = '';
+    history.replaceState(null, '', location.pathname + (q ? '?' + q : '') + h);
+    // Déjà connecté → on enregistre tout de suite (sinon après auth).
+    if (currentUser && currentUser.email && typeof _finea_handlePendingReferralAfterAuth === 'function') {
+      _finea_handlePendingReferralAfterAuth(currentUser);
+    }
+  } catch (_) {}
+}
+
+// Appelé après authentification (OAuth + email) : si un code parrain est en attente,
+// on enregistre l'attribution côté serveur. Fire-and-forget, aucune redirection.
+function _finea_handlePendingReferralAfterAuth(user) {
+  if (!user || !user.email) return;
+  let code = null;
+  try { code = localStorage.getItem(FINEA_PENDING_REF_KEY); } catch (_) {}
+  if (!code) return;
+  try { localStorage.removeItem(FINEA_PENDING_REF_KEY); } catch (_) {}
+  if (typeof _postAuthed === 'function') {
+    _postAuthed('record-referral', { code }).catch(() => {});
+  }
+}
+
+// Carte « Mon parrainage » du tableau de bord : code + lien à partager + stats.
+async function renderDashReferral() {
+  const wrap = document.getElementById('dashReferralWrap');
+  const body = document.getElementById('dashReferralBody');
+  if (!wrap || !body || !currentUser) return;
+  if (typeof _postAuthed !== 'function') { wrap.style.display = 'none'; return; }
+  let data = null;
+  try {
+    const r = await _postAuthed('my-referral', { share_base_url: location.origin + '/' });
+    if (r && r.ok && r.data && r.data.ok) data = r.data;
+  } catch (_) {}
+  // Pas de session serveur (compte purement local) → on masque proprement.
+  if (!data) { wrap.style.display = 'none'; return; }
+  const esc = (typeof _escapeHtml === 'function') ? _escapeHtml : (s) => String(s);
+  const url = data.share_url || '';
+  const st = data.stats || { total: 0, pending: 0, qualified: 0 };
+  const filleuls = st.total || 0;
+  const statLine = filleuls === 0
+    ? 'Personne encore — partage ton lien pour inviter un proche.'
+    : `${filleuls} invité${filleuls > 1 ? 's' : ''} · ${st.pending || 0} en attente · ${st.qualified || 0} abonné${(st.qualified || 0) > 1 ? 's' : ''}`;
+  body.innerHTML =
+    '<p style="font-size:13px;color:var(--ink-soft);margin:0 0 12px;line-height:1.5;">'
+    + 'Invite un proche : quand il prend un abonnement, vous recevez <strong>chacun 1 mois offert</strong>.</p>'
+    + '<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:10px;">'
+    +   '<input id="dashRefLink" type="text" readonly value="' + esc(url) + '" '
+    +     'style="flex:1;min-width:200px;font-size:12.5px;padding:10px 12px;border:1px solid rgba(10,31,68,0.18);border-radius:10px;background:var(--paper,#fff);color:var(--ink);" '
+    +     'onclick="this.select()">'
+    +   '<button class="dash-offer-btn" style="background:#C9A961;color:#0A1F44;font-weight:600;white-space:nowrap;" onclick="_fineaCopyReferral()">Copier le lien</button>'
+    + '</div>'
+    + '<p style="font-size:12px;color:var(--ink-soft);margin:0;">' + esc(statLine)
+    +   ' · <span style="color:var(--ink-soft);">Code&nbsp;: <strong>' + esc(data.code || '') + '</strong></span></p>';
+  wrap.style.display = '';
+}
+
+function _fineaCopyReferral() {
+  const el = document.getElementById('dashRefLink');
+  if (!el) return;
+  const url = el.value || '';
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url);
+    else { el.select(); document.execCommand('copy'); }
+    if (typeof showNotification === 'function') showNotification('Lien de parrainage copié ✓', 'success', 3000);
+  } catch (_) {
+    if (typeof showNotification === 'function') showNotification('Copie impossible — sélectionne le lien manuellement.', 'info', 4000);
+  }
+}
 
 /* ── Invite acceptance flow ── */
 let _fineaActiveInvite = null;
@@ -31205,7 +31323,8 @@ function renderDashOfferCard() {
       billingWrap = document.createElement('div');
       billingWrap.id = 'dashBillingPortalWrap';
       billingWrap.style.cssText = 'margin-top:12px;';
-      billingWrap.innerHTML = `<button onclick="openBillingPortal(this)" style="width:100%;background:transparent;color:#0A1F44;border:1px solid rgba(10,31,68,0.2);border-radius:100px;padding:10px 16px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;">⚙ Gérer mon abonnement · résilier</button>`;
+      billingWrap.innerHTML = `<button onclick="openBillingPortal(this)" style="width:100%;background:transparent;color:#0A1F44;border:1px solid rgba(10,31,68,0.2);border-radius:100px;padding:10px 16px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;">⚙ Gérer mon abonnement (carte, factures)</button>`
+        + `<button onclick="if(typeof openResiliation==='function')openResiliation()" style="width:100%;margin-top:8px;background:transparent;color:#4a4a4a;border:1px solid rgba(10,31,68,0.14);border-radius:100px;padding:10px 16px;font-size:13px;font-weight:600;font-family:Arial,sans-serif;cursor:pointer;">Résilier mon abonnement</button>`;
       curEl.parentElement && curEl.parentElement.appendChild(billingWrap);
     }
   } else if (billingWrap) {
@@ -31292,7 +31411,7 @@ function renderOfferOverlay() {
       <div class="offer-header">
         <span class="offer-eyebrow">Mon offre &amp; espaces</span>
         <h1 class="offer-title">Ajuste ton plan FINEA</h1>
-        <p class="offer-intro">Passe d'un niveau à l'autre, du Solo au Duo ou au Foyer, du mensuel à l'annuel. <strong>Pendant la bêta publique, les changements sont gratuits</strong> et appliqués immédiatement ; en production, le différentiel sera prélevé via paiement sécurisé.</p>
+        <p class="offer-intro">Passe d'un niveau à l'autre, du Solo au Duo ou au Foyer, du mensuel à l'annuel. Les changements sont appliqués immédiatement ; tout différentiel de prix est réglé via paiement sécurisé.</p>
       </div>
 
       <div class="offer-current-banner">
@@ -31352,7 +31471,7 @@ function renderOfferOverlay() {
       `}
 
       <div class="offer-disclaimer">
-        <strong>En bêta publique</strong> · le changement d'offre est <strong>gratuit et instantané</strong>. Une fois en production, le différentiel sera prélevé via paiement sécurisé. La downgrade n'efface aucune donnée — l'accès aux modules verrouillés est simplement coupé jusqu'à un nouvel upgrade.
+        Le changement d'offre est <strong>instantané</strong> ; tout différentiel de prix est réglé via paiement sécurisé. La downgrade n'efface aucune donnée — l'accès aux modules verrouillés est simplement coupé jusqu'à un nouvel upgrade.
       </div>
     </div>
   `;
@@ -38789,7 +38908,7 @@ function _appDownloadCertificate(parcoursId) {
     doc.setTextColor(10, 31, 68);
     doc.setFont('times', 'bold'); doc.setFontSize(30); doc.text('FINEA', W / 2, 42, { align: 'center' });
     doc.setFont('times', 'normal'); doc.setFontSize(11); doc.setTextColor(201, 169, 97);
-    doc.text("ACADÉMIE · ÉCOLE DE SOUVERAINETÉ FINANCIÈRE", W / 2, 51, { align: 'center' });
+    doc.text("ACADÉMIE · APPLICATION DE SOUVERAINETÉ FINANCIÈRE", W / 2, 51, { align: 'center' });
     // Corps
     doc.setTextColor(74, 74, 74); doc.setFontSize(13);
     doc.text('Ce certificat atteste que', W / 2, 78, { align: 'center' });
@@ -38975,29 +39094,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (_FINEA_EMAIL_ROUTES[_fineaHashRoute()]) setTimeout(_fineaHandleEmailDeeplink, 700);
 });
 
-/* ─── Compteur Fondateur Beta + Waitlist (frontend uniquement, prêt pour backend Sept) ─── */
-const FOUNDER_TOTAL = 20;
-function getFounderCount() {
-  // TODO backend Sept : remplacer par GET /beta/founder-count
-  const stored = localStorage.getItem('finea_founderTaken');
-  return stored != null ? Number(stored) : 3;  // 3 places prises par défaut → 17 restantes
-}
-function renderFounderCounter() {
-  const taken = getFounderCount();
-  const left = Math.max(0, FOUNDER_TOTAL - taken);
-  const pct = Math.round((taken / FOUNDER_TOTAL) * 100);
-  // Voyage banner
-  const elCount = document.getElementById('founderCount');
-  const elBar = document.getElementById('founderBar');
-  if (elCount) elCount.textContent = left;
-  if (elBar) elBar.style.width = pct + '%';
-  // Pricing section
-  const elPC = document.getElementById('pricingFounderCount');
-  const elPB = document.getElementById('pricingFounderBar');
-  if (elPC) elPC.textContent = left;
-  if (elPB) elPB.style.width = pct + '%';
-}
-
 const PRICING_SCOPE_DEF = {
   solo:  {
     icon: '👤', label: 'Solo', spaces: '1 espace inclus', feature: '1 espace personnel',
@@ -39006,8 +39102,6 @@ const PRICING_SCOPE_DEF = {
     periods:       { declic: 'paiement unique', fondation: '/mois sans engagement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
     pricesAnnual:  { declic: '9€',  fondation: '182€', maitrise: '278€', architecte: '470€' },
     periodsAnnual: { declic: 'paiement unique', fondation: '/an · économie 46€', maitrise: '/an · économie 70€', architecte: '/an · économie 118€' },
-    founder: '',
-    founderBanner: '',
   },
   duo:   {
     icon: '👥', label: 'Duo', spaces: '2 espaces (Maîtrise+)', feature: '2 espaces personnels liés',
@@ -39016,8 +39110,6 @@ const PRICING_SCOPE_DEF = {
     periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
     pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '470€', architecte: '662€' },
     periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 118€', architecte: '/an · économie 166€' },
-    founder: '',
-    founderBanner: '',
   },
   foyer: {
     icon: '🏠', label: 'Foyer', spaces: "jusqu'à 5 espaces (Maîtrise+)", feature: "jusqu'à 5 espaces personnels liés",
@@ -39026,8 +39118,6 @@ const PRICING_SCOPE_DEF = {
     periods:       { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/mois sans engagement', architecte: '/mois · sur candidature' },
     pricesAnnual:  { declic: '—',   fondation: '—',   maitrise: '662€', architecte: '854€' },
     periodsAnnual: { declic: 'Solo uniquement', fondation: 'Solo uniquement', maitrise: '/an · économie 166€', architecte: '/an · économie 214€' },
-    founder: '',
-    founderBanner: '',
   }
 };
 let _pricingScopeCopyTimer = null;
@@ -39098,9 +39188,6 @@ function renderPricingScope() {
       if (wrap) wrap.classList.remove('pricing-price-fade');
     }, 140);
   });
-  document.querySelectorAll('[data-pricing-founder-note]').forEach(el => { el.textContent = cfg.founder; });
-  const founderScopeNote = document.getElementById('pricingFounderScopeNote');
-  if (founderScopeNote) founderScopeNote.textContent = cfg.founderBanner;
   const architecteSelect = document.getElementById('pricingArchitecteScope');
   if (architecteSelect) architecteSelect.value = scope;
   document.querySelectorAll('[data-pricing-scope-row]').forEach(row => {
@@ -39137,12 +39224,14 @@ const LEGAL_CONTENT = {
       <p><strong>Directeur de la publication :</strong> Djordan Belson, en sa qualité de président de BEL HOLDING SAS.</p>
 
       <h3>Contact</h3>
-      <p>Email général : <strong>contact@hellofinea.com</strong><br>
+      <p>Téléphone : <strong>07 43 70 25 18</strong><br>
+      Email général : <strong>contact@hellofinea.com</strong><br>
       Demandes RGPD : <strong>rgpd@hellofinea.com</strong></p>
 
       <h3>Hébergement</h3>
-      <p>Le site hellofinea.com est hébergé par <strong>Netlify, Inc.</strong> — San Francisco,
-      Californie, États-Unis (transferts encadrés par des Clauses Contractuelles Types) —
+      <p>Le site hellofinea.com est hébergé par <strong>Netlify, Inc.</strong> — 2343 3rd Street,
+      Suite 296, San Francisco, CA 94107, États-Unis (société de droit du Delaware ; transferts
+      hors UE encadrés par des Clauses Contractuelles Types) —
       <a href="https://www.netlify.com" target="_blank" rel="noopener" style="color:var(--gold);">netlify.com</a>.</p>
       <p>Les fonctions serveur et la base de données (Edge Functions, PostgreSQL) sont hébergées
       par <strong>Supabase Inc.</strong> — données hébergées dans l'Union européenne (région Paris, France) —
@@ -39162,64 +39251,17 @@ const LEGAL_CONTENT = {
     `,
   },
   cgu: {
-    title: 'Conditions Générales d\'Utilisation — Bêta publique',
+    title: 'Conditions Générales d\'Utilisation',
     body: `
-      <h3>1. Objet</h3>
-      <p>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et
-      l'utilisation du service FINEA en phase de bêta publique, édité par <strong>BEL HOLDING</strong>
-      ("FINEA", "nous").</p>
-
-      <h3>2. Accès à la bêta</h3>
-      <p>La bêta publique FINEA est accessible sur inscription validée par
-      l'éditeur. Elle est ouverte à toute personne inscrite. Pendant toute la durée de la bêta,
-      <strong>aucun paiement n'est exigé</strong>.</p>
-
-      <h3>3. Nature du service</h3>
-      <p>FINEA est un service d'<strong>éducation et de pilotage financiers personnels</strong>.
-      FINEA n'est pas un Conseiller en Investissement Financier (CIF) au sens de l'article
-      L.541-1 du Code Monétaire et Financier, ni un courtier d'assurance, ni une banque, ni
-      un gestionnaire de patrimoine. FINEA ne formule aucune recommandation de placement,
-      de produit ni d'allocation personnalisée. Voir l'onglet "Non-CIF" pour le détail.</p>
-
-      <h3>4. Engagements de l'utilisateur</h3>
-      <ul>
-        <li>fournir des informations exactes lors de l'inscription ;</li>
-        <li>conserver la confidentialité de ses identifiants ;</li>
-        <li>ne pas utiliser le service à des fins frauduleuses ou illicites ;</li>
-        <li>ne pas tenter de contourner les limitations techniques ou de sécurité.</li>
-      </ul>
-
-      <h3>5. Nature bêta &amp; évolutivité</h3>
-      <p>La bêta est mise à disposition <strong>"en l'état"</strong>. Le service peut connaître
-      des interruptions, bugs, pertes de données temporaires ou évolutions sans préavis.
-      BEL HOLDING s'engage à corriger les anomalies critiques dans un délai raisonnable mais
-      ne garantit aucune disponibilité, performance ou pérennité durant cette phase.</p>
-
-      <h3>6. Propriété &amp; données</h3>
-      <p>L'utilisateur conserve la pleine propriété des données qu'il saisit (diagnostic,
-      budget, projets…). BEL HOLDING en a l'usage strict pour la fourniture du service. Le code,
-      le design, les contenus pédagogiques et la marque FINEA restent la propriété de
-      BEL HOLDING. Voir Politique de confidentialité.</p>
-
-      <h3>7. Responsabilité</h3>
-      <p>FINEA ne saurait être tenu responsable des décisions financières prises par
-      l'utilisateur sur la base des analyses, scores ou contenus pédagogiques fournis. Pour
-      toute décision d'investissement, il appartient à l'utilisateur de consulter un CIF
-      agréé AMF, un Conseiller en Gestion de Patrimoine ou son conseiller bancaire.</p>
-
-      <h3>8. Résiliation</h3>
-      <p>L'utilisateur peut quitter la bêta à tout moment via la suppression de son compte
-      (demande à contact@hellofinea.com). BEL HOLDING peut suspendre l'accès en cas de manquement aux
-      présentes CGU, avec préavis raisonnable sauf urgence.</p>
-
-      <h3>9. Évolution des CGU</h3>
-      <p>Les présentes CGU peuvent évoluer pendant la bêta. Toute modification substantielle
-      sera notifiée à l'utilisateur par email ou via le service. La poursuite de l'utilisation
-      vaut acceptation des CGU modifiées.</p>
-
-      <h3>10. Droit applicable</h3>
-      <p>Les présentes CGU sont soumises au droit français. Tout litige relève de la
-      compétence exclusive des tribunaux du ressort du siège social de BEL HOLDING.</p>
+      <p>Les présentes Conditions Générales d'Utilisation régissent l'accès et l'utilisation du service FINEA, édité par <strong>BEL HOLDING</strong>. Les conditions de souscription et de vente des abonnements figurent dans les Conditions Générales de Vente.</p>
+      <p style="margin-top:14px;"><a href="/cgu" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">Lire les CGU complètes &rarr;</a></p>
+    `,
+  },
+  cgv: {
+    title: 'Conditions Générales de Vente',
+    body: `
+      <p>Les présentes Conditions Générales de Vente régissent la vente des abonnements FINEA (offres, prix TTC, paiement, reconduction, résiliation, droit de rétractation, remboursement, parrainage), édités par <strong>BEL HOLDING</strong>.</p>
+      <p style="margin-top:14px;"><a href="/cgv" target="_blank" rel="noopener" style="color:var(--gold);font-weight:700;">Lire les CGV complètes &rarr;</a></p>
     `,
   },
   privacy: {
@@ -39435,12 +39477,10 @@ function buildMobilePricingCards() {
 // Init compteur + pricing mobile cards au chargement
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    renderFounderCounter();
     renderPricingScope();
     buildMobilePricingCards();
   });
 } else {
-  renderFounderCounter();
   renderPricingScope();
   buildMobilePricingCards();
 }
@@ -42456,7 +42496,7 @@ if (mobileNavToggle && mobileNavDrawer) {
           </div>
           <div style="padding-bottom:22px;">
             <div style="font-family:'Cormorant Garamond',serif;font-size:23px;font-weight:600;line-height:1.12;color:var(--navy);margin-bottom:4px;">Ce qu'on attend de toi</div>
-            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Tu fais partie des premiers. Pose <strong>un vrai geste</strong> cette semaine, explore le simulateur qui te concerne, et surtout : <strong>dis-nous ce qui coince</strong> (le bouton Feedback est toujours là). Ton retour ne tombe pas dans le vide — il change ce qu'on livre la semaine suivante. C'est une bêta : on construit <strong>avec</strong> toi.</div>
+            <div style="font-size:13.5px;line-height:1.55;color:var(--ink-soft);">Tu fais partie des premiers. Pose <strong>un vrai geste</strong> cette semaine, explore le simulateur qui te concerne, et surtout : <strong>dis-nous ce qui coince</strong> (le bouton Feedback est toujours là). Ton retour ne tombe pas dans le vide — il change ce qu'on livre la semaine suivante. On construit FINEA <strong>avec</strong> toi.</div>
           </div>
         </div>
 
@@ -42505,7 +42545,7 @@ if (mobileNavToggle && mobileNavDrawer) {
 
       </div>
 
-      <div class="cl-thanks">Merci de naviguer avec nous pendant la bêta. 🌱 Ton retour trace la route.</div>
+      <div class="cl-thanks">Merci de naviguer avec nous. 🌱 Ton retour trace la route.</div>
     </div>
 
     <footer class="cl-footer">
@@ -43541,7 +43581,7 @@ let _updateStickyBar = function() {};
 (function() {
   let overlay, fired = false, armed = false;
   const COOLDOWN_DAYS = 7;
-  const ARM_DELAY_MS  = 10000; // n'arme le déclencheur qu'après 10 s de présence
+  const ARM_DELAY_MS  = 30000; // n'arme le déclencheur qu'après 30 s de présence (évite l'effet précipité)
 
   function _recentlyShown() {
     try {
@@ -43794,7 +43834,7 @@ else _v3LandingInit();
   <!-- S7 — CITATION MANIFESTE -->
   <section class="arch-citation">
     <blockquote class="arch-citation-text">« Nous vous apprenons ce que d'autres vous facturent à prix d'or. »</blockquote>
-    <div class="arch-citation-author">— FINEA, école de souveraineté financière</div>
+    <div class="arch-citation-author">— FINEA, application de souveraineté financière</div>
   </section>
 
   <!-- S8 — FORMULAIRE CANDIDATURE -->
@@ -43858,7 +43898,7 @@ else _v3LandingInit();
 <div class="exit-intent-overlay" id="exitIntentOverlay" role="dialog" aria-modal="true" aria-labelledby="exitIntentTitle">
   <div class="exit-intent-modal">
     <button class="exit-intent-close" id="exitIntentClose" type="button" aria-label="Fermer">✕</button>
-    <div class="exit-intent-eyebrow">Avant de partir…</div>
+    <div class="exit-intent-eyebrow">Avant d'aller plus loin…</div>
     <h2 class="exit-intent-title" id="exitIntentTitle">Fais ton diagnostic FINEA.</h2>
     <p class="exit-intent-sub">2 minutes, 5 axes, ton Score. C'est offert, sans email obligatoire.</p>
     <button class="exit-intent-cta" id="exitIntentCta" type="button">Faire mon diagnostic →</button>
@@ -43882,9 +43922,9 @@ else _v3LandingInit();
   }
   // Getter global pour le futur code (mesure d'audience, etc.) : true seulement si accepté.
   window._fineaCookieConsent = function(cat){
+    if (!cat || cat === 'essential') return true;     // l'essentiel ne requiert jamais de consentement
     var r = read();
     if (!r) return false;
-    if (!cat || cat === 'essential') return true;     // l'essentiel ne requiert pas de consentement
     if (cat === 'audience') return !!r.audience;
     return false;
   };
@@ -44279,5 +44319,114 @@ else _v3LandingInit();
 })();
 </script>
 
+<script>
+/* PWA — enregistrement du service worker + proposition de mise à jour (anti-version périmée) */
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').then(function (reg) {
+      function proposeReload(worker) {
+        if (document.getElementById('finea-sw-update')) return;
+        var b = document.createElement('div');
+        b.id = 'finea-sw-update';
+        b.setAttribute('role', 'button');
+        b.style.cssText = 'position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:999999;background:#0A1F44;color:#FAF7F2;padding:12px 20px;border-radius:100px;font:600 14px -apple-system,Segoe UI,Arial,sans-serif;box-shadow:0 8px 24px rgba(10,31,68,.35);cursor:pointer;';
+        b.textContent = '↻ Nouvelle version — recharger';
+        b.onclick = function () { if (worker) worker.postMessage('SKIP_WAITING'); };
+        document.body.appendChild(b);
+      }
+      if (reg.waiting) proposeReload(reg.waiting);
+      reg.addEventListener('updatefound', function () {
+        var nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', function () {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) proposeReload(nw);
+        });
+      });
+    }).catch(function () {});
+    var reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (reloaded) return; reloaded = true; window.location.reload();
+    });
+  });
+}
+</script>
+<script>
+/* PWA — invite à l'installation. Android/desktop : capte beforeinstallprompt et
+   propose « Installer ». iOS Safari : instruction manuelle (pas d'API). Gaté après
+   le consentement cookies pour ne pas chevaucher sa bannière. */
+(function () {
+  var DKEY = 'finea_pwa_install_dismissed';
+  function standalone() {
+    try { return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true; } catch (e) { return false; }
+  }
+  function dismissed() { try { return localStorage.getItem(DKEY) === '1'; } catch (e) { return false; } }
+  function dismiss() { try { localStorage.setItem(DKEY, '1'); } catch (e) {} }
+  function cookieHandled() { try { return !!localStorage.getItem('finea_cookie_consent'); } catch (e) { return true; } }
+  if (standalone() || dismissed()) return;
+
+  var deferred = null;
+  var ua = navigator.userAgent || '';
+  var isIOS = /iphone|ipad|ipod/i.test(ua);
+  var isSafari = /safari/i.test(ua) && !/crios|fxios|edgios|chrome|android/i.test(ua);
+
+  function removeBanner() { var b = document.getElementById('finea-install-banner'); if (b) b.remove(); }
+
+  function build(subHtml, ctaLabel, onCta) {
+    if (document.getElementById('finea-install-banner') || standalone() || dismissed()) return;
+    var w = document.createElement('div');
+    w.id = 'finea-install-banner';
+    w.style.cssText = 'position:fixed;left:16px;right:16px;bottom:16px;max-width:460px;margin:0 auto;z-index:99998;background:#0A1F44;color:#FAF7F2;border-radius:16px;padding:14px 16px;box-shadow:0 12px 32px rgba(10,31,68,.42);font-family:-apple-system,"Segoe UI",Arial,sans-serif;display:flex;gap:13px;align-items:center;';
+    var ic = document.createElement('img');
+    ic.src = '/icons/finea-icon-192.png'; ic.alt = 'FINEA';
+    ic.style.cssText = 'width:42px;height:42px;border-radius:11px;flex:0 0 auto;';
+    var tx = document.createElement('div');
+    tx.style.cssText = 'flex:1;min-width:0;';
+    tx.innerHTML = '<div style="font-weight:700;font-size:15px;margin-bottom:2px;">Installer FINEA</div><div style="font-size:12.5px;line-height:1.45;color:rgba(250,247,242,.82);">' + subHtml + '</div>';
+    var ac = document.createElement('div');
+    ac.style.cssText = 'display:flex;flex-direction:column;gap:6px;flex:0 0 auto;align-items:stretch;';
+    if (ctaLabel) {
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.textContent = ctaLabel;
+      btn.style.cssText = 'background:#C9A961;color:#0A1F44;border:none;border-radius:100px;padding:9px 16px;font-weight:700;font-size:13px;cursor:pointer;white-space:nowrap;';
+      btn.onclick = onCta;
+      ac.appendChild(btn);
+    }
+    var cl = document.createElement('button');
+    cl.type = 'button'; cl.textContent = 'Plus tard';
+    cl.style.cssText = 'background:transparent;color:rgba(250,247,242,.7);border:none;font-size:12px;cursor:pointer;padding:4px;';
+    cl.onclick = function () { dismiss(); removeBanner(); };
+    ac.appendChild(cl);
+    w.appendChild(ic); w.appendChild(tx); w.appendChild(ac);
+    document.body.appendChild(w);
+  }
+
+  function whenCookieHandled(fn) {
+    if (cookieHandled()) { fn(); return; }
+    var n = 0, t = setInterval(function () { n++; if (cookieHandled() || n > 90) { clearInterval(t); fn(); } }, 1000);
+  }
+
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault(); deferred = e;
+    whenCookieHandled(function () {
+      if (!deferred || standalone() || dismissed()) return;
+      build('Accès direct depuis ton écran d\'accueil, et consultation hors-ligne.', 'Installer', function () {
+        removeBanner();
+        deferred.prompt();
+        deferred.userChoice.then(function () { dismiss(); deferred = null; });
+      });
+    });
+  });
+
+  if (isIOS && isSafari) {
+    setTimeout(function () {
+      whenCookieHandled(function () {
+        build('Appuie sur <strong>Partager</strong> (carré + flèche), puis <strong>« Sur l\'écran d\'accueil »</strong>.', null, null);
+      });
+    }, 3500);
+  }
+
+  window.addEventListener('appinstalled', function () { dismiss(); removeBanner(); });
+})();
+</script>
 </body>
 </html>
