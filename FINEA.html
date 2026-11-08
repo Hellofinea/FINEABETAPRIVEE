@@ -37697,7 +37697,7 @@ const APP_PARCOURS = [
       },
       {
         id: 'p-premiers-pas-l2', geste: { id:'g_premierspas_l2', source:'academie', label:"Note ton revenu du mois et tes 3 plus grosses dépenses fixes", axis:'structure' },
-        ordre: 2,
+        ordre: 3,
         titre: "Faire un budget quand tu gagnes peu",
         sous_titre: "Petit revenu ne veut pas dire pas de budget — au contraire.",
         duree_min: 9,
@@ -37727,7 +37727,7 @@ const APP_PARCOURS = [
       },
       {
         id: 'p-premiers-pas-l3', geste: { id:'g_premierspas_l3', source:'academie', label:"Active l'alerte de solde bas dans ton appli bancaire", axis:'liquidite' },
-        ordre: 3,
+        ordre: 4,
         titre: "Le découvert : le piège le plus cher",
         sous_titre: "Pourquoi être dans le rouge coûte si cher, et comment l'éviter.",
         duree_min: 9,
@@ -37755,7 +37755,7 @@ const APP_PARCOURS = [
       },
       {
         id: 'p-premiers-pas-l4', geste: { id:'g_premierspas_l4', source:'academie', label:"Choisis un montant à mettre de côté ce mois-ci, même 10 €", axis:'protection' },
-        ordre: 4,
+        ordre: 5,
         titre: "Ta première épargne : le coussin",
         sous_titre: "Pas pour devenir riche — pour ne pas paniquer au premier imprévu.",
         duree_min: 9,
@@ -37783,7 +37783,7 @@ const APP_PARCOURS = [
       },
       {
         id: 'p-premiers-pas-l5', geste: { id:'g_premierspas_l5', source:'academie', label:"Repère un abonnement que tu n'utilises plus et décide", axis:'liquidite' },
-        ordre: 5,
+        ordre: 6,
         titre: "Abonnements et arnaques : garde ton argent",
         sous_titre: "Repérer ce qui te ponctionne en silence, et les pièges qui visent les jeunes.",
         duree_min: 9,
@@ -37813,7 +37813,7 @@ const APP_PARCOURS = [
       },
       {
         id: 'p-premiers-pas-l6', geste: { id:'g_premierspas_l6', source:'academie', label:"Sur ta paie d'alternant, repère ton % du SMIC, puis compare le brut et le net", axis:'liquidite' },
-        ordre: 6,
+        ordre: 2,
         titre: "Lire ta paie d'alternant",
         sous_titre: "Pourquoi ta fiche de paie ne ressemble à aucune autre.",
         duree_min: 13,
@@ -38905,7 +38905,7 @@ function renderParcoursDetail(slug) {
       </div>` : ''}
 
     <div class="lessons-list">
-      ${p.lessons.map(l => {
+      ${p.lessons.slice().sort((a, b) => (a.ordre || 0) - (b.ordre || 0)).map(l => {
         const unlocked = _appLessonIsUnlocked(p, l.ordre, prog);
         const completed = prog.lessons_completed.includes(l.id);
         return `
@@ -39404,7 +39404,7 @@ if (document.readyState !== 'loading' && (location.hash || '').startsWith('#appr
    l'anonyme. Seule la leçon héro est exposée — les suivantes restent gated. */
 const _FINEA_PUBLIC_LESSONS = {
   'fiche-de-paie':   { slug: 'premiers-pas', ordre: 1 },
-  'paie-alternance': { slug: 'premiers-pas', ordre: 6 },  // hook segment alternance / IIM
+  'paie-alternance': { slug: 'premiers-pas', ordre: 2 },  // hook segment alternance / IIM
 };
 function openLessonPublic(slug, ordre) {
   const overlay = document.getElementById('appOverlay');
