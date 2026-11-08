@@ -8016,9 +8016,32 @@ body.modnav-locked .a4-content {
 .app-intro strong { color: var(--navy); font-weight: 600; }
 
 /* Parcours grid */
-.parcours-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px;
+.parcours-grid { display: block; }
+/* Regroupement des parcours SOUS leur pilier (Académie) */
+.parcours-pilier-group { margin-bottom: 34px; }
+.parcours-pilier-group:last-child { margin-bottom: 0; }
+.parcours-pilier-head {
+  display: flex; align-items: center; gap: 10px;
+  font-family: 'Cormorant Garamond', serif; font-size: 23px; font-weight: 500; color: var(--navy);
+  margin: 0 0 16px; padding-bottom: 10px; border-bottom: 1px solid var(--line);
 }
+.parcours-pilier-head .sym { font-size: 18px; color: var(--gold); }
+.parcours-pilier-head .count { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--ink-soft); font-weight: 400; margin-left: auto; letter-spacing: 0.04em; }
+.parcours-pilier-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 22px; }
+/* Sélecteur de pilier : on n'affiche QU'UN pilier à la fois (pas de mélange) */
+.parcours-filtres { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 26px; }
+.parcours-filtre {
+  display: inline-flex; align-items: center; gap: 7px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink-soft);
+  background: white; border: 1px solid var(--line); border-radius: 100px;
+  padding: 9px 16px; cursor: pointer; transition: all .18s; min-height: 40px;
+}
+.parcours-filtre .sym { font-size: 13px; color: var(--gold); }
+.parcours-filtre:hover:not(:disabled) { border-color: var(--gold-soft); color: var(--navy); }
+.parcours-filtre.active { background: var(--navy); border-color: var(--navy); color: var(--cream); }
+.parcours-filtre.active .sym { color: var(--gold); }
+.parcours-filtre:disabled { opacity: .45; cursor: default; }
+.parcours-filtre em { font-style: normal; font-size: 11px; opacity: .75; }
 .parcours-card {
   background: white; border: 1px solid var(--line); border-radius: 18px;
   padding: 26px 24px; cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s;
@@ -8031,10 +8054,9 @@ body.modnav-locked .a4-content {
   padding: 5px 10px; border-radius: 100px; display: inline-block;
 }
 .parcours-pilier.clarifier   { background: rgba(46,196,182,0.12); color: #178f84; }
-.parcours-pilier.batir       { background: rgba(201,169,97,0.16); color: #8a6f2f; }
-.parcours-pilier.proteger    { background: rgba(10,31,68,0.08);   color: var(--navy); }
-.parcours-pilier.transmettre { background: rgba(122,72,176,0.12); color: #6437a3; }
+.parcours-pilier.structurer  { background: rgba(10,31,68,0.10);   color: var(--navy); }
 .parcours-pilier.optimiser   { background: rgba(220,140,60,0.14); color: #a05e1e; }
+.parcours-pilier.batir       { background: rgba(201,169,97,0.16); color: #8a6f2f; }
 .parcours-duree { font-size: 12px; color: var(--ink-soft); display: inline-flex; align-items: center; gap: 4px; }
 .parcours-card-title { font-family: 'Cormorant Garamond', serif; font-size: 26px; color: var(--navy); font-weight: 500; line-height: 1.15; margin: 0; }
 .parcours-card-desc { font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
@@ -10726,6 +10748,9 @@ body.modnav-locked .a4-content {
 }
 .notif-badge[hidden] { display: none !important; }
 .notif-wrap[hidden] { display: none !important; }
+/* Menu déployant (modnav) ouvert : on masque la cloche de notif — même coin que le
+   bouton « Fermer ✕ » (z-index 9998 > panneau) → évite le chevauchement. Restaurée à la fermeture. */
+body:has(.modnav.open) .notif-wrap { display: none !important; }
 .notif-panel {
   display: none;
   position: absolute; top: 56px; right: 0;
@@ -24069,7 +24094,7 @@ function _dashResumeLast() {
 /* ─── ZONE 3 — Ton voyage FINEA : 4 paliers pédagogiques ─── */
 const DASH_PALIERS = [
   { key: 'clarifier',   sym: '◐', name: 'Clarifier',   parcoursSlug: 'clarifier' },
-  { key: 'structurer',  sym: '▲', name: 'Structurer',  parcoursSlug: null, waitlist: true },
+  { key: 'structurer',  sym: '▲', name: 'Structurer',  parcoursSlug: 'structurer' },
   { key: 'optimiser',   sym: '◆', name: 'Optimiser',   parcoursSlug: null },
   { key: 'batir',       sym: '✦', name: 'Bâtir',       parcoursSlug: null },
 ];
@@ -24139,7 +24164,7 @@ function renderDashJourney() {
     const stateCls = certifie ? 'dash-palier--done' : 'dash-palier--active';
     const meta = certifie ? `<strong>✓ Certifié</strong>` : (done > 0 ? `${done}/${total} leçons · En cours →` : `${total} leçons · Commencer →`);
     return `
-      <div class="dash-palier ${stateCls}" onclick="openApprendre('parcours')">
+      <div class="dash-palier ${stateCls}" onclick="openApprendre('parcours/pilier/${p.key}')">
         <div class="dash-palier-sym">${p.sym}</div>
         <div class="dash-palier-name">${p.name}</div>
         <div class="dash-palier-bar"><div class="dash-palier-bar-fill" style="width:${pct}%"></div></div>
@@ -28367,7 +28392,13 @@ function _moduleRenderPreserve(containerId, fn) {
   if (!container) { fn(); return; }
   const ae = document.activeElement;
   const tag = ae && ae.tagName;
-  const onAttr = (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT')
+  const isField = (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT');
+  // On mémorise l'id du champ focalisé (prioritaire) ET son attribut gestionnaire.
+  // L'id est indispensable pour les outils dont PLUSIEURS champs partagent le même
+  // handler (ex. PER : 7 champs en oninput="perRecalc()") — l'attribut seul ne les
+  // distingue pas et on re-focaliserait le mauvais champ.
+  const aeId   = isField ? (ae.id || '') : '';
+  const onAttr = isField
     ? (ae.getAttribute('oninput') || ae.getAttribute('onchange') || ae.getAttribute('onclick'))
     : null;
   let selStart = 0, selEnd = 0;
@@ -28376,17 +28407,29 @@ function _moduleRenderPreserve(containerId, fn) {
   }
   const scrollTop = container.scrollTop;
   fn();
-  if (onAttr) {
-    const inputs = container.querySelectorAll('input, textarea, select');
-    for (const inp of inputs) {
-      if (inp.getAttribute('oninput') === onAttr
-       || inp.getAttribute('onchange') === onAttr
-       || inp.getAttribute('onclick') === onAttr) {
-        try { inp.focus({ preventScroll: true }); } catch (_) { try { inp.focus(); } catch(__){} }
-        if (selStart && inp.type !== 'number') {
-          try { inp.setSelectionRange(selStart, selEnd); } catch (_) {}
-        }
-        break;
+  if (aeId || onAttr) {
+    let target = null;
+    if (aeId) {
+      try { target = container.querySelector('#' + ((window.CSS && CSS.escape) ? CSS.escape(aeId) : aeId)); } catch (_) {}
+    }
+    if (!target && onAttr) {
+      const inputs = container.querySelectorAll('input, textarea, select');
+      for (const inp of inputs) {
+        if (inp.getAttribute('oninput') === onAttr
+         || inp.getAttribute('onchange') === onAttr
+         || inp.getAttribute('onclick') === onAttr) { target = inp; break; }
+      }
+    }
+    if (target) {
+      try { target.focus({ preventScroll: true }); } catch (_) { try { target.focus(); } catch(__){} }
+      if (target.type === 'number') {
+        // Les champs type="number" n'exposent pas selectionStart : l'onfocus="this.select()"
+        // re-sélectionne TOUT à chaque re-render → le chiffre suivant remplace au lieu de
+        // s'ajouter (saisie libre impossible, seules les flèches ↑↓ marchent). On annule la
+        // sélection et on place le curseur à la fin pour que la frappe se poursuive.
+        try { const v = target.value; target.value = ''; target.value = v; } catch (_) {}
+      } else if (selStart) {
+        try { target.setSelectionRange(selStart, selEnd); } catch (_) {}
       }
     }
   }
@@ -34149,7 +34192,9 @@ function patchS5State(patch) {
   const s = getS5State();
   Object.assign(s, patch);
   _s5SaveState(s);
-  renderS5();
+  // Préserve le focus + le curseur du champ en cours de saisie (sinon la frappe
+  // dans les champs number est impossible : voir _moduleRenderPreserve).
+  _moduleRenderPreserve('s5Content', renderS5);
 }
 
 /* ─── OPEN / CLOSE ─── */
@@ -37766,11 +37811,259 @@ const APP_PARCOURS = [
           { question: "Que faire si une « offre » te demande de payer pour obtenir un job ?", options: ["Payer vite avant que ça parte", "Refuser : un vrai employeur ne fait jamais payer", "Emprunter pour payer"], bonne_reponse: 1, explication: "Payer pour travailler est un signal d'arnaque. Un employeur légitime te rémunère, pas l'inverse." },
         ],
       },
+      {
+        id: 'p-premiers-pas-l6', geste: { id:'g_premierspas_l6', source:'academie', label:"Sur ta paie d'alternant, repère ton % du SMIC, puis compare le brut et le net", axis:'liquidite' },
+        ordre: 6,
+        titre: "Lire ta paie d'alternant",
+        sous_titre: "Pourquoi ta fiche de paie ne ressemble à aucune autre.",
+        duree_min: 13,
+        visuel: '🎓',
+        contenu_md:
+          "# Lire ta paie d'alternant\n\n" +
+          "> Pourquoi ta fiche de paie ne ressemble à aucune autre.\n\n" +
+
+          "## Pourquoi cette leçon\n\n" +
+          "Tu es en alternance — apprentissage ou contrat de professionnalisation — et ta fiche de paie t'intrigue : un salaire calculé bizarrement, un net presque égal au brut, parfois zéro impôt. Ce n'est pas une erreur. L'alternance a des **règles de paie à elle**, plutôt avantageuses, et personne ne te les explique.\n\n" +
+          "Cette leçon décode les trois particularités qui font que ta paie n'est pas celle d'un salarié classique. Tu sauras enfin lire ce que tu touches vraiment — et pourquoi.\n\n" +
+
+          "## 1. Ton salaire est un pourcentage du SMIC\n\n" +
+          "Contrairement à un salarié négociant son salaire, ta rémunération d'alternant est fixée par un **barème légal** : un **pourcentage du SMIC** (ou du minimum conventionnel s'il est plus favorable), qui dépend de **ton âge** et de **ton année de contrat**. Plus tu avances dans le contrat et plus tu prends de l'âge, plus le pourcentage monte.\n\n" +
+          "Concrètement : deux alternants dans la même entreprise peuvent toucher des montants différents juste à cause de l'âge ou de l'année. Ce n'est pas de l'injustice, c'est le barème. **Le repère à connaître, c'est ton pourcentage** : c'est lui qui explique ton brut.\n\n" +
+
+          "## 2. La surprise : ton net est presque égal à ton brut\n\n" +
+          "Chez un salarié classique, l'écart brut → net est important (souvent ~22-25 % de cotisations). Chez l'**apprenti**, cet écart est **minime** : une large part de ton salaire est **exonérée de cotisations salariales**. Résultat, ton **net à payer est très proche de ton brut**.\n\n" +
+          "C'est une excellente nouvelle — mais un piège de lecture. Beaucoup d'alternants croient que leur fiche de paie est « fausse » parce que le net colle au brut. Non : c'est l'exonération qui fait ça. (En professionnalisation, les règles diffèrent légèrement selon l'âge et le statut — le principe reste : des cotisations allégées.)\n\n" +
+
+          "## 3. Souvent, pas d'impôt sur le revenu\n\n" +
+          "Troisième spécificité : le salaire d'un **apprenti est exonéré d'impôt sur le revenu jusqu'à un plafond annuel** (de l'ordre d'un SMIC annuel). En dessous de ce plafond, ta paie d'apprenti n'entre pas dans ton impôt — d'où un prélèvement à la source souvent à zéro.\n\n" +
+          "Attention : ce plafond et ces règles **évoluent chaque année**, et le contrat de professionnalisation ne suit pas exactement les mêmes règles que l'apprentissage. Ne retiens pas un chiffre — retiens le **mécanisme** : *alternant = cotisations allégées + souvent peu ou pas d'impôt sous un seuil*.\n\n" +
+
+          "## 💡 À retenir\n\n" +
+          "**Ta paie d'alternant obéit à trois règles qui la rendent avantageuse :** un salaire en % du SMIC (selon âge + année), des cotisations fortement allégées (net ≈ brut), et souvent pas d'impôt sous un plafond. Tu ne subis pas ta fiche de paie : tu la comprends. Et comprendre que tu touches presque tout ton brut, c'est aussi réaliser que **c'est le bon moment pour prendre l'habitude de mettre de côté** — avant que la vie de salarié classique, elle, ne rogne le net.\n\n" +
+
+          "## ✓ Ton geste de ce soir\n\n" +
+          "Sors ta dernière fiche de paie d'alternant. Repère **trois choses** : (1) ton **pourcentage du SMIC** (souvent indiqué, ou déductible de ton brut), (2) ton **brut**, (3) ton **net à payer**. Mesure l'écart brut → net : tu verras à quel point il est faible. C'est ta réalité, et c'est un atout. Note ton net : c'est ta vraie base pour construire ton budget.\n\n" +
+
+          "## ⚠️ Important\n\n" +
+          "Contenu **pédagogique**, non-CIF. Les barèmes (% du SMIC), seuils d'exonération et règles fiscales de l'alternance **changent chaque année** et diffèrent entre apprentissage et professionnalisation. Vérifie toujours les montants en vigueur sur **service-public.fr** ou auprès de l'**URSSAF** / de ton employeur.",
+        cta_outil: '/studio/m1',
+        cta_label: "Ouvrir mon Budget mensuel",
+        quiz: [
+          { question: "Comment est fixé le salaire d'un alternant ?", options: ["Librement négocié comme un salarié classique", "Selon un barème : un % du SMIC dépendant de l'âge et de l'année de contrat", "Toujours au SMIC complet"], bonne_reponse: 1, explication: "La rémunération de l'alternant suit un barème légal : un pourcentage du SMIC (ou du minimum conventionnel) selon l'âge et l'année du contrat." },
+          { question: "Pourquoi le net d'un apprenti est-il souvent presque égal à son brut ?", options: ["Parce qu'il n'a pas de fiche de paie", "Parce qu'une large part de son salaire est exonérée de cotisations salariales", "Parce que son employeur fait une erreur"], bonne_reponse: 1, explication: "L'apprenti bénéficie d'une exonération d'une grande partie des cotisations salariales : son net à payer colle donc à son brut." },
+          { question: "Un apprenti paie-t-il toujours de l'impôt sur le revenu sur son salaire ?", options: ["Oui, comme tout le monde", "Non : son salaire est exonéré jusqu'à un plafond annuel (qui évolue chaque année)", "Jamais, quel que soit le montant"], bonne_reponse: 1, explication: "Le salaire d'apprenti est exonéré d'impôt jusqu'à un plafond annuel (de l'ordre d'un SMIC annuel). Au-delà, la fraction supérieure est imposable. Le plafond change chaque année : vérifie-le." },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'p-structurer',
+    slug: 'structurer',
+    titre: 'Structurer ton système',
+    description: "Clarifier, c'est voir. Structurer, c'est mettre en place le système qui tient tout seul : se payer d'abord, séparer, sécuriser, automatiser.",
+    pilier: 'structurer',
+    duree_totale_label: '~1h, à ton rythme',
+    duree_totale_min: 52,
+    ordre: 1,
+    certificat_nom: 'Structurateur FINEA',
+    cover_image: '▲',
+    lessons: [
+      {
+        id: 'p-structurer-l1', geste: { id:'g_structurer_l1', source:'academie', label:"Programme un virement automatique vers ton épargne, le jour de ta paie", axis:'structure' },
+        ordre: 1,
+        titre: "Se payer en premier",
+        sous_titre: "La règle qui inverse tout : épargner d'abord, dépenser ensuite.",
+        duree_min: 12,
+        visuel: '🎯',
+        contenu_md:
+          "# Se payer en premier\n\n" +
+          "> La règle qui inverse tout : épargner d'abord, dépenser ensuite.\n\n" +
+
+          "## Pourquoi cette leçon\n\n" +
+          "La plupart des gens épargnent *ce qui reste* à la fin du mois. Le problème : il ne reste presque jamais rien. Ce n'est pas un défaut de discipline — c'est un défaut d'ordre.\n\n" +
+          "Tant que l'épargne est la dernière étape, elle est la variable d'ajustement : la première sacrifiée au moindre imprévu. La solution tient en une inversion : **mettre l'épargne en premier, et vivre avec le reste.** On appelle ça « se payer en premier ». C'est le geste qui transforme une bonne intention en système.\n\n" +
+
+          "## Le renversement\n\n" +
+          "Compare les deux ordres :\n\n" +
+          "**L'ordre qui échoue :** revenu → dépenses → *(ce qui reste)* → épargne. Le reste est flou, émotionnel, souvent nul.\n\n" +
+          "**L'ordre qui tient :** revenu → **épargne** → dépenses *(le reste)*. L'épargne devient une charge fixe, comme le loyer. Tu ne la décides plus chaque mois : elle est déjà partie.\n\n" +
+          "Ce n'est pas une question de montant. 20 € mis de côté automatiquement chaque mois valent mieux que 200 € qu'on se promet d'épargner « quand on pourra ». Le montant, tu l'augmenteras plus tard. L'automatisme, lui, se décide une seule fois.\n\n" +
+
+          "## Pourquoi ça marche sur ton cerveau\n\n" +
+          "**On ne regrette pas ce qu'on n'a jamais vu.** Si l'épargne part le jour de la paie, avant que tu aies le temps de t'habituer à l'argent, tu ajustes ton train de vie sans douleur. Ce que tu ne vois pas sur ton compte courant ne te manque pas.\n\n" +
+          "**L'automatisation bat la volonté.** Compter sur sa motivation chaque mois, c'est 12 occasions d'échouer par an. Un virement programmé, c'est zéro décision à reprendre. Tu transformes un effort répété en un réglage permanent.\n\n" +
+
+          "## 💡 À retenir\n\n" +
+          "**L'épargne n'est pas un reste, c'est une priorité.** Le bon montant, c'est celui que tu peux tenir *sans y penser* — commence petit, quitte à l'augmenter. Le but de cette leçon n'est pas de te faire épargner beaucoup : c'est de rendre ton épargne **automatique et invisible**, pour qu'elle survive à tes mois difficiles.\n\n" +
+
+          "## ✓ Ton geste de ce soir\n\n" +
+          "Ouvre ton application bancaire et **programme un virement automatique récurrent** depuis ton compte courant vers un compte ou livret d'épargne, **daté le lendemain de ta paie**. Choisis un montant que tu ne sentiras pas passer — même 15 ou 20 €. L'important ce soir n'est pas la somme, c'est le réglage. On l'augmentera quand ton système sera rodé.\n\n" +
+          "Si tu n'as pas encore de compte d'épargne séparé, pas de panique : c'est exactement le sujet de la prochaine leçon.",
+        cta_outil: '/studio/m1',
+        cta_label: "Ouvrir mon Budget mensuel",
+        quiz: [
+          { question: "Que signifie « se payer en premier » ?", options: ["Dépenser pour soi avant les factures", "Mettre l'épargne de côté dès la paie, avant les dépenses", "Se verser un salaire quand on est indépendant"], bonne_reponse: 1, explication: "Se payer en premier, c'est traiter l'épargne comme une charge fixe prélevée dès le revenu — pas comme le reste en fin de mois." },
+          { question: "Pourquoi un petit virement automatique vaut-il mieux qu'une grosse épargne « quand on pourra » ?", options: ["Parce que les banques l'exigent", "Parce que l'automatisme survit aux mois difficiles, pas la motivation", "Parce que les petits montants rapportent plus"], bonne_reponse: 1, explication: "Un réglage automatique se décide une fois ; la volonté, elle, doit être renouvelée chaque mois — et finit par lâcher." },
+          { question: "Quel est le bon moment pour programmer le virement d'épargne ?", options: ["Le jour (ou le lendemain) de la paie", "Le dernier jour du mois", "Quand il reste de l'argent"], bonne_reponse: 0, explication: "Dès la paie : l'argent part avant que tu t'y habitues. Ce que tu ne vois pas ne te manque pas." },
+        ],
+      },
+      {
+        id: 'p-structurer-l2', geste: { id:'g_structurer_l2', source:'academie', label:"Ouvre (ou nomme) un 2e compte dédié à ton épargne de précaution", axis:'structure' },
+        ordre: 2,
+        titre: "Un compte pour chaque mission",
+        sous_titre: "Arrêter le compte unique fourre-tout.",
+        duree_min: 13,
+        visuel: '🗂️',
+        contenu_md:
+          "# Un compte pour chaque mission\n\n" +
+          "> Arrêter le compte unique fourre-tout.\n\n" +
+
+          "## Pourquoi cette leçon\n\n" +
+          "Si tout ton argent vit sur un seul compte, tu pilotes à l'aveugle. Le loyer, les courses, l'épargne, le voyage de l'été, le coussin pour les imprévus : tout est mélangé dans le même pot. Résultat, tu ne sais jamais vraiment ce qui est « disponible » et ce qui est « déjà engagé ».\n\n" +
+          "La solution n'est pas de gagner plus. C'est de **donner une mission à chaque euro**, en séparant physiquement les sommes. Un compte, un rôle.\n\n" +
+
+          "## L'architecture minimale\n\n" +
+          "Pas besoin de dix comptes. Trois rôles suffisent pour transformer le chaos en clarté :\n\n" +
+          "**1. Le compte du quotidien.** Ton compte courant. Il reçoit la paie, il paie le loyer, les abonnements, les courses, les sorties. C'est le compte qui *bouge*. Tout ce qui est récurrent et quotidien vit ici.\n\n" +
+          "**2. Le compte de précaution.** Un compte ou livret séparé où dort ton coussin de sécurité (prochaine leçon). On n'y touche pas pour le quotidien : il n'existe que pour les vrais imprévus. Le simple fait qu'il soit *ailleurs* le protège.\n\n" +
+          "**3. Le(s) compte(s) projet.** Facultatif au début, mais puissant : un compte pour un objectif daté — un voyage, un permis, un déménagement. Tu y verses un peu chaque mois, tu vois la cagnotte grandir, et tu ne pioch' jamais dedans par erreur.\n\n" +
+
+          "## Pourquoi séparer change tout\n\n" +
+          "**La séparation crée une frontière mentale.** Quand le coussin est sur le même compte que les courses, il n'est qu'un chiffre parmi d'autres — tu finis par le grignoter sans t'en rendre compte. Déplacé sur un compte dédié, il devient *intouchable* : y toucher demande un geste conscient.\n\n" +
+          "**Tu lis ta situation d'un coup d'œil.** Le solde du compte courant devient une vérité simple : voilà ce que j'ai pour vivre ce mois-ci. Plus de calcul mental pour deviner ce qui est « vraiment » à moi.\n\n" +
+          "Ouvrir un livret d'épargne réglementé (type Livret A ou LDDS) est gratuit, sans risque sur les sommes déposées, et l'argent reste disponible à tout moment. C'est l'outil standard pour loger un compte de précaution — on en reparle en détail juste après.\n\n" +
+
+          "## 💡 À retenir\n\n" +
+          "**Un compte = une mission.** La séparation ne te fait pas gagner un centime de plus, mais elle rend ton argent *lisible* et *protégé*. Tu arrêtes de piloter un pot commun opaque ; tu pilotes trois enveloppes claires. La clarté précède toujours le contrôle.\n\n" +
+
+          "## ✓ Ton geste de ce soir\n\n" +
+          "Si tu as déjà un livret ou un deuxième compte qui traîne, **renomme-le mentalement (ou dans ton appli) « Précaution »** et décide qu'il ne sert plus qu'à ça. Si tu n'en as aucun, note d'en ouvrir un : la plupart des banques le proposent en quelques clics, gratuitement.\n\n" +
+          "Puis dirige le virement automatique de la leçon 1 vers ce compte-là. Ton épargne a désormais une maison à elle.",
+        cta_outil: '/studio/m1',
+        cta_label: "Ouvrir mon Budget mensuel",
+        quiz: [
+          { question: "Quel est l'intérêt principal de séparer son argent sur plusieurs comptes ?", options: ["Gagner des intérêts plus élevés", "Rendre chaque somme lisible et protéger ce qui ne doit pas être dépensé", "Obligation légale au-dessus d'un certain revenu"], bonne_reponse: 1, explication: "La séparation ne crée pas de rendement : elle crée de la clarté et une frontière mentale qui protège l'épargne." },
+          { question: "À quoi sert le « compte de précaution » ?", options: ["À payer les courses et le loyer", "À loger le coussin de sécurité, à l'écart du quotidien", "À investir en bourse"], bonne_reponse: 1, explication: "Le compte de précaution isole l'épargne d'urgence pour qu'on n'y touche pas par habitude. Ce n'est pas un compte d'investissement." },
+          { question: "Un livret réglementé comme le Livret A permet-il de retirer son argent à tout moment ?", options: ["Non, l'argent est bloqué plusieurs années", "Oui, les sommes restent disponibles et sans risque de perte", "Seulement une fois par an"], bonne_reponse: 1, explication: "Le Livret A et le LDDS sont disponibles à tout moment et sans risque sur le capital déposé — ce qui en fait un support adapté à un coussin de précaution." },
+        ],
+      },
+      {
+        id: 'p-structurer-l3', geste: { id:'g_structurer_l3', source:'academie', label:"Calcule ton coussin cible : additionne tes charges d'un mois, multiplie par 3", axis:'liquidite' },
+        ordre: 3,
+        titre: "Ton coussin de sécurité, bien dimensionné",
+        sous_titre: "Combien, et où le garder disponible.",
+        duree_min: 14,
+        visuel: '🛟',
+        contenu_md:
+          "# Ton coussin de sécurité, bien dimensionné\n\n" +
+          "> Combien, et où le garder disponible.\n\n" +
+
+          "## Pourquoi cette leçon\n\n" +
+          "Le coussin de sécurité, c'est la somme qui te permet d'encaisser un coup dur — une panne, une facture surprise, un mois de revenu en moins — **sans paniquer, sans découvert, sans crédit d'urgence.** C'est la première brique de la tranquillité financière, avant même l'idée d'investir.\n\n" +
+          "Deux questions reviennent toujours : *combien ?* et *où le mettre ?* Cette leçon y répond simplement.\n\n" +
+
+          "## Combien : la règle des mois de charges\n\n" +
+          "On ne dimensionne pas un coussin en « belle somme ronde », mais en **mois de dépenses incompressibles**. Repère tout ce que tu dois payer chaque mois quoi qu'il arrive — loyer, charges, assurances, remboursements, alimentation de base, transport. C'est ton *coût de survie mensuel*.\n\n" +
+          "- **Point de départ raisonnable : 1 mois.** C'est déjà un énorme pas : de quoi absorber la plupart des imprévus du quotidien.\n" +
+          "- **Cible de confort : 3 mois.** La référence la plus citée. De quoi tenir une période difficile sans céder à la précipitation.\n" +
+          "- **Jusqu'à 6 mois** si tes revenus sont irréguliers (indépendant, intérim, saisonnier) ou ta situation plus fragile.\n\n" +
+          "Ces repères sont des ordres de grandeur, pas une règle universelle : ta situation personnelle ajuste le curseur. Mais commence par viser **un mois**, atteignable, avant de penser à trois.\n\n" +
+
+          "## Où : disponible et sans risque, point.\n\n" +
+          "Un coussin a **un seul cahier des charges** : être là quand tu en as besoin. Deux critères, et deux seulement :\n\n" +
+          "**1. Disponible immédiatement.** Tu dois pouvoir le récupérer en quelques clics, sans délai ni pénalité. Un imprévu n'attend pas.\n\n" +
+          "**2. Sans risque de perte sur le capital.** Le coussin n'est pas là pour « rapporter » : il est là pour exister intact le jour J. Une somme qui peut baisser de valeur n'est pas un coussin.\n\n" +
+          "En pratique, ces deux critères décrivent les **livrets d'épargne réglementés** (Livret A, LDDS) : argent disponible à tout moment, aucun risque sur les sommes déposées. C'est le support standard d'un coussin — non pas parce qu'il « rapporte » (ce n'est pas le but), mais parce qu'il est *sûr et liquide*. FINEA ne te dira jamais où « placer pour faire fructifier » : ici, on parle de sécurité, pas de rendement.\n\n" +
+
+          "## 💡 À retenir\n\n" +
+          "**Le coussin se mesure en mois de charges, pas en humeur — et il se garde disponible et sans risque.** Avant toute idée de « faire travailler son argent », il y a cette base : une réserve que tu ne touches que pour les vrais coups durs. C'est elle qui t'évite le découvert et le crédit cher. La sérénité d'abord, le reste ensuite.\n\n" +
+
+          "## ✓ Ton geste de ce soir\n\n" +
+          "Prends 5 minutes et **calcule ton coût de survie mensuel** : additionne tout ce que tu paies chaque mois quoi qu'il arrive. Multiplie par 3 : voilà ta cible de confort. Note aussi le × 1 : voilà ta première étape, celle que tu vises maintenant.\n\n" +
+          "Compare à ce que tu as déjà de côté. L'écart n'est pas un reproche — c'est ta feuille de route. Le virement automatique de la leçon 1 est exactement l'outil pour le combler, mois après mois.\n\n" +
+          "## ⚠️ Important\n\n" +
+          "Contenu **pédagogique**, non-CIF. Les repères (1 à 6 mois, livrets réglementés) sont des ordres de grandeur et des faits sur des produits grand public — pas un conseil en placement personnalisé.",
+        cta_outil: '/studio/m1',
+        cta_label: "Ouvrir mon Budget mensuel",
+        quiz: [
+          { question: "Comment dimensionne-t-on un coussin de sécurité ?", options: ["En visant une belle somme ronde", "En mois de dépenses incompressibles (ex. 3 mois)", "Au pourcentage de son salaire annuel"], bonne_reponse: 1, explication: "On raisonne en mois de charges incompressibles : 1 mois pour commencer, ~3 mois en confort, jusqu'à 6 si les revenus sont irréguliers." },
+          { question: "Quels sont les deux seuls critères pour choisir où garder son coussin ?", options: ["Le rendement et la fiscalité", "La disponibilité immédiate et l'absence de risque sur le capital", "La durée de blocage et le plafond"], bonne_reponse: 1, explication: "Un coussin doit être disponible tout de suite et sans risque de perte. Le rendement n'est pas l'objectif." },
+          { question: "Pourquoi un coussin ne cherche-t-il pas à « rapporter » ?", options: ["Parce que c'est interdit", "Parce que son rôle est d'exister intact le jour d'un imprévu, pas de fructifier", "Parce que les intérêts sont imposés"], bonne_reponse: 1, explication: "Le coussin est une réserve de sécurité : sa mission est d'être là, intacte et disponible. Faire fructifier son argent est un autre sujet, plus tard." },
+        ],
+      },
+      {
+        id: 'p-structurer-l4', geste: { id:'g_structurer_l4', source:'academie', label:"Mets en place une automatisation (virement permanent) et note la date de ton point mensuel", axis:'structure' },
+        ordre: 4,
+        titre: "Le système qui tourne sans toi",
+        sous_titre: "Automatiser pour ne plus y penser.",
+        duree_min: 13,
+        visuel: '⚙️',
+        contenu_md:
+          "# Le système qui tourne sans toi\n\n" +
+          "> Automatiser pour ne plus y penser.\n\n" +
+
+          "## Pourquoi cette leçon\n\n" +
+          "Tu as clarifié tes flux, tu te paies en premier, tu as séparé tes comptes et dimensionné ton coussin. Il reste une dernière marche, et c'est elle qui rend tout durable : **faire en sorte que le système tourne sans ta volonté.**\n\n" +
+          "Un plan financier qui dépend de ta discipline chaque mois est un plan fragile. Un plan *automatisé* est un plan qui survit à tes semaines chargées, à tes coups de mou, à tes oublis. L'objectif de cette leçon : passer du pilotage manuel au pilote automatique.\n\n" +
+
+          "## Les trois automatismes qui suffisent\n\n" +
+          "**1. Le virement d'épargne (déjà en place).** Programmé le lendemain de la paie, vers ton compte de précaution. C'est le cœur du réacteur : il tourne seul.\n\n" +
+          "**2. Le lissage des grosses dépenses.** Certaines charges tombent d'un coup (assurance annuelle, impôts, abonnement à l'année). Plutôt que de les subir, mets de côté chaque mois une fraction de leur total sur un compte dédié. Quand la facture arrive, l'argent est déjà là. Tu transformes une secousse en un petit prélèvement régulier et indolore.\n\n" +
+          "**3. Le rendez-vous mensuel.** Le seul geste manuel qui reste. Une fois par mois, 10 minutes : tu regardes tes comptes, tu vérifies que les automatismes ont bien tourné, tu ajustes un montant si ta situation a changé. Pas pour te juger — pour garder la main.\n\n" +
+
+          "## Automatiser n'est pas se désintéresser\n\n" +
+          "**Automatiser libère ton attention, il ne la supprime pas.** Le piège serait de tout programmer puis de ne plus jamais regarder. L'automatisation gère le *répétitif* pour que ton attention se concentre sur l'*exceptionnel* : un changement de revenu, un nouveau projet, une dépense qui dérape.\n\n" +
+          "**Le système se révise, il ne se fige pas.** Ta vie change — un déménagement, une augmentation, un enfant. Ton rendez-vous mensuel est le moment où tu réaccordes le système à ta réalité. Un bon système n'est pas celui qu'on oublie : c'est celui qu'on ajuste en 10 minutes au lieu de 10 heures.\n\n" +
+
+          "## 💡 À retenir\n\n" +
+          "**Le but n'est pas de penser à ton argent tout le temps — c'est d'avoir à y penser le moins possible, sans perdre le contrôle.** Trois automatismes (épargne, lissage, rendez-vous) suffisent à faire tourner un système solide. Tu as transformé une série de bonnes intentions en une machine qui travaille pour toi, même les mois où tu n'as pas la tête à ça. C'est ça, structurer.\n\n" +
+
+          "## ✓ Ton geste de ce soir\n\n" +
+          "Mets en place **une** automatisation de plus — au choix : un virement permanent vers un compte projet, ou une mise de côté mensuelle pour lisser ta prochaine grosse facture. Une seule suffit ce soir.\n\n" +
+          "Puis **inscris dans ton agenda la date de ton rendez-vous mensuel** (par exemple le lendemain de la paie, juste après le virement d'épargne). Ce rendez-vous de 10 minutes est le gardien de tout le système. Bravo : tu viens de structurer ton argent.",
+        cta_outil: '/rituel',
+        cta_label: "Programmer mon Rituel mensuel",
+        quiz: [
+          { question: "Pourquoi automatiser son système financier ?", options: ["Pour ne plus jamais regarder ses comptes", "Pour qu'il survive aux semaines chargées et aux oublis, sans dépendre de la volonté", "Parce que c'est obligatoire"], bonne_reponse: 1, explication: "L'automatisation rend le système durable : il tourne même les mois où la motivation manque. Mais elle ne remplace pas la vigilance." },
+          { question: "À quoi sert le « lissage » des grosses dépenses ?", options: ["À les éviter complètement", "À mettre de côté chaque mois une fraction de leur total pour qu'elles ne soient plus une secousse", "À les payer en plusieurs fois avec un crédit"], bonne_reponse: 1, explication: "Lisser, c'est provisionner d'avance une fraction d'une grosse charge annuelle, pour que le jour venu l'argent soit déjà là — sans crédit." },
+          { question: "Une fois le système automatisé, que reste-t-il à faire manuellement ?", options: ["Plus rien, on oublie tout", "Un rendez-vous mensuel de ~10 minutes pour vérifier et ajuster", "Tout recalculer chaque semaine"], bonne_reponse: 1, explication: "L'automatisation gère le répétitif ; le rendez-vous mensuel garde la main sur l'exceptionnel et réaccorde le système à ta vie." },
+        ],
+      },
     ],
   },
 ];
 
 const APP_FICHES = [
+  /* ─── Segment Freelance / Alternance (douleur spécifique, canal écoles du digital) ─── */
+  { id: 'f-auto-entrepreneur-bases', slug: 'auto-entrepreneur-bases', geste: { id:'g_academie_auto-entrepreneur-bases', source:'academie', label:"Si tu factures une activité, vérifie si le statut micro te concerne", axis:'structure' }, titre: "Devenir auto-entrepreneur : les vraies bases", categorie: 'methode', tags: ['structure','freelance','auto-entrepreneur','micro-entreprise','URSSAF'], duree_lecture_min: 6, parcours_lies: [], fiches_liees: ['f-revenus-irreguliers'], date_publication: '2026-11-07',
+    contenu_md: "# Devenir auto-entrepreneur : les vraies bases\n\n" +
+      "Tu fais une mission en freelance, un petit projet rémunéré, et il faut « facturer ». Le statut le plus simple pour ça s'appelle la **micro-entreprise** (ex-auto-entrepreneur). Voici ce qu'il faut comprendre avant de te lancer — sans jargon.\n\n" +
+      "## Ce que c'est\n\n" +
+      "La micro-entreprise est un **régime simplifié** pour exercer une activité indépendante : tu émets des factures, tu encaisses un chiffre d'affaires (CA), et tu déclares ce CA à l'URSSAF. C'est léger à créer et à gérer — pensé pour démarrer seul.\n\n" +
+      "## Les 4 choses à savoir\n\n" +
+      "**1. La création est gratuite et en ligne.** Tu t'inscris sur le guichet unique des formalités des entreprises et tu obtiens un **numéro SIRET** : ton identité professionnelle, à mettre sur tes factures. Méfie-toi des sites qui font payer cette démarche — elle est gratuite.\n\n" +
+      "**2. Tu paies des cotisations en % de ton CA.** Pas de CA ce mois-ci ? **Pas de cotisations.** C'est le grand avantage : tu ne paies des charges sociales que proportionnellement à ce que tu encaisses réellement. Le pourcentage dépend du type d'activité (service, vente…).\n\n" +
+      "**3. Tu dois déclarer ton CA, même à zéro.** Chaque mois ou chaque trimestre (tu choisis), tu déclares ton chiffre d'affaires à l'URSSAF — y compris si tu n'as rien facturé (tu déclares 0). Oublier une déclaration entraîne des pénalités : mets-toi une alarme récurrente.\n\n" +
+      "**4. La franchise de TVA, au début.** En dessous d'un certain seuil de CA, tu ne factures **pas** la TVA à tes clients (mention « TVA non applicable, art. 293 B du CGI » sur la facture). Au-delà du seuil, tu dois la facturer et la reverser. C'est souvent la première complexité quand l'activité grandit.\n\n" +
+      "## Le piège à éviter\n\n" +
+      "Il existe des **plafonds de chiffre d'affaires** à ne pas dépasser pour rester en micro, et les taux comme les seuils **changent régulièrement**. Ne retiens pas un chiffre figé : retiens le mécanisme (CA → cotisations proportionnelles → déclaration). Et surtout, **ce que tu encaisses n'est pas ce que tu gagnes** : il faut en retirer les cotisations et l'impôt — c'est tout le sujet de la fiche suivante.\n\n" +
+      "## ⚠️ Important\n\n" +
+      "Fiche **pédagogique**, non-CIF. Les taux de cotisations, seuils de TVA et plafonds de CA de la micro-entreprise **évoluent** et dépendent de ton activité. FINEA ne te vend rien et ne touche aucune commission. Avant de créer ton activité, vérifie les règles en vigueur sur **urssaf.fr** / **service-public.fr**, et pour un cas complexe, fais-toi accompagner." },
+  { id: 'f-revenus-irreguliers', slug: 'revenus-irreguliers', geste: { id:'g_academie_revenus-irreguliers', source:'academie', label:"À ta prochaine rentrée d'argent, mets de côté la part cotisations + impôts AVANT de te verser quoi que ce soit", axis:'protection' }, titre: "Revenus irréguliers : lisser et provisionner", categorie: 'methode', tags: ['protection','freelance','revenus irréguliers','trésorerie','impôts'], duree_lecture_min: 6, parcours_lies: [], fiches_liees: ['f-auto-entrepreneur-bases','f-matelas-securite'], date_publication: '2026-11-07',
+    contenu_md: "# Revenus irréguliers : lisser et provisionner\n\n" +
+      "Freelance, alternant avec des missions, intermittent : tes revenus montent et descendent. Le danger n'est pas de gagner peu — c'est de **confondre un bon mois avec une bonne année**, et de dépenser de l'argent qui n'est pas vraiment à toi. Voici les deux réflexes qui changent tout.\n\n" +
+      "## Réflexe 1 : lisser (se verser un « salaire » fixe)\n\n" +
+      "Plutôt que de vivre au rythme de tes rentrées d'argent, calcule une **moyenne prudente** de tes revenus sur plusieurs mois, et **verse-toi un montant fixe** chaque mois, comme un salaire. Les bons mois alimentent un **compte tampon** ; les mois creux y puisent. Ton train de vie devient régulier même si ton activité ne l'est pas.\n\n" +
+      "Commence prudent : mieux vaut un « salaire » un peu bas que tu tiens, qu'un montant optimiste qui te met dans le rouge au premier trou d'air.\n\n" +
+      "## Réflexe 2 : provisionner (ce que tu encaisses n'est pas à toi)\n\n" +
+      "C'est **l'erreur n°1** des indépendants qui débutent : voir le CA arriver et le considérer comme gagné. Faux. Sur chaque somme encaissée, une part reviendra à l'**URSSAF** (cotisations) et une part à l'**impôt**. Cette part n'est pas ton argent — tu ne fais que la garder en attendant de la reverser.\n\n" +
+      "Le geste qui sauve : **dès qu'une facture est payée, vire immédiatement un pourcentage sur un compte « à reverser » séparé** (voir la leçon « Un compte pour chaque mission »). Quand l'URSSAF et l'impôt appellent, l'argent est déjà là. Tu ne subis jamais la facture — tu l'avais mise de côté.\n\n" +
+      "## Et le coussin, en plus\n\n" +
+      "Revenus irréguliers = coussin de sécurité **surdimensionné**. Là où un salarié vise ~3 mois de charges, vise plutôt **le haut de la fourchette (jusqu'à 6 mois)** : c'est ta trésorerie qui absorbe les trous, pas seulement les imprévus. Ce coussin n'est pas un luxe, c'est ton filet.\n\n" +
+      "## 💡 À retenir\n\n" +
+      "**Lisse tes revenus (salaire fixe depuis un tampon) et provisionne ce qui n'est pas à toi (cotisations + impôts sur un compte dédié), dès l'encaissement.** Avec ces deux réflexes, l'irrégularité de tes revenus cesse d'être une angoisse : elle devient juste un paramètre que ton système absorbe.\n\n" +
+      "## ⚠️ Important\n\n" +
+      "Fiche **pédagogique**, non-CIF. Les taux de cotisations et d'imposition dépendent de ton statut et évoluent. FINEA ne recommande aucun produit. Pour fixer le bon pourcentage à provisionner, vérifie ton taux sur **urssaf.fr** / **impots.gouv.fr** ou avec un professionnel." },
   /* ─── Maillage Parcours "Clarifier" ─── */
   { id: 'f-abonnements-caches', slug: 'abonnements-caches', geste: { id:'g_academie_abonnements-caches', source:'academie', label:"Liste tes prélèvements récurrents en 3 colonnes", axis:'liquidite' }, titre: "Abonnements cachés : la checklist", categorie: 'methode', tags: ['budget','flux','abonnements'], duree_lecture_min: 4, parcours_lies: ['p-clarifier'], fiches_liees: ['f-releve-bancaire-lecture','f-glossaire-frais-bancaires'], date_publication: '2026-06-01',
     contenu_md: "# Abonnements cachés : la checklist\n\n" +
@@ -38491,6 +38784,8 @@ function appRoute(path) {
   }
   // parcours par défaut
   _appSetActiveTab('parcours');
+  // parcours/pilier/<clé> → la liste filtrée sur CE pilier uniquement
+  if (parts[0] === 'parcours' && parts[1] === 'pilier') { renderParcoursList(parts[2]); return; }
   if (parts[0] === 'parcours' && parts[1]) {
     if (parts[2]) {
       renderLesson(parts[1], parseInt(parts[2], 10));
@@ -38504,34 +38799,69 @@ function appRoute(path) {
 function appGoto(path) { appRoute(path); }
 
 /* ─── Render : liste des parcours ─── */
-function renderParcoursList() {
+const PARCOURS_PILIERS_LABEL = { clarifier:'Clarifier', structurer:'Structurer', optimiser:'Optimiser', batir:'Bâtir' };
+function _renderParcoursCard(p) {
+  const prog = getParcoursProgress(p.id);
+  const pct = _appParcoursPct(p, prog);
+  const started = prog.lessons_completed.length > 0;
+  const done = prog.certificat_obtenu;
+  const cta = done ? 'Revoir' : (started ? 'Continuer' : 'Commencer');
+  const dureeLabel = p.duree_totale_label || `~${Math.round(p.duree_totale_min/30)*30/60}h`;
+  return `
+    <div class="parcours-card" onclick="appGoto('parcours/${p.slug}')">
+      <div class="parcours-card-top">
+        <span class="parcours-pilier ${p.pilier}">${PARCOURS_PILIERS_LABEL[p.pilier] || p.pilier}</span>
+        <span class="parcours-duree">⏱ ${dureeLabel}</span>
+      </div>
+      <h3 class="parcours-card-title">${p.titre}</h3>
+      <p class="parcours-card-desc">${p.description}</p>
+      <div class="parcours-progress"><div class="parcours-progress-fill" style="width:${pct}%"></div></div>
+      <div class="parcours-card-foot">
+        <span><strong>${prog.lessons_completed.length}</strong> / ${p.lessons.length} leçons</span>
+        <button class="parcours-cta ${done ? 'done' : ''}">${done ? '✓ ' + cta : cta + ' →'}</button>
+      </div>
+    </div>`;
+}
+let _appParcoursPilier = null;   // pilier actuellement affiché dans la vue Parcours
+function _appPiliersOrdre() {
+  return (typeof DASH_PALIERS !== 'undefined' && Array.isArray(DASH_PALIERS))
+    ? DASH_PALIERS
+    : [{key:'clarifier',sym:'◐',name:'Clarifier'},{key:'structurer',sym:'▲',name:'Structurer'},{key:'optimiser',sym:'◆',name:'Optimiser'},{key:'batir',sym:'✦',name:'Bâtir'}];
+}
+/* On n'affiche QU'UN SEUL pilier à la fois : entrer dans « Clarifier » ne montre que les
+   parcours Clarifier. Le sélecteur en haut permet de passer d'un pilier à l'autre.
+   Un pilier sans parcours est affiché désactivé (« bientôt »), jamais mélangé aux autres. */
+function renderParcoursList(pilierKey) {
   _appShowView('appViewParcours');
   const grid = document.getElementById('parcoursGrid');
   if (!grid) return;
-  grid.innerHTML = APP_PARCOURS.slice().sort((a, b) => (a.ordre || 0) - (b.ordre || 0)).map(p => {
-    const prog = getParcoursProgress(p.id);
-    const pct = _appParcoursPct(p, prog);
-    const started = prog.lessons_completed.length > 0;
-    const done = prog.certificat_obtenu;
-    const piliers = { clarifier:'Clarifier', batir:'Bâtir', proteger:'Protéger', transmettre:'Transmettre', optimiser:'Optimiser' };
-    const cta = done ? 'Revoir' : (started ? 'Continuer' : 'Commencer');
-    const dureeLabel = p.duree_totale_label || `~${Math.round(p.duree_totale_min/30)*30/60}h`;
-    return `
-      <div class="parcours-card" onclick="appGoto('parcours/${p.slug}')">
-        <div class="parcours-card-top">
-          <span class="parcours-pilier ${p.pilier}">${piliers[p.pilier] || p.pilier}</span>
-          <span class="parcours-duree">⏱ ${dureeLabel}</span>
-        </div>
-        <h3 class="parcours-card-title">${p.titre}</h3>
-        <p class="parcours-card-desc">${p.description}</p>
-        <div class="parcours-progress"><div class="parcours-progress-fill" style="width:${pct}%"></div></div>
-        <div class="parcours-card-foot">
-          <span><strong>${prog.lessons_completed.length}</strong> / ${p.lessons.length} leçons</span>
-          <button class="parcours-cta ${done ? 'done' : ''}">${done ? '✓ ' + cta : cta + ' →'}</button>
-        </div>
-      </div>
-    `;
+  const ordre = _appPiliersOrdre();
+  const aDesParcours = (k) => APP_PARCOURS.some(x => x.pilier === k);
+  const dispo = ordre.filter(p => aDesParcours(p.key));
+  // pilier actif : celui demandé s'il a du contenu, sinon le dernier consulté, sinon le premier
+  let actif = (pilierKey && aDesParcours(pilierKey)) ? pilierKey
+            : (_appParcoursPilier && aDesParcours(_appParcoursPilier)) ? _appParcoursPilier
+            : (dispo[0] ? dispo[0].key : null);
+  _appParcoursPilier = actif;
+
+  const chips = ordre.map(pil => {
+    const has = aDesParcours(pil.key);
+    const label = PARCOURS_PILIERS_LABEL[pil.key] || pil.name || pil.key;
+    return `<button type="button" class="parcours-filtre${pil.key === actif ? ' active' : ''}"${has ? ` onclick="appGoto('parcours/pilier/${pil.key}')"` : ' disabled'}>
+        <span class="sym">${pil.sym || ''}</span> ${label}${has ? '' : ' <em>· bientôt</em>'}
+      </button>`;
   }).join('');
+
+  if (!actif) { grid.innerHTML = `<div class="parcours-filtres">${chips}</div>`; return; }
+  const pil = ordre.find(p => p.key === actif) || { key: actif, sym: '', name: actif };
+  const parcs = APP_PARCOURS.filter(x => x.pilier === actif).sort((a, b) => (a.ordre || 0) - (b.ordre || 0));
+  const nbLecons = parcs.reduce((n, p) => n + p.lessons.length, 0);
+  grid.innerHTML = `
+    <div class="parcours-filtres">${chips}</div>
+    <div class="parcours-pilier-group">
+      <h2 class="parcours-pilier-head"><span class="sym">${pil.sym || ''}</span> ${PARCOURS_PILIERS_LABEL[actif] || pil.name || actif}<span class="count">${parcs.length} parcours · ${nbLecons} leçons</span></h2>
+      <div class="parcours-pilier-cards">${parcs.map(_renderParcoursCard).join('')}</div>
+    </div>`;
 }
 
 /* ─── Render : détail d'un parcours ─── */
@@ -38542,13 +38872,13 @@ function renderParcoursDetail(slug) {
   if (!p) { wrap.innerHTML = '<p>Parcours introuvable.</p>'; return; }
   const prog = getParcoursProgress(p.id);
   const pct = _appParcoursPct(p, prog);
-  const piliers = { clarifier:'Clarifier', batir:'Bâtir', proteger:'Protéger', transmettre:'Transmettre', optimiser:'Optimiser' };
+  const piliers = PARCOURS_PILIERS_LABEL;
 
   const nextLesson = p.lessons.find(l => !prog.lessons_completed.includes(l.id)) || p.lessons[0];
   const ctaLabel = prog.certificat_obtenu ? 'Revoir le parcours' : (prog.lessons_completed.length ? `Reprendre · Leçon ${nextLesson.ordre}` : 'Commencer la leçon 1');
 
   wrap.innerHTML = `
-    <div class="lesson-back-link" onclick="appGoto('parcours')">← Tous les parcours</div>
+    <div class="lesson-back-link" onclick="appGoto('parcours/pilier/${p.pilier}')">← Parcours ${PARCOURS_PILIERS_LABEL[p.pilier] || ''}</div>
     <div class="parcours-detail-head">
       <span class="app-eyebrow">🎓 Parcours · ${piliers[p.pilier]}</span>
       <h1 class="app-title" style="text-align:left;font-size:38px;">${p.titre}</h1>
@@ -38598,7 +38928,7 @@ function renderParcoursDetail(slug) {
 }
 
 /* ─── Render : leçon (contenu + quiz) ─── */
-function renderLesson(slug, ordre) {
+function renderLesson(slug, ordre, opts) {
   _appShowView('appViewLesson');
   const p = _appFindParcours(slug);
   const wrap = document.getElementById('lessonWrap');
@@ -38607,7 +38937,9 @@ function renderLesson(slug, ordre) {
   if (!lesson) { wrap.innerHTML = '<p>Leçon introuvable.</p>'; return; }
   const prog = getParcoursProgress(p.id);
 
-  if (!_appLessonIsUnlocked(p, ordre, prog)) {
+  // Accès public (leçon héro d'acquisition) : on ignore le verrou de progression —
+  // une leçon exposée délibérément en public doit toujours s'afficher.
+  if (!(opts && opts.public) && !_appLessonIsUnlocked(p, ordre, prog)) {
     wrap.innerHTML = `
       <div class="lesson-back-link" onclick="appGoto('parcours/${p.slug}')">← Retour au parcours</div>
       <div class="lesson-content" style="text-align:center;">
@@ -39063,6 +39395,60 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 if (document.readyState !== 'loading' && (location.hash || '').startsWith('#apprendre')) {
   _appHandleHash();
+}
+
+/* ─── Leçon en ACCÈS PUBLIC (hook d'acquisition, sans login) ───
+   Une leçon « héro » (ex. la fiche de paie) devient partageable et lisible par un
+   visiteur NON connecté, avec un CTA d'inscription. Réutilise renderLesson : la 1re
+   leçon d'un parcours est toujours déverrouillée et getParcoursProgress tolère
+   l'anonyme. Seule la leçon héro est exposée — les suivantes restent gated. */
+const _FINEA_PUBLIC_LESSONS = {
+  'fiche-de-paie':   { slug: 'premiers-pas', ordre: 1 },
+  'paie-alternance': { slug: 'premiers-pas', ordre: 6 },  // hook segment alternance / IIM
+};
+function openLessonPublic(slug, ordre) {
+  const overlay = document.getElementById('appOverlay');
+  if (!overlay || typeof renderLesson !== 'function') return;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (typeof _appSetActiveTab === 'function') _appSetActiveTab('parcours');
+  renderLesson(slug, ordre || 1, { public: true });
+  // Visiteur non connecté → bandeaux d'inscription en tête ET en pied de la leçon.
+  if (typeof currentUser === 'undefined' || !currentUser) {
+    const wrap = document.getElementById('lessonWrap');
+    if (wrap && !document.getElementById('lessonPublicCta')) {
+      const mk = (id) => {
+        const el = document.createElement('div');
+        el.id = id;
+        el.style.cssText = 'background:var(--navy);color:var(--cream);border-radius:14px;padding:18px 20px;margin:0 0 20px;text-align:center;';
+        el.innerHTML =
+          '<div style="font-family:\'Cormorant Garamond\',serif;font-size:21px;margin-bottom:6px;">Leçon offerte par FINEA</div>' +
+          '<div style="font-size:14px;opacity:.85;margin-bottom:14px;">Crée ton compte gratuit pour débloquer le parcours complet, les quiz et ton Score.</div>' +
+          '<button type="button" style="background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:11px 20px;font-weight:700;cursor:pointer;font-family:inherit;" ' +
+          'onclick="closeApprendre(); if(typeof openAuth===\'function\') openAuth(\'signup\');">Créer mon compte gratuit →</button>';
+        return el;
+      };
+      wrap.insertBefore(mk('lessonPublicCta'), wrap.firstChild);
+      wrap.appendChild(mk('lessonPublicCtaBottom'));
+    }
+  }
+}
+function _fineaHandlePublicLessonHash() {
+  let h = '';
+  try { h = (location.hash || '').replace(/^#/, ''); } catch (_) { return; }
+  if (_FINEA_PUBLIC_LESSONS[h]) {
+    const cfg = _FINEA_PUBLIC_LESSONS[h];
+    openLessonPublic(cfg.slug, cfg.ordre);
+    return;
+  }
+  const m = h.match(/^lecon\/([a-z0-9-]+)(?:\/(\d+))?$/i);
+  if (m) openLessonPublic(m[1], m[2] ? parseInt(m[2], 10) : 1);
+}
+window.addEventListener('hashchange', _fineaHandlePublicLessonHash);
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', _fineaHandlePublicLessonHash);
+} else {
+  _fineaHandlePublicLessonHash();
 }
 
 /* ─── Deep-links des e-mails (séquence onboarding Brevo J1→J14) ───
@@ -41411,7 +41797,9 @@ function setPerState(patch) {
   const cur = getPerState();
   const next = Object.assign({}, cur, patch);
   spaceStorage.set(getCurrentSpaceId(), 'per', null, next);
-  renderPer();
+  // Préserve le focus + le curseur du champ saisi (les 7 champs partagent perRecalc() :
+  // _moduleRenderPreserve les distingue par id). Sinon saisie libre impossible.
+  _moduleRenderPreserve('perContent', renderPer);
 }
 
 /* ─── CALCULS ─── */
